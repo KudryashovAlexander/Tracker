@@ -13,8 +13,9 @@ class StatisticViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = "Статистика"
+        navigationController?.navigationBar.prefersLargeTitles = true
+
         
-        view.backgroundColor = .ypBlack
     }
     
 }
