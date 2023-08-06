@@ -15,11 +15,13 @@ class FirstViewController: UIViewController {
         view.backgroundColor = .ypBlue
         logoImageViewSupport()
         viewsConstrains()
+        nextViews()
     }
     
     private func logoImageViewSupport() {
         let image = UIImage(named: "Logo") ?? UIImage()
         logoImageView.image = image
+        logoImageView.contentMode = .scaleAspectFill
         view.addSubview(logoImageView)
     }
     
@@ -31,8 +33,12 @@ class FirstViewController: UIViewController {
         ])
     }
     
-    private func createNextView() {
-        //TODO: - Метод следуюещего вью взависимости от сохранения информации
+    private func nextViews() {
+        
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+
+        let tabBar = TabBarController()
+        window.rootViewController = tabBar
     }
     
 }
