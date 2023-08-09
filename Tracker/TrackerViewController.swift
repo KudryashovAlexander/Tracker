@@ -8,6 +8,7 @@
 import UIKit
 class TrackerViewController: UIViewController {
     
+    private let sController = UISearchController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,28 +19,37 @@ class TrackerViewController: UIViewController {
     }
     
     private func navigationSupport() {
-        if let navBar = navigationController?.navigationBar {
-            
-            let leftButton = UIBarButtonItem(
-                barButtonSystemItem: .add,
-                target: self,
-                action: #selector(add))
-            navBar.topItem?.leftBarButtonItem = leftButton
-            
-            let datePicker = UIDatePicker()
-            
-            datePicker.preferredDatePickerStyle = .compact
-            datePicker.datePickerMode = .date
-            
-            datePicker.locale = Locale(identifier: "ru_RU")
-//            datePicker.date.formatted() = "dd MM YYYY"
-            
-            let rightButton = UIBarButtonItem(customView: datePicker)
-            navBar.topItem?.rightBarButtonItem = rightButton
-            
-        }
+        guard let navControl = navigationController else { return }
+        let navBar = navControl.navigationBar
+        
+        let leftButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(add))
+        leftButton.tintColor = .ypBlack
+        navBar.topItem?.leftBarButtonItem = leftButton
+        
+        let datePicker = UIDatePicker()
+        
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        
+        datePicker.locale = Locale(identifier: "ru_RU")
+        //            datePicker.date.formatted() = "dd MM YYYY"
+        
+        let rightButton = UIBarButtonItem(customView: datePicker)
+        navBar.topItem?.rightBarButtonItem = rightButton
+        
+        
         self.navigationItem.title = "Трекеры"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navBar.prefersLargeTitles = true
+        
+        
+        sController.hidesNavigationBarDuringPresentation = false
+        
+        
+        sController.searchBar.searchTextField.placeholder = "Поиск"
+        self.navigationItem.searchController = sController
         
     }
     
