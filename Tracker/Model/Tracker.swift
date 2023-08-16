@@ -8,10 +8,10 @@
 import UIKit
 
 struct Tracker {
-    var name: String
-    var color: UIColor
-    var emojie: String
-    var schedule = ScheduleTracker()
+    let name: String
+    let color: UIColor
+    let emojie: String
+    let schedule = ScheduleTracker()
     let id = UUID()
     
     init(name: String, color: UIColor, emojie: String) {
