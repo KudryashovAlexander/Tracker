@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7492A911D680054FFF1 /* TableViewHelper.swift */; };
-		7F16D7512A9137BB0054FFF1 /* TexFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7502A9137BB0054FFF1 /* TexFieldCell.swift */; };
-		7F16D7532A913B980054FFF1 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7522A913B980054FFF1 /* GeneralTableViewCell.swift */; };
+		7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */; };
+		7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */; };
 		7F20E6142A759A6C00C49C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E6132A759A6C00C49C3E /* AppDelegate.swift */; };
 		7F20E6162A759A6C00C49C3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E6152A759A6C00C49C3E /* SceneDelegate.swift */; };
 		7F20E61D2A759A6E00C49C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F20E61C2A759A6E00C49C3E /* Assets.xcassets */; };
@@ -34,8 +34,8 @@
 
 /* Begin PBXFileReference section */
 		7F16D7492A911D680054FFF1 /* TableViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHelper.swift; sourceTree = "<group>"; };
-		7F16D7502A9137BB0054FFF1 /* TexFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TexFieldCell.swift; sourceTree = "<group>"; };
-		7F16D7522A913B980054FFF1 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
+		7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
+		7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerTableViewCell.swift; sourceTree = "<group>"; };
 		7F20E6102A759A6C00C49C3E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F20E6132A759A6C00C49C3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F20E6152A759A6C00C49C3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 				7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */,
 				7F84755C2A86AF7C00BBF9EF /* Helper.swift */,
 				7F16D7492A911D680054FFF1 /* TableViewHelper.swift */,
-				7F16D7522A913B980054FFF1 /* GeneralTableViewCell.swift */,
+				7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -159,8 +159,8 @@
 			isa = PBXGroup;
 			children = (
 				7F84754D2A7F7C0000BBF9EF /* TrackersViewController.swift */,
-				7F8475512A8170B700BBF9EF /* TrackerCollectionViewCell.swift */,
 				7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */,
+				7F8475512A8170B700BBF9EF /* TrackerCollectionViewCell.swift */,
 			);
 			path = TrackersView;
 			sourceTree = "<group>";
@@ -169,7 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */,
-				7F16D7502A9137BB0054FFF1 /* TexFieldCell.swift */,
+				7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */,
 			);
 			path = TrackerConfigurationView;
 			sourceTree = "<group>";
@@ -251,10 +251,11 @@
 				7F20E6292A75A27D00C49C3E /* UIColor_ext.swift in Sources */,
 				7F8475612A86B52C00BBF9EF /* TrackerAddViewController.swift in Sources */,
 				7F8475502A7F7C5400BBF9EF /* StatisticViewController.swift in Sources */,
-				7F16D7512A9137BB0054FFF1 /* TexFieldCell.swift in Sources */,
 				7F84754C2A7F73ED00BBF9EF /* TabBarController.swift in Sources */,
+				7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */,
 				7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */,
 				7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */,
+				7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
 				7F84754E2A7F7C0000BBF9EF /* TrackersViewController.swift in Sources */,
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,
@@ -264,7 +265,6 @@
 				7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */,
 				7F8475572A81779D00BBF9EF /* Schedule.swift in Sources */,
 				7F20E62B2A75C1F200C49C3E /* UIFont_ext.swift in Sources */,
-				7F16D7532A913B980054FFF1 /* GeneralTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

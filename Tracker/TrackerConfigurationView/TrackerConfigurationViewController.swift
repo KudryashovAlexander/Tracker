@@ -28,10 +28,12 @@ class TrackerConfigurationViewController: UIViewController {
         return label
     }
     
-    private let supportTrackerConteiner = UIView()
+    private let propertyTableViewConteiner = UIView()
+    private let propertyTableView = UITableView()
     
-    private let categoryButton = UIButton()
-    private let scheduleButton = UIButton()
+    
+    
+
     
     //private var emojieContentView = UICollectionView()
     //private var colorContentView = UICollectionView()
@@ -43,6 +45,8 @@ class TrackerConfigurationViewController: UIViewController {
         
         nameTrackerConteinerSupport()
         nameTrackerTextFieldSupport()
+        
+        propertyTableViewConteinerSupport()
         
         layoutSupport()
     }
@@ -58,15 +62,21 @@ class TrackerConfigurationViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             nameTrackerConteiner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            nameTrackerConteiner.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
-            nameTrackerConteiner.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor,constant: -16),
+            nameTrackerConteiner.widthAnchor.constraint(equalTo:view.widthAnchor, constant: -32),
             nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75),
+            nameTrackerConteiner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             
             nameTrackerTextField.topAnchor.constraint(equalTo: nameTrackerConteiner.topAnchor),
             nameTrackerTextField.leftAnchor.constraint(equalTo: nameTrackerConteiner.leftAnchor),
             nameTrackerTextField.rightAnchor.constraint(equalTo: nameTrackerConteiner.rightAnchor),
-            nameTrackerTextField.heightAnchor.constraint(equalToConstant: 75)
+            nameTrackerTextField.heightAnchor.constraint(equalToConstant: 75),
+            
+            propertyTableViewConteiner.topAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor, constant: 24),
+            propertyTableViewConteiner.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor),
+            propertyTableViewConteiner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: 75*2),
+            
             
         ])
         
@@ -99,8 +109,7 @@ class TrackerConfigurationViewController: UIViewController {
         button.addTarget(self, action: #selector(removeText), for: .touchUpInside)
 //        button.sizeToFit()
         rightView.addSubview(button)
-
-
+        
         nameTrackerTextField.rightView = rightView
         nameTrackerTextField.rightViewMode = .whileEditing
     }
@@ -108,6 +117,17 @@ class TrackerConfigurationViewController: UIViewController {
     @objc
     private func removeText() {
         nameTrackerTextField.text = ""
+    }
+    
+    
+    private func propertyTableViewConteinerSupport() {
+        propertyTableViewConteiner.backgroundColor = .ypBackground
+        propertyTableViewConteiner.layer.masksToBounds = true
+        propertyTableViewConteiner.layer.cornerRadius = 16
+        view.addSubview(propertyTableViewConteiner)
+        
+        propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
+        
     }
     
     
