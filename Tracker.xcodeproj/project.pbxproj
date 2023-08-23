@@ -10,6 +10,10 @@
 		7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7492A911D680054FFF1 /* TableViewHelper.swift */; };
 		7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */; };
 		7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */; };
+		7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */; };
+		7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75C2A9666580054FFF1 /* EmojieView.swift */; };
+		7F16D75F2A96B6A50054FFF1 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75E2A96B6A50054FFF1 /* ColorCell.swift */; };
+		7F16D7612A96B7420054FFF1 /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7602A96B7420054FFF1 /* ColorView.swift */; };
 		7F20E6142A759A6C00C49C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E6132A759A6C00C49C3E /* AppDelegate.swift */; };
 		7F20E6162A759A6C00C49C3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E6152A759A6C00C49C3E /* SceneDelegate.swift */; };
 		7F20E61D2A759A6E00C49C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F20E61C2A759A6E00C49C3E /* Assets.xcassets */; };
@@ -36,6 +40,10 @@
 		7F16D7492A911D680054FFF1 /* TableViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHelper.swift; sourceTree = "<group>"; };
 		7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerTableViewCell.swift; sourceTree = "<group>"; };
+		7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieCell.swift; sourceTree = "<group>"; };
+		7F16D75C2A9666580054FFF1 /* EmojieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieView.swift; sourceTree = "<group>"; };
+		7F16D75E2A96B6A50054FFF1 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		7F16D7602A96B7420054FFF1 /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		7F20E6102A759A6C00C49C3E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F20E6132A759A6C00C49C3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F20E6152A759A6C00C49C3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +178,10 @@
 			children = (
 				7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */,
 				7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */,
+				7F16D75C2A9666580054FFF1 /* EmojieView.swift */,
+				7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */,
+				7F16D7602A96B7420054FFF1 /* ColorView.swift */,
+				7F16D75E2A96B6A50054FFF1 /* ColorCell.swift */,
 			);
 			path = TrackerConfigurationView;
 			sourceTree = "<group>";
@@ -258,12 +270,16 @@
 				7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
 				7F84754E2A7F7C0000BBF9EF /* TrackersViewController.swift in Sources */,
+				7F16D7612A96B7420054FFF1 /* ColorView.swift in Sources */,
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,
 				7F8475592A84299900BBF9EF /* TrackerCategory.swift in Sources */,
+				7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */,
+				7F16D75F2A96B6A50054FFF1 /* ColorCell.swift in Sources */,
 				7F20E6142A759A6C00C49C3E /* AppDelegate.swift in Sources */,
 				7F20E6162A759A6C00C49C3E /* SceneDelegate.swift in Sources */,
 				7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */,
 				7F8475572A81779D00BBF9EF /* Schedule.swift in Sources */,
+				7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */,
 				7F20E62B2A75C1F200C49C3E /* UIFont_ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

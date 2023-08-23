@@ -28,37 +28,70 @@ class TrackerConfigurationViewController: UIViewController {
         return label
     }
     
+    private var propertyTracker = ["Категория","Расписание"]
+    
     private let propertyTableViewConteiner = UIView()
     private let propertyTableView = UITableView()
     
+    private var emojieCollectionView = EmojieView()
+    private let emojieNameLabel = UILabel()
     
-    
-
-    
-    //private var emojieContentView = UICollectionView()
-    //private var colorContentView = UICollectionView()
+    private var colorCollectionView = ColorView()
+    private let colorNameLabel = UILabel()
     
     override func viewDidLoad() {
+        
+        
         super.viewDidLoad()
+
+        
         view.backgroundColor = .ypWhite
         self.navigationItem.title = navName
+        
+        if isRegular == false {
+            propertyTracker.removeLast()
+        }
+        
+        propertyTableView.delegate = self
+        propertyTableView.dataSource = self
         
         nameTrackerConteinerSupport()
         nameTrackerTextFieldSupport()
         
         propertyTableViewConteinerSupport()
+        propertyTableViewSupport()
         
+        emojieNameLabelSupport()
+        colorNameLabelSupport()
+                
         layoutSupport()
     }
     
     private func layoutSupport() {
         
-        view.addSubview(nameTrackerConteiner)
         nameTrackerConteiner.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(nameTrackerConteiner)
         
-        nameTrackerConteiner.addSubview(nameTrackerTextField)
         nameTrackerTextField.translatesAutoresizingMaskIntoConstraints = false
-
+        nameTrackerConteiner.addSubview(nameTrackerTextField)
+        
+        propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(propertyTableViewConteiner)
+        
+        propertyTableView.translatesAutoresizingMaskIntoConstraints = false
+        propertyTableViewConteiner.addSubview(propertyTableView)
+        
+        emojieCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emojieCollectionView)
+        
+        emojieNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emojieNameLabel)
+        
+        colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(colorCollectionView)
+        
+        colorNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(colorNameLabel)
         
         NSLayoutConstraint.activate([
             nameTrackerConteiner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -75,9 +108,29 @@ class TrackerConfigurationViewController: UIViewController {
             propertyTableViewConteiner.topAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor, constant: 24),
             propertyTableViewConteiner.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor),
             propertyTableViewConteiner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: 75*2),
+            propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: CGFloat(75 * propertyTracker.count)),
             
+            propertyTableView.topAnchor.constraint(equalTo: propertyTableViewConteiner.topAnchor),
+            propertyTableView.bottomAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor),
+            propertyTableView.leftAnchor.constraint(equalTo: propertyTableViewConteiner.leftAnchor),
+            propertyTableView.rightAnchor.constraint(equalTo: propertyTableViewConteiner.rightAnchor),
             
+            emojieCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emojieCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 16 * 2),
+            emojieCollectionView.topAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor, constant: 50),
+            emojieCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
+            
+            emojieNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 28),
+            emojieNameLabel.bottomAnchor.constraint(equalTo: emojieCollectionView.topAnchor),
+            
+            colorCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            colorCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 16 * 2),
+            colorCollectionView.topAnchor.constraint(equalTo: emojieCollectionView.bottomAnchor, constant: 34),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
+            
+            colorNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 28),
+            colorNameLabel.bottomAnchor.constraint(equalTo: colorCollectionView.topAnchor),
+    
         ])
         
     }
@@ -124,10 +177,17 @@ class TrackerConfigurationViewController: UIViewController {
         propertyTableViewConteiner.backgroundColor = .ypBackground
         propertyTableViewConteiner.layer.masksToBounds = true
         propertyTableViewConteiner.layer.cornerRadius = 16
-        view.addSubview(propertyTableViewConteiner)
+        propertyTableView.separatorInset.left = 16
+        propertyTableView.separatorInset.right = 16
+        propertyTableView.tableHeaderView = UIView()
+    }
+    
+    private func propertyTableViewSupport() {
         
-        propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
-        
+        propertyTableView.register(NewTrackerTableViewCell.self, forCellReuseIdentifier: NewTrackerTableViewCell.cellIdentifier)
+        propertyTableView.isScrollEnabled = false
+        propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+
     }
     
     
@@ -154,5 +214,40 @@ class TrackerConfigurationViewController: UIViewController {
         }
     }
     
+    private func emojieNameLabelSupport() {
+        emojieNameLabel.text = EmojieCollection().name
+        emojieNameLabel.font = .yPBold19
+        emojieNameLabel.textAlignment = .left
+    }
+    
+    private func colorNameLabelSupport() {
+        colorNameLabel.text = ColorCollection().name
+        colorNameLabel.font = .yPBold19
+        colorNameLabel.textAlignment = .left
+    }
+    
 
+}
+
+//MARK: - Extension TableView
+extension TrackerConfigurationViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return propertyTracker.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewTrackerTableViewCell.cellIdentifier, for: indexPath)
+        guard let newTrackerCell = cell as? NewTrackerTableViewCell else {
+             return UITableViewCell()
+        }
+//        newTrackerCell.selectedProperty = "Привет"
+        newTrackerCell.propertyName = propertyTracker[indexPath.row]
+        if indexPath.row == propertyTracker.count {
+            newTrackerCell.separatorInset.left = tableView.frame.maxX
+        }
+        newTrackerCell.backgroundColor = .ypBackground
+        return newTrackerCell
+    }
+    
+    
 }

@@ -11,14 +11,23 @@ class NewTrackerTableViewCell: UITableViewCell {
     
     static let cellIdentifier = "NewTrackerTableViewCell"
     
-    var labelName = UILabel()
-    var propertyImageView = UIImageView()
+    var propertyName = String() {
+        didSet {
+            propertyNameLabel.text = propertyName
+            layoutConfiguration()
+        }
+    }
+    var selectedProperty: String?
+
+    private var propertyNameLabel = UILabel()
+    private var selectedPropertyLabel = UILabel()
+    private var propertyImageView = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
-        labelNameConfiguration()
+        propertyNameConfiguration()
+        selectedPropertyConfiguration()
         propertyImageViewConfiguration()
-        LayoutConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -26,33 +35,83 @@ class NewTrackerTableViewCell: UITableViewCell {
     }
     
     
-    private func labelNameConfiguration() {
-        labelName.font = .yPRegular17
-        labelName.textColor = .ypBlack
-        labelName.textAlignment = .left
-        contentView.addSubview(labelName)
-        
+    private func propertyNameConfiguration() {
+        propertyNameLabel.font = .yPRegular17
+        propertyNameLabel.textColor = .ypBlack
+        propertyNameLabel.textAlignment = .left
     }
     
     private func propertyImageViewConfiguration() {
         let image = UIImage(named: "property_nextView")
         propertyImageView.image = image
-        contentView.addSubview(propertyImageView)
     }
     
-    private func LayoutConfiguration() {
+    private func layoutConfiguration() {
         
-        labelName.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(propertyNameLabel)
+        contentView.addSubview(propertyImageView)
+
+        
+        propertyNameLabel.translatesAutoresizingMaskIntoConstraints = false
         propertyImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            labelName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            labelName.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            
+            contentView.heightAnchor.constraint(equalToConstant: 75),
+            
+            propertyNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             
             propertyImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            propertyImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
+            propertyImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+    
         ])
+        
+        if selectedProperty != nil {
+            
+            selectedPropertyLabel.text = selectedProperty
+            contentView.addSubview(selectedPropertyLabel)
+            
+            selectedPropertyLabel.translatesAutoresizingMaskIntoConstraints = false
+                        
+            NSLayoutConstraint.activate([
+                propertyNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+                selectedPropertyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+                selectedPropertyLabel.topAnchor.constraint(equalTo: propertyNameLabel.bottomAnchor, constant: 2)
+            ])
+        } else {
+            propertyNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+
+        }
         
     }
     
+    private func selectedPropertyConfiguration() {
+        selectedPropertyLabel.textAlignment = .left
+        selectedPropertyLabel.font = .yPRegular17
+        selectedPropertyLabel.textColor = .ypGray
+        
+    }
+    
+//    func updateLayout() {
+//        labelName.translatesAutoresizingMaskIntoConstraints = false
+//        labelProperty.translatesAutoresizingMaskIntoConstraints = false
+//        propertyImageView.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//
+//            contentView.heightAnchor.constraint(equalToConstant: 75),
+//
+//            labelName.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+//            labelName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+//
+//            labelProperty.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 2),
+//            labelProperty.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+//
+//            propertyImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            propertyImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+//
+//        ])
+//    }
+    
+
 }
