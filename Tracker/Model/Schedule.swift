@@ -10,7 +10,7 @@ import Foundation
 struct ScheduleDay {
     let name: String
     let shortName: String
-    var isOn: Bool = true
+    var isOn: Bool = false
 }
 
 private var monday = ScheduleDay(name: "Понедельник", shortName: "Пн")

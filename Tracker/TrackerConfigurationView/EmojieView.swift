@@ -52,13 +52,13 @@ class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
         cell.emojieLabel.text = emojieCollection.array[indexPath.row]
         cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 6
+        cell.layer.cornerRadius = 16
         return cell
                 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.width/6, height: self.frame.height/3)
+        return CGSize(width: 52, height: 52)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -71,7 +71,7 @@ class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? EmojieCell {
             selectedEmojie = cell.emojieLabel.text!
-            cell.backgroundColor = .ypGray
+            cell.backgroundColor = .lightGray
             print("Выбрана эмоция \(String(describing: cell.emojieLabel.text))")
         }
     }

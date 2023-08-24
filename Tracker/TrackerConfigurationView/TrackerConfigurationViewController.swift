@@ -12,7 +12,26 @@ class TrackerConfigurationViewController: UIViewController {
     var navName = String()
     var isRegular: Bool = false
     
-    private var scrollView = UIScrollView()
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .ypWhite
+        scrollView.frame = view.bounds
+        scrollView.contentSize = contenSize
+        return scrollView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.frame.size = contenSize
+        view.backgroundColor = .ypWhite
+        return view
+    }()
+    
+
+    
+    private var contenSize: CGSize{
+        return CGSize(width: view.frame.width, height: 841)
+    }
     
     private let nameTrackerConteiner = UIView()
     
@@ -39,11 +58,16 @@ class TrackerConfigurationViewController: UIViewController {
     private var colorCollectionView = ColorView()
     private let colorNameLabel = UILabel()
     
+    private let canselButton = UIButton()
+    private let createButton = UIButton()
+    
+    private let alertPresenter = AlertPresener()
+    
+    
     override func viewDidLoad() {
         
         
         super.viewDidLoad()
-
         
         view.backgroundColor = .ypWhite
         self.navigationItem.title = navName
@@ -63,42 +87,53 @@ class TrackerConfigurationViewController: UIViewController {
         
         emojieNameLabelSupport()
         colorNameLabelSupport()
+        
+        canselButtonSupport()
+        createButtonSupport()
                 
         layoutSupport()
     }
     
     private func layoutSupport() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         
         nameTrackerConteiner.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(nameTrackerConteiner)
+        contentView.addSubview(nameTrackerConteiner)
         
         nameTrackerTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTrackerConteiner.addSubview(nameTrackerTextField)
         
         propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(propertyTableViewConteiner)
+        contentView.addSubview(propertyTableViewConteiner)
         
         propertyTableView.translatesAutoresizingMaskIntoConstraints = false
         propertyTableViewConteiner.addSubview(propertyTableView)
         
         emojieCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(emojieCollectionView)
+        contentView.addSubview(emojieCollectionView)
         
         emojieNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(emojieNameLabel)
+        contentView.addSubview(emojieNameLabel)
         
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(colorCollectionView)
+        contentView.addSubview(colorCollectionView)
         
         colorNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(colorNameLabel)
+        contentView.addSubview(colorNameLabel)
+        
+        canselButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(canselButton)
+        
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(createButton)
         
         NSLayoutConstraint.activate([
-            nameTrackerConteiner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            nameTrackerConteiner.widthAnchor.constraint(equalTo:view.widthAnchor, constant: -32),
-            nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75),
-            nameTrackerConteiner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
+            nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75),
+            nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             nameTrackerTextField.topAnchor.constraint(equalTo: nameTrackerConteiner.topAnchor),
             nameTrackerTextField.leftAnchor.constraint(equalTo: nameTrackerConteiner.leftAnchor),
@@ -107,7 +142,7 @@ class TrackerConfigurationViewController: UIViewController {
             
             propertyTableViewConteiner.topAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor, constant: 24),
             propertyTableViewConteiner.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor),
-            propertyTableViewConteiner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            propertyTableViewConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: CGFloat(75 * propertyTracker.count)),
             
             propertyTableView.topAnchor.constraint(equalTo: propertyTableViewConteiner.topAnchor),
@@ -115,22 +150,32 @@ class TrackerConfigurationViewController: UIViewController {
             propertyTableView.leftAnchor.constraint(equalTo: propertyTableViewConteiner.leftAnchor),
             propertyTableView.rightAnchor.constraint(equalTo: propertyTableViewConteiner.rightAnchor),
             
-            emojieCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emojieCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 16 * 2),
-            emojieCollectionView.topAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor, constant: 50),
+            emojieCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emojieCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
+            emojieCollectionView.topAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor, constant: 74),
             emojieCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
             
-            emojieNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 28),
+            emojieNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 28),
             emojieNameLabel.bottomAnchor.constraint(equalTo: emojieCollectionView.topAnchor),
             
-            colorCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            colorCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 16 * 2),
-            colorCollectionView.topAnchor.constraint(equalTo: emojieCollectionView.bottomAnchor, constant: 34),
+            colorCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            colorCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
+            colorCollectionView.topAnchor.constraint(equalTo: emojieCollectionView.bottomAnchor, constant: 58),
             colorCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
             
-            colorNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 28),
+            colorNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 28),
             colorNameLabel.bottomAnchor.constraint(equalTo: colorCollectionView.topAnchor),
-    
+            
+            canselButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            canselButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 16),
+            canselButton.widthAnchor.constraint(equalToConstant: contentView.frame.width / 2 - 20 - 4),
+            canselButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            createButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            createButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 16),
+            createButton.widthAnchor.constraint(equalToConstant: contentView.frame.width / 2 - 20 - 4),
+            createButton.heightAnchor.constraint(equalToConstant: 60),
+            
         ])
         
     }
@@ -177,8 +222,7 @@ class TrackerConfigurationViewController: UIViewController {
         propertyTableViewConteiner.backgroundColor = .ypBackground
         propertyTableViewConteiner.layer.masksToBounds = true
         propertyTableViewConteiner.layer.cornerRadius = 16
-        propertyTableView.separatorInset.left = 16
-        propertyTableView.separatorInset.right = 16
+
         propertyTableView.tableHeaderView = UIView()
     }
     
@@ -186,6 +230,8 @@ class TrackerConfigurationViewController: UIViewController {
         
         propertyTableView.register(NewTrackerTableViewCell.self, forCellReuseIdentifier: NewTrackerTableViewCell.cellIdentifier)
         propertyTableView.isScrollEnabled = false
+        propertyTableView.separatorInset.left = 16
+        propertyTableView.separatorInset.right = 16
         propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
 
     }
@@ -226,6 +272,49 @@ class TrackerConfigurationViewController: UIViewController {
         colorNameLabel.textAlignment = .left
     }
     
+    private func canselButtonSupport() {
+        canselButton.backgroundColor = .ypWhite
+        canselButton.setTitle("Отменить", for: .normal)
+        canselButton.setTitleColor(.ypRed, for: .normal)
+        canselButton.layer.masksToBounds = true
+        canselButton.layer.cornerRadius = 16
+        let color = UIColor.ypRed.cgColor
+        canselButton.layer.borderColor = color
+        canselButton.layer.borderWidth = 1
+        canselButton.addTarget(self, action: #selector(canselPress), for: .touchUpInside)
+    }
+    
+    @objc
+    private func canselPress() {
+        self.dismiss(animated: true)
+    }
+    
+    private func createButtonSupport() {
+        createButton.setTitle("Создать", for: .normal)
+        createButton.backgroundColor = .ypBlack
+        createButton.layer.masksToBounds = true
+        createButton.layer.cornerRadius = 16
+        createButton.setTitleColor(.ypWhite, for: .normal)
+        createButton.addTarget(self, action: #selector(createPress), for: .touchUpInside)
+    }
+    
+    @objc
+    private func createPress(){
+        //TODO: - Сделать проверку что заполнены имя, категория, расписание, емоджи, цвет и после этого сохранить трекер и вернуться на главный экран
+        createButton.backgroundColor = .ypGray
+        
+        if let name = nameTrackerTextField.text {
+            if !name.isEmpty {
+                let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie)
+            } else {
+                alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
+                    //
+                    self.createButton.backgroundColor = .ypBlack
+                }
+            }
+        }
+        
+    }
 
 }
 
@@ -247,6 +336,27 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
         }
         newTrackerCell.backgroundColor = .ypBackground
         return newTrackerCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            createCategoryViewController()
+        }
+        
+        if indexPath.row == 1 {
+            createScheduleViewController()
+        }
+        
+    }
+    
+    private func createScheduleViewController() {
+        let vc = ScheduleViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
+    }
+    
+    private func createCategoryViewController() {
+        //Дописать метод
     }
     
     

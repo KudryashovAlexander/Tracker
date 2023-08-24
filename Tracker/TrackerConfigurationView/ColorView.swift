@@ -51,13 +51,13 @@ class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         }
         cell.colorView.backgroundColor = colorCollection.array[indexPath.row]
         cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 6
+        cell.layer.cornerRadius = 8
         return cell
                 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.width/6, height: self.frame.height/3)
+        return CGSize(width: 52, height: 52)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -71,13 +71,15 @@ class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
             if let color = cell.colorView.backgroundColor {
                 selectedColor = color
-                cell.backgroundColor = .ypGray
+                cell.layer.borderWidth = 3
+                let borderColor = color.withAlphaComponent(0.3).cgColor
+                cell.layer.borderColor = borderColor
             }
         }
     }
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
-        cell?.backgroundColor = .ypWhite
+        cell?.layer.borderWidth = 0
     }
     
 }

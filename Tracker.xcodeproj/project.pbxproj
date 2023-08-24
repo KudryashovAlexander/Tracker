@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7492A911D680054FFF1 /* TableViewHelper.swift */; };
-		7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */; };
 		7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */; };
 		7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */; };
 		7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75C2A9666580054FFF1 /* EmojieView.swift */; };
@@ -20,6 +19,9 @@
 		7F20E6202A759A6E00C49C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F20E61E2A759A6E00C49C3E /* LaunchScreen.storyboard */; };
 		7F20E6292A75A27D00C49C3E /* UIColor_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E6282A75A27D00C49C3E /* UIColor_ext.swift */; };
 		7F20E62B2A75C1F200C49C3E /* UIFont_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */; };
+		7F34B3A02A972F990068359E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B39F2A972F990068359E /* AlertPresenter.swift */; };
+		7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A12A975A790068359E /* ScheduleViewController.swift */; };
+		7F34B3A52A975B340068359E /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A42A975B340068359E /* ScheduleTableViewCell.swift */; };
 		7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */; };
 		7F8475472A7E923000BBF9EF /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */; };
 		7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475482A7F693F00BBF9EF /* FirstViewController.swift */; };
@@ -38,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		7F16D7492A911D680054FFF1 /* TableViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHelper.swift; sourceTree = "<group>"; };
-		7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerTableViewCell.swift; sourceTree = "<group>"; };
 		7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieCell.swift; sourceTree = "<group>"; };
 		7F16D75C2A9666580054FFF1 /* EmojieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieView.swift; sourceTree = "<group>"; };
@@ -52,6 +53,9 @@
 		7F20E6212A759A6E00C49C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F20E6282A75A27D00C49C3E /* UIColor_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor_ext.swift; sourceTree = "<group>"; };
 		7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont_ext.swift; sourceTree = "<group>"; };
+		7F34B39F2A972F990068359E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		7F34B3A12A975A790068359E /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		7F34B3A42A975B340068359E /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewContoller.swift; sourceTree = "<group>"; };
 		7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
 		7F8475482A7F693F00BBF9EF /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -108,6 +112,7 @@
 				7F84755F2A86B4B700BBF9EF /* TrackersView */,
 				7F8475662A8E940300BBF9EF /* TrackerConfigurationView */,
 				7F84754F2A7F7C5400BBF9EF /* StatisticViewController.swift */,
+				7F34B3A32A975A830068359E /* ScheduleView */,
 				7F8475452A7E921200BBF9EF /* Welcome */,
 				7F20E6272A75A22E00C49C3E /* Helper */,
 			);
@@ -122,9 +127,18 @@
 				7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */,
 				7F84755C2A86AF7C00BBF9EF /* Helper.swift */,
 				7F16D7492A911D680054FFF1 /* TableViewHelper.swift */,
-				7F16D7542A93CDAB0054FFF1 /* GeneralTableViewCell.swift */,
+				7F34B39F2A972F990068359E /* AlertPresenter.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		7F34B3A32A975A830068359E /* ScheduleView */ = {
+			isa = PBXGroup;
+			children = (
+				7F34B3A12A975A790068359E /* ScheduleViewController.swift */,
+				7F34B3A42A975B340068359E /* ScheduleTableViewCell.swift */,
+			);
+			path = ScheduleView;
 			sourceTree = "<group>";
 		};
 		7F8475452A7E921200BBF9EF /* Welcome */ = {
@@ -263,12 +277,13 @@
 				7F20E6292A75A27D00C49C3E /* UIColor_ext.swift in Sources */,
 				7F8475612A86B52C00BBF9EF /* TrackerAddViewController.swift in Sources */,
 				7F8475502A7F7C5400BBF9EF /* StatisticViewController.swift in Sources */,
+				7F34B3A02A972F990068359E /* AlertPresenter.swift in Sources */,
 				7F84754C2A7F73ED00BBF9EF /* TabBarController.swift in Sources */,
 				7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */,
 				7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */,
 				7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */,
-				7F16D7552A93CDAB0054FFF1 /* GeneralTableViewCell.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
+				7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */,
 				7F84754E2A7F7C0000BBF9EF /* TrackersViewController.swift in Sources */,
 				7F16D7612A96B7420054FFF1 /* ColorView.swift in Sources */,
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,
@@ -281,6 +296,7 @@
 				7F8475572A81779D00BBF9EF /* Schedule.swift in Sources */,
 				7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */,
 				7F20E62B2A75C1F200C49C3E /* UIFont_ext.swift in Sources */,
+				7F34B3A52A975B340068359E /* ScheduleTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
