@@ -11,7 +11,7 @@ struct Tracker {
     let name: String
     let color: UIColor
     let emojie: String
-    let schedule = ScheduleTracker()
+    var schedule = ScheduleTracker()
     let id = UUID()
     
     init(name: String, color: UIColor, emojie: String) {

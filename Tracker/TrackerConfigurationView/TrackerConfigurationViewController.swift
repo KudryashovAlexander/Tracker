@@ -27,8 +27,6 @@ class TrackerConfigurationViewController: UIViewController {
         return view
     }()
     
-
-    
     private var contenSize: CGSize{
         return CGSize(width: view.frame.width, height: 841)
     }

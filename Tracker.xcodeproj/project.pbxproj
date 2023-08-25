@@ -22,6 +22,8 @@
 		7F34B3A02A972F990068359E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B39F2A972F990068359E /* AlertPresenter.swift */; };
 		7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A12A975A790068359E /* ScheduleViewController.swift */; };
 		7F34B3A52A975B340068359E /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A42A975B340068359E /* ScheduleTableViewCell.swift */; };
+		7F34B3A92A98A46F0068359E /* SupplementaryTrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A82A98A46F0068359E /* SupplementaryTrackersView.swift */; };
+		7F34B3AB2A98D39F0068359E /* Date_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3AA2A98D39F0068359E /* Date_ext.swift */; };
 		7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */; };
 		7F8475472A7E923000BBF9EF /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */; };
 		7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475482A7F693F00BBF9EF /* FirstViewController.swift */; };
@@ -56,6 +58,8 @@
 		7F34B39F2A972F990068359E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		7F34B3A12A975A790068359E /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		7F34B3A42A975B340068359E /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		7F34B3A82A98A46F0068359E /* SupplementaryTrackersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryTrackersView.swift; sourceTree = "<group>"; };
+		7F34B3AA2A98D39F0068359E /* Date_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_ext.swift; sourceTree = "<group>"; };
 		7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewContoller.swift; sourceTree = "<group>"; };
 		7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
 		7F8475482A7F693F00BBF9EF /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				7F20E61C2A759A6E00C49C3E /* Assets.xcassets */,
+				7F34B3AA2A98D39F0068359E /* Date_ext.swift */,
 				7F20E6282A75A27D00C49C3E /* UIColor_ext.swift */,
 				7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */,
 				7F84755C2A86AF7C00BBF9EF /* Helper.swift */,
@@ -183,6 +188,7 @@
 				7F84754D2A7F7C0000BBF9EF /* TrackersViewController.swift */,
 				7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */,
 				7F8475512A8170B700BBF9EF /* TrackerCollectionViewCell.swift */,
+				7F34B3A82A98A46F0068359E /* SupplementaryTrackersView.swift */,
 			);
 			path = TrackersView;
 			sourceTree = "<group>";
@@ -283,10 +289,12 @@
 				7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */,
 				7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
+				7F34B3AB2A98D39F0068359E /* Date_ext.swift in Sources */,
 				7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */,
 				7F84754E2A7F7C0000BBF9EF /* TrackersViewController.swift in Sources */,
 				7F16D7612A96B7420054FFF1 /* ColorView.swift in Sources */,
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,
+				7F34B3A92A98A46F0068359E /* SupplementaryTrackersView.swift in Sources */,
 				7F8475592A84299900BBF9EF /* TrackerCategory.swift in Sources */,
 				7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */,
 				7F16D75F2A96B6A50054FFF1 /* ColorCell.swift in Sources */,
