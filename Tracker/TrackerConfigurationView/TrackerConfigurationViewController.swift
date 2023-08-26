@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackerConfigurationViewController: UIViewController {
+final class TrackerConfigurationViewController: UIViewController {
     
     var navName = String()
     var isRegular: Bool = false

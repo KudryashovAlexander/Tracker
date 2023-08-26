@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private var emojieCollection = EmojieCollection()
     private let collectionView = UICollectionView(frame: .zero,

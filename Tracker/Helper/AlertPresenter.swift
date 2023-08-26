@@ -13,7 +13,7 @@ struct AlertModel {
     let buttonTitle: String
 }
 
-class AlertPresener {
+final class AlertPresener {
     
     private let defaultAlert = AlertModel(title: "Не хватает параметров",
                                          message: "Введите: ",

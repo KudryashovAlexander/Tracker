@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WelcomePageViewController: UIPageViewController {
+final class WelcomePageViewController: UIPageViewController {
     
     
     

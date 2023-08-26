@@ -11,7 +11,7 @@ protocol ScheduleViewControllerProtocol: AnyObject {
     func changeIsOn(_ numberDay: Int)
 }
 
-class ScheduleViewController: UIViewController {
+final class ScheduleViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()

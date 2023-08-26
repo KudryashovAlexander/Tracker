@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewTrackerTableViewCell: UITableViewCell {
+final class NewTrackerTableViewCell: UITableViewCell {
     
     static let cellIdentifier = "NewTrackerTableViewCell"
     

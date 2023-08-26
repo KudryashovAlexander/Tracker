@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7492A911D680054FFF1 /* TableViewHelper.swift */; };
 		7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */; };
 		7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */; };
 		7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F16D75C2A9666580054FFF1 /* EmojieView.swift */; };
@@ -41,7 +40,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7F16D7492A911D680054FFF1 /* TableViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHelper.swift; sourceTree = "<group>"; };
 		7F16D7562A93CF370054FFF1 /* NewTrackerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerTableViewCell.swift; sourceTree = "<group>"; };
 		7F16D75A2A96625C0054FFF1 /* EmojieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieCell.swift; sourceTree = "<group>"; };
 		7F16D75C2A9666580054FFF1 /* EmojieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojieView.swift; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 				7F20E6282A75A27D00C49C3E /* UIColor_ext.swift */,
 				7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */,
 				7F84755C2A86AF7C00BBF9EF /* Helper.swift */,
-				7F16D7492A911D680054FFF1 /* TableViewHelper.swift */,
 				7F34B39F2A972F990068359E /* AlertPresenter.swift */,
 			);
 			path = Helper;
@@ -287,7 +284,6 @@
 				7F84754C2A7F73ED00BBF9EF /* TabBarController.swift in Sources */,
 				7F16D7572A93CF370054FFF1 /* NewTrackerTableViewCell.swift in Sources */,
 				7F8475492A7F693F00BBF9EF /* FirstViewController.swift in Sources */,
-				7F16D74A2A911D680054FFF1 /* TableViewHelper.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
 				7F34B3AB2A98D39F0068359E /* Date_ext.swift in Sources */,
 				7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */,

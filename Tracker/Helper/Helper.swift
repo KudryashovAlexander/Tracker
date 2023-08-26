@@ -22,9 +22,6 @@ struct ColorCollection {
 }
 
 // Для МОК Данных
-
-
-
 let tracker1 = Tracker(name: "Погладить кота", color: .ypCS5, emojie: "😻")
 let tracker2 = Tracker(name: "Приготовить поесть", color: .ypCS9, emojie: "🥦")
 let homeWork = TrackerCategory(name: "Домашние дела",

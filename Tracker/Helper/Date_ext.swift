@@ -16,7 +16,7 @@ extension Formatter {
         return formatter
     }()
     
-    static let pickerDateFormat: DateFormatter = {
+    static let pickerDateFormat: DateFormatter = { //Можно подключить только для верисий айос 15 и новее
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
         formatter.dateFormat = "dd.MM.YY"

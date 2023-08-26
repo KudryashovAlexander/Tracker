@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SupplementaryTrackersView: UICollectionReusableView {
+final class SupplementaryTrackersView: UICollectionReusableView {
     
     static let identifier = "SupplementaryTrackersView"
     

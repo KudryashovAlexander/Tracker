@@ -6,7 +6,7 @@
 //
 
 import UIKit
-class TrackersViewController: UIViewController {
+final class TrackersViewController: UIViewController {
     
     private let sController = UISearchController()
     var categories: [TrackerCategory] = mokVisibaleCategory
@@ -109,10 +109,12 @@ class TrackersViewController: UIViewController {
         
         self.navigationItem.title = "Трекеры"
         navBar.prefersLargeTitles = true
+        navControl.hidesBarsOnSwipe = false
         
         sController.hidesNavigationBarDuringPresentation = false
         
         sController.searchBar.searchTextField.placeholder = "Поиск"
+        sController.searchBar.searchTextField.delegate = self
         self.navigationItem.searchController = sController
         
     }
@@ -143,6 +145,21 @@ class TrackersViewController: UIViewController {
         visibleCategories = visCategory
     }
     
+    private func searchTracker(textDidChange searchText: String) {
+        var visCategory = [TrackerCategory]()
+        for cat in categories {
+            var trakers = [Tracker]()
+            for _ in cat.trackers {
+                trakers = cat.trackers.filter({$0.name.contains(searchText)})
+                if !trakers.isEmpty{
+                    visCategory.append(TrackerCategory(name: cat.name, trackers: trakers))
+                }
+            }
+        }
+        visibleCategories = visCategory
+        collectionView.reloadData()
+    }
+    
     
     @objc
     private func add() {
@@ -153,6 +170,22 @@ class TrackersViewController: UIViewController {
     }
     
 }
+//MARK: - Extension UITextFieldDelegate
+extension TrackersViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text {
+            searchTracker(textDidChange: text)
+        }
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        sortedCollectionData()
+        return true
+    }
+    
+    
+}
+
 
 //MARK: - Extension CollectionViewDataSourse
 extension TrackersViewController: UICollectionViewDataSource {
@@ -162,6 +195,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             collectionIsEmpty(false)
             return 0
         }
+        collectionIsEmpty(true)
         return visibleCategories.count
     }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EmojieCell: UICollectionViewCell {
+final class EmojieCell: UICollectionViewCell {
     
     static let cellIdentifier = "EmojieCell"
     

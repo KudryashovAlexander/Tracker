@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var colorCollection = ColorCollection()
     private let collectionView = UICollectionView(frame: .zero,

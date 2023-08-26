@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TrackerAddViewController: UIViewController {
+final class TrackerAddViewController: UIViewController {
     
     
     private var trackerButton = UIButton()
