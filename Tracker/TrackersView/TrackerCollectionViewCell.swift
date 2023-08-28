@@ -6,14 +6,36 @@
 //
 
 import UIKit
+protocol TrackersViewCellProtocol: AnyObject {
+    func addOrRemoveTrackerRecord(id: UUID, isAdd: Bool, indexPath: IndexPath)
+}
+
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCollectionCell"
+    var delegate: TrackersViewCellProtocol?
     
     var dayCount = 0 {
         didSet {
             dayCountLabel.text = dayCounterString(dayCount)
+        }
+    }
+    var indexPath: IndexPath?
+    
+    var dayIsDone = false {
+        didSet {
+            if dayIsDone == true {
+                let image = UIImage(named: "done_button") ?? UIImage()
+                addTrackerDayButton.setImage(image, for: .normal)
+                addTrackerDayButton.backgroundColor = .ypWhite
+                addTrackerDayButton.tintColor = tracker.color
+            } else {
+                let image = UIImage(named: "add_Tracker_button") ?? UIImage()
+                addTrackerDayButton.setImage(image, for: .normal)
+                addTrackerDayButton.backgroundColor = tracker.color
+                addTrackerDayButton.tintColor = .ypWhite
+            }
         }
     }
     
@@ -24,8 +46,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             trackerLabel.text = tracker.name
             trackerView.backgroundColor = tracker.color
             addTrackerDayButton.backgroundColor = tracker.color
+            trackerID = tracker.id
         }
     }
+    private var trackerID = UUID()
 
     //вью трекера
     private var trackerView = UIView()
@@ -133,13 +157,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private func addTrackerDayButtonSupport(){
         addTrackerDayButton.layer.masksToBounds = true
         addTrackerDayButton.layer.cornerRadius = 17
-        let image = UIImage(named: "add_Tracker_button") ?? UIImage()
-        addTrackerDayButton.setImage(image, for: .normal)
         addTrackerDayButton.addTarget(self, action: #selector(addDayCount), for: .touchUpInside)
-        
-        let color = tracker.color
-        color.withAlphaComponent(0.3)
-        addTrackerDayButton.setTitleColor(color, for: .highlighted)
         
         addTrackerDayButton.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -200,9 +218,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func addDayCount() {
-        dayCount += 1
-        let image = UIImage(named: "done_button") ?? UIImage()
-        addTrackerDayButton.setImage(image, for: .normal)
+       // dayIsDone = !dayIsDone
+        if let indexPath = indexPath {
+            delegate?.addOrRemoveTrackerRecord(id: trackerID, isAdd: !dayIsDone, indexPath: indexPath)
+        }
     }
     
     func pinCell() {

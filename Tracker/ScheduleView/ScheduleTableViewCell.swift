@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ScheduleTableViewCellProtocol: AnyObject {
+    func changeIsOn(_ numberDay: Int)
+}
+
 final class ScheduleTableViewCell: UITableViewCell {
     
     static let cellIdentifier = "ScheduleTableViewCell"
@@ -14,7 +18,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     let dayLabel = UILabel()
     var numberDay = Int()
     let daySwitch = UISwitch()
-    var delegate:ScheduleViewControllerProtocol?
+    var delegate:ScheduleTableViewCellProtocol?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)

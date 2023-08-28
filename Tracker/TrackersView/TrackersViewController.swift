@@ -6,6 +6,9 @@
 //
 
 import UIKit
+
+
+
 final class TrackersViewController: UIViewController {
     
     private let sController = UISearchController()
@@ -13,6 +16,7 @@ final class TrackersViewController: UIViewController {
     var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var currentDate = Date()
+    private let datePicker = UIDatePicker()
     
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -26,7 +30,6 @@ final class TrackersViewController: UIViewController {
 
         super.viewDidLoad()
         navigationSupport()
-
         
         self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
         self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
@@ -85,7 +88,6 @@ final class TrackersViewController: UIViewController {
         emptyCollectiionImage.isHidden = isHidden
         emptyCollectionLabel.isHidden = isHidden
     }
-    private let datePicker = UIDatePicker()
     
     //Настройка навигейшн
     private func navigationSupport() {
@@ -109,23 +111,24 @@ final class TrackersViewController: UIViewController {
         
         self.navigationItem.title = "Трекеры"
         navBar.prefersLargeTitles = true
-        navControl.hidesBarsOnSwipe = false
+        //navControl.hidesBarsOnSwipe = false
         
         sController.hidesNavigationBarDuringPresentation = false
         
         sController.searchBar.searchTextField.placeholder = "Поиск"
-        sController.searchBar.searchTextField.delegate = self
         self.navigationItem.searchController = sController
         
+        sController.searchBar.searchTextField.delegate = self
+
     }
     @objc
     private func changeDate() {
         currentDate = datePicker.date
         sortedCollectionData()
         collectionView.reloadData()
-        
     }
     
+    //Поиск по дате трекера
     private func sortedCollectionData() {
         var visCategory = [TrackerCategory]()
         for cat in categories {
@@ -145,19 +148,37 @@ final class TrackersViewController: UIViewController {
         visibleCategories = visCategory
     }
     
+    //поиск трекера
     private func searchTracker(textDidChange searchText: String) {
         var visCategory = [TrackerCategory]()
-        for cat in categories {
+        for cat in visibleCategories {
             var trakers = [Tracker]()
             for _ in cat.trackers {
                 trakers = cat.trackers.filter({$0.name.contains(searchText)})
-                if !trakers.isEmpty{
-                    visCategory.append(TrackerCategory(name: cat.name, trackers: trakers))
-                }
+            }
+            if !trakers.isEmpty{
+                visCategory.append(TrackerCategory(name: cat.name, trackers: trakers))
             }
         }
         visibleCategories = visCategory
         collectionView.reloadData()
+    }
+    
+    private func trackerFind(id: UUID) -> (Int,Bool) {
+        
+        var countDay = 0
+        var isDone = false
+        
+        for trackerRecord in completedTrackers {
+            if trackerRecord.id == id {
+                countDay += 1
+                let stringDate = trackerRecord.date.dayMounthYearString
+                if stringDate == currentDate.dayMounthYearString {
+                    isDone = true
+                }
+            }
+        }
+        return (countDay,isDone)
     }
     
     
@@ -170,6 +191,45 @@ final class TrackersViewController: UIViewController {
     }
     
 }
+
+//MARK: Extension TrackerConfigurationViewControllerProtocol{
+extension TrackersViewController: TrackerConfigurationViewControllerProtocol {
+    func addEndTracker(newCategory: TrackerCategory) {
+        categories.append(newCategory)
+        collectionView.reloadData()
+    }
+}
+
+
+//MARK: - Extension TrackersViewControllerProtocol
+extension TrackersViewController: TrackersViewCellProtocol {
+    
+    func addOrRemoveTrackerRecord(id: UUID, isAdd: Bool, indexPath idexPath: IndexPath) {
+        if currentDate.isAfter(){
+            return
+        }
+        
+        let trackerRecord = TrackerRecord(id: id, date: currentDate)
+        let trackerRecordDateString = trackerRecord.date.dayMounthYearString
+        
+        if isAdd {
+            completedTrackers.append(trackerRecord)
+        } else {
+            completedTrackers.removeAll { trackerRec in
+                trackerRecord.id == trackerRec.id &&
+                trackerRecordDateString == trackerRec.date.dayMounthYearString
+            }
+        }
+        collectionView.reloadItems(at: [idexPath])
+    }
+    
+
+    
+    
+}
+
+
+
 //MARK: - Extension UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -182,8 +242,7 @@ extension TrackersViewController: UITextFieldDelegate {
         sortedCollectionData()
         return true
     }
-    
-    
+
 }
 
 
@@ -211,7 +270,14 @@ extension TrackersViewController: UICollectionViewDataSource {
         else { return UICollectionViewCell() }
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        
         cell.tracker = tracker
+        cell.delegate = self
+        
+        cell.dayCount = trackerFind(id: tracker.id).0
+        cell.dayIsDone = trackerFind(id: tracker.id).1
+        cell.indexPath = indexPath
+
         return cell
     }
     

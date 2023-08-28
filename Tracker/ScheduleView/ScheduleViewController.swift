@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol ScheduleViewControllerProtocol: AnyObject {
-    func changeIsOn(_ numberDay: Int)
+protocol ScheduleViewControllerProtocol {
+    func updateSchedule(_ newSchedule: ScheduleTracker)
 }
 
 final class ScheduleViewController: UIViewController {
@@ -37,6 +37,8 @@ final class ScheduleViewController: UIViewController {
     private var schedule = ScheduleTracker()
     
     private var doneButton = UIButton()
+    
+    var delegate:ScheduleViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,7 +112,7 @@ final class ScheduleViewController: UIViewController {
     }
     @objc
     private func createSchedule() {
-        
+        delegate?.updateSchedule(schedule)
         dismiss(animated: true)
     }
     
@@ -139,7 +141,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
 }
 
 //MARK: Extension ScheduleViewControllerProtocol
-extension ScheduleViewController: ScheduleViewControllerProtocol {
+extension ScheduleViewController: ScheduleTableViewCellProtocol {
     func changeIsOn(_ numberDay: Int) {
         schedule.scheduleArray[numberDay].isOn = !schedule.scheduleArray[numberDay].isOn
         print("\(schedule.scheduleArray[numberDay].isOn), \(schedule.scheduleArray[numberDay].name)")

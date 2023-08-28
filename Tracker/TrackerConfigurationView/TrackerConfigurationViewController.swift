@@ -7,10 +7,16 @@
 
 import UIKit
 
+protocol TrackerConfigurationViewControllerProtocol {
+    func addEndTracker(newCategory: TrackerCategory)
+}
+
 final class TrackerConfigurationViewController: UIViewController {
     
     var navName = String()
     var isRegular: Bool = false
+    
+    var delegate: TrackerConfigurationViewControllerProtocol?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -58,6 +64,8 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private let canselButton = UIButton()
     private let createButton = UIButton()
+    
+    var schedule = ScheduleTracker()
     
     private let alertPresenter = AlertPresener()
     
@@ -298,12 +306,23 @@ final class TrackerConfigurationViewController: UIViewController {
     
     @objc
     private func createPress(){
-        //TODO: - Сделать проверку что заполнены имя, категория, расписание, емоджи, цвет и после этого сохранить трекер и вернуться на главный экран
         createButton.backgroundColor = .ypGray
         
         if let name = nameTrackerTextField.text {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie)
+                //tracker.schedule = schedule
+                
+                let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
+                
+                guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                let splashVC = TrackersViewController()
+                delegate = splashVC
+                
+                delegate?.addEndTracker(newCategory: trackerCategory)
+
+                window.rootViewController = splashVC
+                
             } else {
                 alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
                     //
@@ -342,6 +361,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
         }
         
         if indexPath.row == 1 {
+            
             createScheduleViewController()
         }
         
@@ -349,6 +369,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     
     private func createScheduleViewController() {
         let vc = ScheduleViewController()
+        vc.delegate = self
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
@@ -356,6 +377,12 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     private func createCategoryViewController() {
         //Дописать метод
     }
-    
+}
+
+//MARK: - Extension ScheduleViewControllerProtocol
+extension TrackerConfigurationViewControllerProtocol: ScheduleViewControllerProtocol {
+    func updateSchedule(_ newSchedule: ScheduleTracker) {
+        schedule = newSchedule
+    }
     
 }
