@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ScheduleViewControllerProtocol {
-    func updateSchedule(_ newSchedule: ScheduleTracker)
+    func updateSchedule(_ newSchedule: Schedule)
 }
 
 final class ScheduleViewController: UIViewController {
@@ -34,7 +34,7 @@ final class ScheduleViewController: UIViewController {
     
     private var scheduleContainer = UIView()
     private var scheduleTableView = UITableView()
-    private var schedule = ScheduleTracker()
+    private var schedule = Schedule()
     
     private var doneButton = UIButton()
     
@@ -122,7 +122,7 @@ final class ScheduleViewController: UIViewController {
 extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        schedule.scheduleArray.count
+        schedule.daysIsOn.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -130,8 +130,9 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
             return UITableViewCell()
         }
         cell.delegate = self
-        cell.dayLabel.text = schedule.scheduleArray[indexPath.row].name
-        cell.daySwitch.isOn = schedule.scheduleArray[indexPath.row].isOn
+        
+        cell.dayLabel.text = schedule.dayOfWeek[indexPath.row]
+        cell.daySwitch.isOn = schedule.daysIsOn[indexPath.row].isOn
         cell.numberDay = indexPath.row
         
         cell.backgroundColor = .ypBackground
@@ -143,7 +144,6 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
 //MARK: Extension ScheduleViewControllerProtocol
 extension ScheduleViewController: ScheduleTableViewCellProtocol {
     func changeIsOn(_ numberDay: Int) {
-        schedule.scheduleArray[numberDay].isOn = !schedule.scheduleArray[numberDay].isOn
-        print("\(schedule.scheduleArray[numberDay].isOn), \(schedule.scheduleArray[numberDay].name)")
+        schedule.daysIsOn[numberDay].isOn = !schedule.daysIsOn[numberDay].isOn
     }
 }

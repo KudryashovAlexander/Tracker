@@ -65,7 +65,7 @@ final class TrackerConfigurationViewController: UIViewController {
     private let canselButton = UIButton()
     private let createButton = UIButton()
     
-    var schedule = ScheduleTracker()
+    var schedule = Schedule()
     
     private let alertPresenter = AlertPresener()
     
@@ -310,7 +310,7 @@ final class TrackerConfigurationViewController: UIViewController {
         
         if let name = nameTrackerTextField.text {
             if !name.isEmpty {
-                let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie)
+                let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 //tracker.schedule = schedule
                 
                 let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
@@ -380,7 +380,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
 
 //MARK: - Extension ScheduleViewControllerProtocol
 extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
-    func updateSchedule(_ newSchedule: ScheduleTracker) {
+    func updateSchedule(_ newSchedule: Schedule) {
         schedule = newSchedule
     }
     

@@ -23,12 +23,14 @@ final class TrackersViewController: UIViewController {
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
     
+    private var searchText: String? = nil
+    
     override func viewDidLoad() {
-        sortedCollectionData()
-
+        
         super.viewDidLoad()
         navigationSupport()
-        
+        filterCollectionView()
+
         self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
         self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
         
@@ -101,6 +103,8 @@ final class TrackersViewController: UIViewController {
                 
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
+        datePicker.calendar.firstWeekday = 1
+        
         datePicker.addTarget(self, action: #selector(changeDate), for: .valueChanged)
         datePicker.locale = Locale(identifier: "ru_RU")
         
@@ -109,12 +113,14 @@ final class TrackersViewController: UIViewController {
         
         self.navigationItem.title = "Трекеры"
         navBar.prefersLargeTitles = true
-        //navControl.hidesBarsOnSwipe = false
-        
-        sController.hidesNavigationBarDuringPresentation = false
-        
-        sController.searchBar.searchTextField.placeholder = "Поиск"
+        self.navigationItem.largeTitleDisplayMode = .always
+
         self.navigationItem.searchController = sController
+        self.sController.hidesNavigationBarDuringPresentation = false
+
+//        navControl.hidesBarsOnSwipe = false
+
+        sController.searchBar.searchTextField.placeholder = "Поиск"
         
         sController.searchBar.searchTextField.delegate = self
 
@@ -122,45 +128,35 @@ final class TrackersViewController: UIViewController {
     @objc
     private func changeDate() {
         currentDate = datePicker.date
-        sortedCollectionData()
+        filterCollectionView()
         collectionView.reloadData()
     }
     
-    //Поиск по дате трекера
-    private func sortedCollectionData() {
-        var visCategory = [TrackerCategory]()
-        for cat in categories {
-            var trackers = [Tracker]()
-            for tracker in cat.trackers {
-                for daY in tracker.schedule.scheduleArray {
-                    if daY.shortName == currentDate.weekdayNameString && daY.isOn {
-                        trackers.append(tracker)
-                        break
-                    }
-                }
+    private func filterCollectionView(){
+        let calendar = Calendar.current
+        let filterWeekDay = calendar.component(.weekday, from: currentDate)
+        let filterText = (searchText ?? "").lowercased()
+        
+        visibleCategories = categories.compactMap({ category in
+            let trackers = category.trackers.filter { tracker in
+                let dateCondition = tracker.schedule.daysIsOn.contains { weekDay in
+                    weekDay.numberValue == filterWeekDay && weekDay.isOn
+                } == true
+                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+                
+                return dateCondition && textCondition
             }
-            if !trackers.isEmpty {
-                visCategory.append(cat)
+            
+            if trackers.isEmpty {
+                return nil
             }
-        }
-        visibleCategories = visCategory
-    }
-    
-    //поиск трекера
-    private func searchTracker(textDidChange searchText: String) {
-        var visCategory = [TrackerCategory]()
-        for cat in visibleCategories {
-            var trakers = [Tracker]()
-            for _ in cat.trackers {
-                trakers = cat.trackers.filter({$0.name.contains(searchText)})
-            }
-            if !trakers.isEmpty{
-                visCategory.append(TrackerCategory(name: cat.name, trackers: trakers))
-            }
-        }
-        visibleCategories = visCategory
+            
+            return TrackerCategory(name: category.name, trackers: trackers)
+        })
+        
         collectionView.reloadData()
     }
+    
     
     private func trackerFind(id: UUID) -> (Int,Bool) {
         
@@ -225,16 +221,21 @@ extension TrackersViewController: TrackersViewCellProtocol {
 
 //MARK: - Extension UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text {
-            searchTracker(textDidChange: text)
-        }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        searchText = textField.text
+        filterCollectionView()
+        return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        sortedCollectionData()
+        textField.resignFirstResponder()
+        searchText = nil
+        filterCollectionView()
         return true
     }
+    
 
 }
 
