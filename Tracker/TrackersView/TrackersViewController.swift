@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 final class TrackersViewController: UIViewController {
     
     private let sController = UISearchController()
@@ -223,12 +221,7 @@ extension TrackersViewController: TrackersViewCellProtocol {
         collectionView.reloadItems(at: [idexPath])
     }
     
-
-    
-    
 }
-
-
 
 //MARK: - Extension UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {

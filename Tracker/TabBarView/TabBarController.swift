@@ -8,13 +8,14 @@
 import UIKit
 class TabBarController: UITabBarController {
     
+    let trackerViewController = TrackersViewController()
+    let statisticViewController = StatisticViewController()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
     override func viewDidLoad() {
-        let trackerViewController = TrackersViewController()
-        let statisticViewController = StatisticViewController()
         
         let trackerNavController = UINavigationController(rootViewController: trackerViewController)
         let statisticNavController = UINavigationController(rootViewController: statisticViewController)

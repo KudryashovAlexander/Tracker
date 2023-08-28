@@ -316,12 +316,11 @@ final class TrackerConfigurationViewController: UIViewController {
                 let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
                 
                 guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-                let splashVC = TrackersViewController()
-                delegate = splashVC
-                
-                delegate?.addEndTracker(newCategory: trackerCategory)
 
-                window.rootViewController = splashVC
+                let tabBar = TabBarController()
+                delegate = tabBar.trackerViewController
+                delegate?.addEndTracker(newCategory: trackerCategory)
+                window.rootViewController = tabBar
                 
             } else {
                 alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
@@ -380,7 +379,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
 }
 
 //MARK: - Extension ScheduleViewControllerProtocol
-extension TrackerConfigurationViewControllerProtocol: ScheduleViewControllerProtocol {
+extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
     func updateSchedule(_ newSchedule: ScheduleTracker) {
         schedule = newSchedule
     }
