@@ -14,8 +14,6 @@ final class StatisticViewController: UIViewController {
         
         self.navigationItem.title = "Статистика"
         navigationController?.navigationBar.prefersLargeTitles = true
-
-        
     }
     
 }

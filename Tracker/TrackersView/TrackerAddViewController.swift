@@ -10,9 +10,7 @@ import UIKit
 
 final class TrackerAddViewController: UIViewController {
     
-    
     private var trackerButton = UIButton()
-    
     private var notRegularButton = UIButton()
         
     override func viewDidLoad() {
@@ -24,8 +22,6 @@ final class TrackerAddViewController: UIViewController {
         trackerButtonCongiguration()
         notRegularButtonCongiguration()
 
-        
-        
         NSLayoutConstraint.activate([
             trackerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             trackerButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -85,6 +81,5 @@ final class TrackerAddViewController: UIViewController {
         trackerConfugurationView.isRegular = isRegular
         let naVC = UINavigationController(rootViewController: trackerConfugurationView)
         self.present(naVC, animated: true)
-        
     }
 }

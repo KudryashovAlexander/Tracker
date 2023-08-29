@@ -10,8 +10,7 @@ import UIKit
 final class SupplementaryTrackersView: UICollectionReusableView {
     
     static let identifier = "SupplementaryTrackersView"
-    
-    let titleLabel = UILabel()
+    private let titleLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init (frame:frame)
@@ -32,5 +31,9 @@ final class SupplementaryTrackersView: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(text: String) {
+        titleLabel.text = text
     }
 }

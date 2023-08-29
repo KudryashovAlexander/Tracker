@@ -23,8 +23,6 @@ extension Formatter {
         return formatter
     }()
     
-    
-
 }
 
 extension Date {
@@ -36,8 +34,6 @@ extension Date {
     var dayMounthYearString: String {
         Formatter.pickerDateFormat.string(from: self)
     }
-    
-   
     
     func isAfter(_ date: Date = Date()) -> Bool {
         

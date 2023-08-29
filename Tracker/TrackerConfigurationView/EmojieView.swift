@@ -42,7 +42,6 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(emojieCollection.array.count)
         return emojieCollection.array.count
     }
     
@@ -50,11 +49,11 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojieCell.cellIdentifier,for: indexPath) as? EmojieCell else {
             return UICollectionViewCell()
         }
-        cell.emojieLabel.text = emojieCollection.array[indexPath.row]
+        let text = emojieCollection.array[indexPath.row]
+        cell.configure(text: text)
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16
         return cell
-                
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -70,11 +69,11 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? EmojieCell {
-            selectedEmojie = cell.emojieLabel.text!
+            selectedEmojie = cell.returnText()
             cell.backgroundColor = .lightGray
-            print("Выбрана эмоция \(String(describing: cell.emojieLabel.text))")
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? EmojieCell
         cell?.backgroundColor = .ypWhite

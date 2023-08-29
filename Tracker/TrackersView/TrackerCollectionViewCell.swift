@@ -21,6 +21,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             dayCountLabel.text = dayCounterString(dayCount)
         }
     }
+    
     var indexPath: IndexPath?
     
     var dayIsDone = false {
@@ -39,7 +40,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    //Значения емодзи, цвет трекера, цвет кнопки
     var tracker = Tracker(name: "Тестовая", color: .ypLightGray, emojie: "T"){
         didSet {
             emojieLabel.text = tracker.emojie
@@ -49,27 +49,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             trackerID = tracker.id
         }
     }
+    
     private var trackerID = UUID()
-
-    //вью трекера
     private var trackerView = UIView()
-    
-    //Круг под емоджи
     private var emojieBall = UIView()
-    
-    //Емодзи
     private var emojieLabel = UILabel()
-
-    //кнопка Закрепить
     private var pinImageView = UIImageView()
-    
-    //привычка или неругул событие
     private var trackerLabel = UILabel()
-    
-    //Количество дней
     private var dayCountLabel = UILabel()
-    
-    //кнопка нажатия кнопки
     private var addTrackerDayButton = UIButton()
 
     override init(frame: CGRect) {
@@ -104,6 +91,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         
         layoutSupport()
     }
+    
     //MARK: - Methods
     private func trackerViewSupport(){
         trackerView.layer.masksToBounds = true
@@ -165,46 +153,37 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private func layoutSupport(){
         NSLayoutConstraint.activate([
             
-            //view трекера
             trackerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             trackerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             trackerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             trackerView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
             
-            //Кнопка закрепить
             pinImageView.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 12),
             pinImageView.rightAnchor.constraint(equalTo: trackerView.rightAnchor, constant: -4),
             pinImageView.heightAnchor.constraint(equalToConstant: 24),
             pinImageView.widthAnchor.constraint(equalToConstant: 24),
 
-            //Круг под емодзи
             emojieBall.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 12),
             emojieBall.leftAnchor.constraint(equalTo: trackerView.leftAnchor, constant: 12),
             emojieBall.heightAnchor.constraint(equalToConstant: 24),
             emojieBall.widthAnchor.constraint(equalToConstant: 24),
             
-            //емодзи
             emojieLabel.centerXAnchor.constraint(equalTo: emojieBall.centerXAnchor),
             emojieLabel.centerYAnchor.constraint(equalTo: emojieBall.centerYAnchor),
             
-            //привычка
             trackerLabel.bottomAnchor.constraint(equalTo: trackerView.bottomAnchor, constant: -12),
             trackerLabel.rightAnchor.constraint(equalTo: trackerView.rightAnchor, constant: -12),
             trackerLabel.leftAnchor.constraint(equalTo: trackerView.leftAnchor, constant: 12),
             
-            //Кол-во дней
             dayCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
             dayCountLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
             
-            //кнопка добавления привычки
             addTrackerDayButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
             addTrackerDayButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             addTrackerDayButton.heightAnchor.constraint(equalToConstant: 34),
             addTrackerDayButton.widthAnchor.constraint(equalToConstant: 34)
-
         ])
     }
-    
     
     private func dayCounterString(_ number: Int) -> String {
         var text = String()
@@ -218,7 +197,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func addDayCount() {
-       // dayIsDone = !dayIsDone
         if let indexPath = indexPath {
             delegate?.addOrRemoveTrackerRecord(id: trackerID, isAdd: !dayIsDone, indexPath: indexPath)
         }
@@ -227,6 +205,5 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     func pinCell() {
         pinImageView.isHidden = !pinImageView.isHidden
     }
-    
     
 }

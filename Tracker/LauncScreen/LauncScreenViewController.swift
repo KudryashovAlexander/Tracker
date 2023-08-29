@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class LauncScreenViewController: UIViewController {
     private let logoImageView = UIImageView()
     
     override func viewDidLoad() {

@@ -34,5 +34,4 @@ class TabBarController: UITabBarController {
         self.viewControllers = [trackerNavController,statisticNavController]
     }
     
-    
 }

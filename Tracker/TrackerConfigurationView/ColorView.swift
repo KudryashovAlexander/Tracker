@@ -41,7 +41,6 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(colorCollection.array.count)
         return colorCollection.array.count
     }
     
@@ -49,7 +48,8 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.cellIdentifier,for: indexPath) as? ColorCell else {
             return UICollectionViewCell()
         }
-        cell.colorView.backgroundColor = colorCollection.array[indexPath.row]
+        let color = colorCollection.array[indexPath.row]
+        cell.configure(color: color)
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 8
         return cell
@@ -63,20 +63,20 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-            if let color = cell.colorView.backgroundColor {
-                selectedColor = color
+                selectedColor = cell.selectedColor()
                 cell.layer.borderWidth = 3
-                let borderColor = color.withAlphaComponent(0.3).cgColor
+                let borderColor = selectedColor.withAlphaComponent(0.3).cgColor
                 cell.layer.borderColor = borderColor
-            }
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
         cell?.layer.borderWidth = 0

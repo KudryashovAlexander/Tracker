@@ -82,36 +82,12 @@ final class NewTrackerTableViewCell: UITableViewCell {
             propertyNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
 
         }
-        
     }
     
     private func selectedPropertyConfiguration() {
         selectedPropertyLabel.textAlignment = .left
         selectedPropertyLabel.font = .yPRegular17
         selectedPropertyLabel.textColor = .ypGray
-        
     }
     
-//    func updateLayout() {
-//        labelName.translatesAutoresizingMaskIntoConstraints = false
-//        labelProperty.translatesAutoresizingMaskIntoConstraints = false
-//        propertyImageView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//
-//            contentView.heightAnchor.constraint(equalToConstant: 75),
-//
-//            labelName.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-//            labelName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-//
-//            labelProperty.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 2),
-//            labelProperty.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-//
-//            propertyImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-//            propertyImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
-//
-//        ])
-//    }
-    
-
 }

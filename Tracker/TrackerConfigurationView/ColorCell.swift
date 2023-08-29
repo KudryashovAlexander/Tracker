@@ -10,7 +10,7 @@ import UIKit
 final class ColorCell: UICollectionViewCell {
     static let cellIdentifier = "ColorCell"
     
-    var colorView = UIView()
+    private var colorView = UIView()
     
     override init(frame: CGRect) {
         super .init(frame: frame)
@@ -25,6 +25,12 @@ final class ColorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(color: UIColor) {
+        colorView.backgroundColor = color
+    }
     
+    func selectedColor() -> UIColor {
+        return colorView.backgroundColor ?? UIColor()
+    }
     
 }

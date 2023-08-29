@@ -7,11 +7,6 @@
 
 import UIKit
 
-struct AlertModel {
-    let title: String
-    let message: String
-    let buttonTitle: String
-}
 
 final class AlertPresener {
     
@@ -19,19 +14,17 @@ final class AlertPresener {
                                          message: "Введите: ",
                                          buttonTitle: "OK")
     
-    
     func showAlert(message: String, viewController: UIViewController, completion: @escaping () -> Void) {
         
         let alert = UIAlertController(title: defaultAlert.title,
                                       message: defaultAlert.message + message,
                                       preferredStyle: .alert)
         
-        
         let action = UIAlertAction(title: defaultAlert.buttonTitle, style: .default) { _ in
             completion()
         }
-        alert.addAction(action)
         
+        alert.addAction(action)
         viewController.present(alert, animated: true, completion: nil)
     }
     

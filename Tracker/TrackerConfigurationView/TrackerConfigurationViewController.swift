@@ -181,17 +181,14 @@ final class TrackerConfigurationViewController: UIViewController {
             createButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 16),
             createButton.widthAnchor.constraint(equalToConstant: contentView.frame.width / 2 - 20 - 4),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            
         ])
         
     }
     
-    //Вью для ввода
     private func nameTrackerConteinerSupport() {
         nameTrackerConteiner.backgroundColor = .white
     }
     
-    //texfield для ввода
     private func nameTrackerTextFieldSupport() {
         nameTrackerTextField.layer.masksToBounds = true
         nameTrackerTextField.layer.cornerRadius = 16
@@ -211,7 +208,6 @@ final class TrackerConfigurationViewController: UIViewController {
         let image = UIImage(named: "textfieldCansel_button")
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(removeText), for: .touchUpInside)
-//        button.sizeToFit()
         rightView.addSubview(button)
         
         nameTrackerTextField.rightView = rightView
@@ -239,12 +235,10 @@ final class TrackerConfigurationViewController: UIViewController {
         propertyTableView.separatorInset.left = 16
         propertyTableView.separatorInset.right = 16
         propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-
     }
     
     
     private func attentionLabelSupport(_ textCount: Int) {
-        
         if textCount > 37 {
             
             attentionLabel.isEnabled = true
@@ -311,11 +305,11 @@ final class TrackerConfigurationViewController: UIViewController {
         if let name = nameTrackerTextField.text {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
-                //tracker.schedule = schedule
                 
                 let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
                 
-                guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                guard let window = UIApplication.shared.windows.first else {
+                    fatalError("Invalid Configuration") }
 
                 let tabBar = TabBarController()
                 delegate = tabBar.trackerViewController
@@ -324,12 +318,10 @@ final class TrackerConfigurationViewController: UIViewController {
                 
             } else {
                 alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
-                    //
                     self.createButton.backgroundColor = .ypBlack
                 }
             }
         }
-        
     }
 
 }
@@ -345,7 +337,6 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
         guard let newTrackerCell = cell as? NewTrackerTableViewCell else {
              return UITableViewCell()
         }
-//        newTrackerCell.selectedProperty = "Привет"
         newTrackerCell.propertyName = propertyTracker[indexPath.row]
         if indexPath.row == propertyTracker.count {
             newTrackerCell.separatorInset.left = tableView.frame.maxX
@@ -360,7 +351,6 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
         }
         
         if indexPath.row == 1 {
-            
             createScheduleViewController()
         }
         

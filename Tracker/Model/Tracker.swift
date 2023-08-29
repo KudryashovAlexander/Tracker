@@ -20,7 +20,6 @@ struct Tracker {
         self.emojie = emojie
         self.schedule = Schedule()
     }
-    
 
     init(name: String, color: UIColor, emojie: String, schedule: Schedule ) {
         self.name = name
@@ -28,9 +27,6 @@ struct Tracker {
         self.emojie = emojie
         self.schedule = schedule
     }
-    
-    func changeDayIsOn(_ index:Int, value: Bool){
-        //schedule[index] = value
-    }
+
 }
 

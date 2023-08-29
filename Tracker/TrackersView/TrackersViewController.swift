@@ -64,12 +64,9 @@ final class TrackersViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         collectionView.allowsMultipleSelection = false
-
     }
     
-    //если пустой коллекшн
     private func emptyCollectiionImageSupport() {
         emptyCollectiionImage.image = UIImage(named: "noTracker") ?? UIImage()
         emptyCollectiionImage.isHidden = true
@@ -89,7 +86,6 @@ final class TrackersViewController: UIViewController {
         emptyCollectionLabel.isHidden = isHidden
     }
     
-    //Настройка навигейшн
     private func navigationSupport() {
         guard let navControl = navigationController else { return }
         let navBar = navControl.navigationBar
@@ -114,14 +110,10 @@ final class TrackersViewController: UIViewController {
         self.navigationItem.title = "Трекеры"
         navBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
-
         self.navigationItem.searchController = sController
-        self.sController.hidesNavigationBarDuringPresentation = false
-
-//        navControl.hidesBarsOnSwipe = false
-
-        sController.searchBar.searchTextField.placeholder = "Поиск"
         
+        self.sController.hidesNavigationBarDuringPresentation = false
+        sController.searchBar.searchTextField.placeholder = "Поиск"
         sController.searchBar.searchTextField.delegate = self
 
     }
@@ -157,7 +149,6 @@ final class TrackersViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    
     private func trackerFind(id: UUID) -> (Int,Bool) {
         
         var countDay = 0
@@ -175,10 +166,8 @@ final class TrackersViewController: UIViewController {
         return (countDay,isDone)
     }
     
-    
     @objc
     private func add() {
-        //TODO: - Метод перехода на вью с доабвление новой привычки или неругулярного события
         let vc = TrackerAddViewController()
         let naVC = UINavigationController(rootViewController: vc)
         self.present(naVC, animated: true)
@@ -186,14 +175,13 @@ final class TrackersViewController: UIViewController {
     
 }
 
-//MARK: Extension TrackerConfigurationViewControllerProtocol{
+//MARK: - Extension TrackerConfigurationViewControllerProtocol{
 extension TrackersViewController: TrackerConfigurationViewControllerProtocol {
     func addEndTracker(newCategory: TrackerCategory) {
         categories.append(newCategory)
         collectionView.reloadData()
     }
 }
-
 
 //MARK: - Extension TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewCellProtocol {
@@ -216,7 +204,6 @@ extension TrackersViewController: TrackersViewCellProtocol {
         }
         collectionView.reloadItems(at: [idexPath])
     }
-    
 }
 
 //MARK: - Extension UITextFieldDelegate
@@ -235,8 +222,6 @@ extension TrackersViewController: UITextFieldDelegate {
         filterCollectionView()
         return true
     }
-    
-
 }
 
 
@@ -267,7 +252,6 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         cell.tracker = tracker
         cell.delegate = self
-        
         cell.dayCount = trackerFind(id: tracker.id).0
         cell.dayIsDone = trackerFind(id: tracker.id).1
         cell.indexPath = indexPath
@@ -279,10 +263,11 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SupplementaryTrackersView.identifier, for: indexPath) as? SupplementaryTrackersView else {
             return UICollectionReusableView()
         }
-        view.titleLabel.text = visibleCategories[indexPath.section].name
+        let text = visibleCategories[indexPath.section].name
+        view.configure(text: text)
         return view
-        
     }
+    
 }
 
 //MARK: - Extension UICollectionViewDelegateFlowLayout
@@ -312,6 +297,5 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                          height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority:.required, verticalFittingPriority: .fittingSizeLevel)
     }
-    
     
 }

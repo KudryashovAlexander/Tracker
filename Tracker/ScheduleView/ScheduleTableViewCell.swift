@@ -63,6 +63,4 @@ final class ScheduleTableViewCell: UITableViewCell {
     private func changeDay() {
         delegate?.changeIsOn(numberDay)
     }
-    
-    
 }

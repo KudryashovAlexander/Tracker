@@ -11,7 +11,7 @@ final class EmojieCell: UICollectionViewCell {
     
     static let cellIdentifier = "EmojieCell"
     
-    var emojieLabel = UILabel()
+    private var emojieLabel = UILabel()
     
     override init(frame: CGRect) {
         super .init(frame: frame)
@@ -26,6 +26,12 @@ final class EmojieCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(text: String) {
+        emojieLabel.text = text
+    }
     
+    func returnText() -> String {
+        return emojieLabel.text ?? ""
+    }
     
 }

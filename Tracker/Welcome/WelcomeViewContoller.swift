@@ -16,14 +16,12 @@ final class WelcomeViewController: UIViewController {
     private let textArray = ["Отслеживайте только то, что хотите",
                              "Даже если это не литры воды и йога"]
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImageSupport()
         buttonSupport()
         viewsConstrains()
     }
-    
     
     private func buttonSupport() {
         button.titleLabel?.text = "Вот это технологии!"
@@ -49,8 +47,6 @@ final class WelcomeViewController: UIViewController {
         view.addSubview(pageControl)
     }
 
-    
-    
     private func viewsConstrains() {
         
         button.translatesAutoresizingMaskIntoConstraints = false

@@ -35,7 +35,6 @@ final class ScheduleViewController: UIViewController {
     private var scheduleContainer = UIView()
     private var scheduleTableView = UITableView()
     private var schedule = Schedule()
-    
     private var doneButton = UIButton()
     
     var delegate:ScheduleViewControllerProtocol?
@@ -103,6 +102,7 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
         scheduleTableView.tableHeaderView = UIView()
     }
+    
     private func doneButtonSupport() {
         doneButton.backgroundColor = .ypBlack
         doneButton.setTitle("Готово", for: .normal)
@@ -110,6 +110,7 @@ final class ScheduleViewController: UIViewController {
         doneButton.layer.cornerRadius = 16
         doneButton.addTarget(self, action: #selector(createSchedule), for: .touchUpInside)
     }
+    
     @objc
     private func createSchedule() {
         delegate?.updateSchedule(schedule)
