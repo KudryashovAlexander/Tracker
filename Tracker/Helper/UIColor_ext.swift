@@ -33,4 +33,6 @@ extension UIColor {
     static var ypCS16: UIColor { UIColor(named: "ypCS16") ?? UIColor.purple }
     static var ypCS17: UIColor { UIColor(named: "ypCS17") ?? UIColor.purple }
     static var ypCS18: UIColor { UIColor(named: "ypCS18") ?? UIColor.green }
+    static var ypCellBall: UIColor { UIColor(named: "ypCellBall") ?? UIColor.green }
+    static var ypBall: UIColor {UIColor(named: "ypBall") ?? UIColor.white}
 }
