@@ -14,7 +14,7 @@ protocol TrackersViewCellProtocol: AnyObject {
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCollectionCell"
-    var delegate: TrackersViewCellProtocol?
+    weak var delegate: TrackersViewCellProtocol?
     
     var dayCount = 0 {
         didSet {

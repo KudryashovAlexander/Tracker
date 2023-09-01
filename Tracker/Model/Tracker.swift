@@ -21,7 +21,7 @@ struct Tracker {
         self.schedule = Schedule()
     }
 
-    init(name: String, color: UIColor, emojie: String, schedule: Schedule ) {
+    init(name: String, color: UIColor, emojie: String, schedule: Schedule) {
         self.name = name
         self.color = color
         self.emojie = emojie

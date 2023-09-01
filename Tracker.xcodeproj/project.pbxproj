@@ -36,6 +36,7 @@
 		7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F84755C2A86AF7C00BBF9EF /* Helper.swift */; };
 		7F8475612A86B52C00BBF9EF /* TrackerAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */; };
 		7F8475632A8D514C00BBF9EF /* TrackerConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */; };
+		7F9523EA2AA239C700EA4B11 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9523E92AA239C700EA4B11 /* CalendarHelper.swift */; };
 		7FE9C52B2A9CDCB100C7C769 /* String_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE9C52A2A9CDCB100C7C769 /* String_ext.swift */; };
 		7FE9C52D2A9CE25F00C7C769 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE9C52C2A9CE25F00C7C769 /* Schedule.swift */; };
 		7FE9C52F2A9E757C00C7C769 /* ALertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE9C52E2A9E757C00C7C769 /* ALertModel.swift */; };
@@ -73,6 +74,7 @@
 		7F84755C2A86AF7C00BBF9EF /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerAddViewController.swift; sourceTree = "<group>"; };
 		7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerConfigurationViewController.swift; sourceTree = "<group>"; };
+		7F9523E92AA239C700EA4B11 /* CalendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		7FE9C52A2A9CDCB100C7C769 /* String_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_ext.swift; sourceTree = "<group>"; };
 		7FE9C52C2A9CE25F00C7C769 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		7FE9C52E2A9E757C00C7C769 /* ALertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALertModel.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				7F20E62A2A75C1F200C49C3E /* UIFont_ext.swift */,
 				7F84755C2A86AF7C00BBF9EF /* Helper.swift */,
 				7F34B39F2A972F990068359E /* AlertPresenter.swift */,
+				7F9523E92AA239C700EA4B11 /* CalendarHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,
 				7F34B3A92A98A46F0068359E /* SupplementaryTrackersView.swift in Sources */,
 				7F8475592A84299900BBF9EF /* TrackerCategory.swift in Sources */,
+				7F9523EA2AA239C700EA4B11 /* CalendarHelper.swift in Sources */,
 				7F16D75B2A96625C0054FFF1 /* EmojieCell.swift in Sources */,
 				7F16D75F2A96B6A50054FFF1 /* ColorCell.swift in Sources */,
 				7F20E6142A759A6C00C49C3E /* AppDelegate.swift in Sources */,

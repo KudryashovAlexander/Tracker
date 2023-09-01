@@ -20,6 +20,7 @@ final class TrackersViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout())
     
+    private var calendar = CalendarHelper().calendar
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
     
@@ -99,10 +100,9 @@ final class TrackersViewController: UIViewController {
                 
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.calendar.firstWeekday = 1
+        datePicker.calendar = calendar
         
         datePicker.addTarget(self, action: #selector(changeDate), for: .valueChanged)
-        datePicker.locale = Locale(identifier: "ru_RU")
         
         let rightButton = UIBarButtonItem(customView: datePicker)
         navBar.topItem?.rightBarButtonItem = rightButton
@@ -125,15 +125,12 @@ final class TrackersViewController: UIViewController {
     }
     
     private func filterCollectionView(){
-        let calendar = Calendar.current
         let filterWeekDay = calendar.component(.weekday, from: currentDate)
         let filterText = (searchText ?? "").lowercased()
         
         visibleCategories = categories.compactMap({ category in
             let trackers = category.trackers.filter { tracker in
-                let dateCondition = tracker.schedule.daysIsOn.contains { weekDay in
-                    weekDay.numberValue == filterWeekDay && weekDay.isOn
-                } == true
+                let dateCondition = tracker.schedule.daysOn.contains(filterWeekDay)
                 let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
                 
                 return dateCondition && textCondition

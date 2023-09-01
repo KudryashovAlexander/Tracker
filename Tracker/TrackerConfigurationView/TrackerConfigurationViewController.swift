@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TrackerConfigurationViewControllerProtocol {
+protocol TrackerConfigurationViewControllerProtocol: AnyObject {
     func addEndTracker(newCategory: TrackerCategory)
 }
 
@@ -16,7 +16,7 @@ final class TrackerConfigurationViewController: UIViewController {
     var navName = String()
     var isRegular: Bool = false
     
-    var delegate: TrackerConfigurationViewControllerProtocol?
+    weak var delegate: TrackerConfigurationViewControllerProtocol?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -341,6 +341,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
         if indexPath.row == propertyTracker.count {
             newTrackerCell.separatorInset.left = tableView.frame.maxX
         }
+        newTrackerCell.selectionStyle = .none
         newTrackerCell.backgroundColor = .ypBackground
         return newTrackerCell
     }

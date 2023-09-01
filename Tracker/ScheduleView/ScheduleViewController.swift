@@ -7,11 +7,13 @@
 
 import UIKit
 
-protocol ScheduleViewControllerProtocol {
+protocol ScheduleViewControllerProtocol: AnyObject {
     func updateSchedule(_ newSchedule: Schedule)
 }
 
 final class ScheduleViewController: UIViewController {
+    
+    private let calendar = CalendarHelper()
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -37,7 +39,7 @@ final class ScheduleViewController: UIViewController {
     private var schedule = Schedule()
     private var doneButton = UIButton()
     
-    var delegate:ScheduleViewControllerProtocol?
+    weak var delegate:ScheduleViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,7 +125,7 @@ final class ScheduleViewController: UIViewController {
 extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        schedule.daysIsOn.count
+        calendar.dayNumber.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -131,10 +133,13 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
             return UITableViewCell()
         }
         cell.delegate = self
+        let dayName = calendar.dayNameOfWeek[indexPath.row]
+        let numberDay = calendar.dayNumber[indexPath.row]
+        let isOn = schedule.daysOn.contains(calendar.dayNumber[indexPath.row])
         
-        cell.dayLabel.text = schedule.dayOfWeek[indexPath.row]
-        cell.daySwitch.isOn = schedule.daysIsOn[indexPath.row].isOn
-        cell.numberDay = indexPath.row
+        cell.configure(text: dayName,
+                       numberDay: numberDay,
+                       isOn: isOn)
         
         cell.backgroundColor = .ypBackground
         return cell
@@ -145,6 +150,10 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
 //MARK: Extension ScheduleViewControllerProtocol
 extension ScheduleViewController: ScheduleTableViewCellProtocol {
     func changeIsOn(_ numberDay: Int) {
-        schedule.daysIsOn[numberDay].isOn = !schedule.daysIsOn[numberDay].isOn
+        if schedule.daysOn.contains(numberDay) {
+            schedule.daysOn.remove(numberDay)
+        } else {
+            schedule.daysOn.insert(numberDay)
+        }
     }
 }

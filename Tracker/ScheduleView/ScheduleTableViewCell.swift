@@ -15,10 +15,10 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     static let cellIdentifier = "ScheduleTableViewCell"
     
-    let dayLabel = UILabel()
-    var numberDay = Int()
-    let daySwitch = UISwitch()
-    var delegate:ScheduleTableViewCellProtocol?
+    private let dayLabel = UILabel()
+    private var numberDay = Int()
+    private let daySwitch = UISwitch()
+    weak var delegate:ScheduleTableViewCellProtocol?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,6 +42,12 @@ final class ScheduleTableViewCell: UITableViewCell {
             daySwitch.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
         ])
         
+    }
+    
+    func configure(text: String, numberDay: Int, isOn: Bool) {
+        dayLabel.text = text
+        self.numberDay = numberDay
+        daySwitch.isOn = isOn
     }
     
     required init?(coder: NSCoder) {
