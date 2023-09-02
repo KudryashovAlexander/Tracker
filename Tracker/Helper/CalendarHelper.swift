@@ -14,6 +14,7 @@ class CalendarHelper {
         var calendar = Calendar.current
         calendar.firstWeekday = 2
         calendar.locale = Locale(identifier: "ru_RU")
+        calendar.timeZone = TimeZone(secondsFromGMT: 3 * 60 * 60)!
         return calendar
     }()
     
