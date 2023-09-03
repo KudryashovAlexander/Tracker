@@ -48,15 +48,13 @@ class CalendarHelper {
             return "Каждый день"
         }
         
-        var daysNumber = days.compactMap { Weekday in
-            Weekday.rawValue
-        }
+        var daysNumber = days.compactMap { $0.rawValue }
         
         var shortNames = String()
 
         for day in daysNumber {
+            var index = 0
             for dayofWeek in dayNumber {
-                var index = 0
                 if day == dayofWeek {
                     shortNames = shortNames + shortNameAllDay[index] + " ,"
                 }

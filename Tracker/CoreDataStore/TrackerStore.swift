@@ -18,12 +18,14 @@ enum TrackerStoreError: Error {
 
 class TrackerStore: NSObject {
     
-    func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) {
+    func updateTrackerCoreData(_ tracker: Tracker) -> TrackerCoreData {
+        let trackerCoreData = TrackerCoreData()
         trackerCoreData.name = tracker.name
         trackerCoreData.colorHex = tracker.color.hexStringFromColor()
         trackerCoreData.emojie = tracker.emojie
         trackerCoreData.scheduleString = tracker.schedule.daysOnString()
         trackerCoreData.id = tracker.id
+        return trackerCoreData
     }
     
     
