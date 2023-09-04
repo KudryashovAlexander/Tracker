@@ -34,6 +34,8 @@ final class TrackersViewController: UIViewController {
         
         navigationSupport()
         filterCollectionView()
+        
+        trackerCategoryStore.delegate = self
 
         self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
         self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
@@ -69,6 +71,7 @@ final class TrackersViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
+        
     }
     
     private func emptyCollectiionImageSupport() {
@@ -213,6 +216,37 @@ extension TrackersViewController: UITextFieldDelegate {
         searchText = nil
         filterCollectionView()
         return true
+    }
+}
+//MARK: - Extension TrackerConfigurationViewControllerDelegate
+extension TrackersViewController: TrackerConfigurationViewControllerDelegate {
+    func createTracker(_ newTracker: Tracker, category: TrackerCategory) {
+        do {
+            try trackerCategoryStore.addTracker(at: newTracker, category: category)
+        } catch {
+            print("Ошибка в добавлении нового трекера")
+        }
+    }
+}
+
+//MARK: - Extension TrackerCategoryStoryDelegate
+extension TrackersViewController: TrackerCategoryStoryDelegate {
+    func store( _ store: TrackerCategoryStory, didUpdate update: TrackerCategoryUpdate) {
+        collectionView.reloadData()
+        
+//        categories = trackerCategoryStore.trackerCategory
+//        collectionView.performBatchUpdates {
+//            let inserterIndexPaths = update.insertedIndexes
+//            let deletedIndexPaths = update.deletedIndexes
+//            let updatedIndexPaths = update.updateIndexes
+//
+//            collectionView.insertItems(at: [inserterIndexPaths])
+//            collectionView.deleteItems(at: [deletedIndexPaths])
+//            collectionView.insertItems(at: [updatedIndexPaths])
+//            for move in update.movedIndexes {
+//                collectionView.moveItem(at: move.oldIndex, to: move.newIndex)
+//            }
+//        }
     }
 }
 

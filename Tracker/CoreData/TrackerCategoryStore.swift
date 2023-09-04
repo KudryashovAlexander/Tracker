@@ -16,16 +16,16 @@ enum TrackerCategoryError: Error {
 
 struct TrackerCategoryUpdate {
     struct Move: Hashable {
-        let oldIndex: Int
-        let newIndex: Int
+        let oldIndex: IndexPath
+        let newIndex: IndexPath
     }
-    let insertedIndexes: IndexSet
-    let deletedIndexes: IndexSet
-    let updateIndexes: IndexSet
+    let insertedIndexes: IndexPath
+    let deletedIndexes: IndexPath
+    let updateIndexes: IndexPath
     let movedIndexes: Set<Move>
 }
 
-protocol TrackerCategoryStoryDeledate: AnyObject {
+protocol TrackerCategoryStoryDelegate: AnyObject {
     func store( _ store: TrackerCategoryStory, didUpdate update: TrackerCategoryUpdate)
 }
 
@@ -33,11 +33,12 @@ class TrackerCategoryStory: NSObject {
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
-    weak var delegate: TrackerCategoryStoryDeledate?
-    private var insertedIndexes: IndexSet?
-    private var deletedIndexes: IndexSet?
-    private var updateIndexes: IndexSet?
+    weak var delegate: TrackerCategoryStoryDelegate?
+    private var insertedIndexes: IndexPath?
+    private var deletedIndexes: IndexPath?
+    private var updateIndexes: IndexPath?
     private var movedIndexes: Set<TrackerCategoryUpdate.Move>?
+    private var currentTrackerCategory: TrackerCategory?
     
     private var trackerStore = TrackerStore()
     var trackerCategory: [TrackerCategory] {
@@ -88,7 +89,6 @@ class TrackerCategoryStory: NSObject {
             }
         }
         
-        
         return TrackerCategory(name: name, trackers: trackers)
     }
     
@@ -99,7 +99,7 @@ class TrackerCategoryStory: NSObject {
     }
     
     func deleteCategory(_ category: TrackerCategory) throws {
-        guard var object = self.fetchedResultsController.fetchedObjects else { return }
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerCategory in object {
             if trackerCategory.name == category.name {
                 context.delete(trackerCategory)
@@ -109,13 +109,20 @@ class TrackerCategoryStory: NSObject {
     }
     
     func addTracker(at newTracker: Tracker, category: TrackerCategory) throws {
-        guard var object = self.fetchedResultsController.fetchedObjects else { return }
+        currentTrackerCategory = category
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerCategory in object {
+
             if trackerCategory.name == category.name {
-                let newTrackerCoreData = try trackerStore.addTracker(at: newTracker)
-                
-                trackerCategory.trackers?.adding(newTrackerCoreData)
-                return
+                if let trackersSet = trackerCategory.trackers {
+                    let newTrackerCoreData = try trackerStore.addTracker(at: newTracker)
+                    let mutableTrackersSet = NSMutableSet(set: trackersSet)
+                    mutableTrackersSet.add(newTrackerCoreData)
+                    
+                    trackerCategory.trackers = mutableTrackersSet
+                    try context.save()
+                    return
+                }
             }
         }
         try addCategory(category)
@@ -123,7 +130,7 @@ class TrackerCategoryStory: NSObject {
     }
     
     func deleteTracker(at tracker: Tracker, category: TrackerCategory) throws {
-        guard var object = self.fetchedResultsController.fetchedObjects else { return }
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
         
         for trackerCategory in object {
             guard let trackers = trackerCategory.trackers else {
@@ -144,9 +151,9 @@ class TrackerCategoryStory: NSObject {
 //MARK: - Extension NSFetchedResultsControllerDelegate
 extension TrackerCategoryStory: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedIndexes = IndexSet()
-        deletedIndexes = IndexSet()
-        updateIndexes = IndexSet()
+        insertedIndexes = IndexPath()
+        deletedIndexes = IndexPath()
+        updateIndexes = IndexPath()
         movedIndexes = Set<TrackerCategoryUpdate.Move>()
     }
     
@@ -164,23 +171,22 @@ extension TrackerCategoryStory: NSFetchedResultsControllerDelegate {
         deletedIndexes = nil
         updateIndexes = nil
         movedIndexes = nil
-        
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
             guard let indexPath = newIndexPath else {fatalError()}
-            insertedIndexes?.insert(indexPath.item)
+            insertedIndexes = indexPath
         case .delete:
             guard let indexPath = indexPath else {fatalError(debugDescription)}
-            deletedIndexes?.insert(indexPath.item)
+            deletedIndexes = indexPath
         case .update:
             guard let indexPath = indexPath else {fatalError()}
-            updateIndexes?.insert(indexPath.item)
+            updateIndexes = indexPath
         case .move:
             guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else {fatalError()}
-            movedIndexes?.insert(.init(oldIndex: oldIndexPath.item, newIndex: newIndexPath.item))
+            movedIndexes?.insert(.init(oldIndex: oldIndexPath, newIndex: newIndexPath))
         @unknown default:
             fatalError()
         }

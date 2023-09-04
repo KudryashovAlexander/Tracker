@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TrackerConfigurationViewControllerDelegate: AnyObject {
+    func createTracker(_ newTracker: Tracker, category: TrackerCategory)
+}
+
 
 final class TrackerConfigurationViewController: UIViewController {
     
@@ -64,7 +68,7 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private let alertPresenter = AlertPresener()
     
-    private let trackerCatogoryStore = TrackerCategoryStory()
+    var delegate: TrackerConfigurationViewControllerDelegate?
     
     
     override func viewDidLoad() {
@@ -303,18 +307,16 @@ final class TrackerConfigurationViewController: UIViewController {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 
-                let trackerCategory = TrackerCategory(name: "Testing", trackers: [tracker])
-                do {
-                    try trackerCatogoryStore.addTracker(at: tracker, category: trackerCategory)
-                } catch {
-                    print("Не удалось сохранить новую категорию")
-                }
-                
+                // ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
+                let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
                 
                 guard let window = UIApplication.shared.windows.first else {
                     fatalError("Invalid Configuration") }
 
                 let tabBar = TabBarController()
+                self.delegate = tabBar.trackerViewController
+                delegate?.createTracker(tracker, category: trackerCategory)
+                
                 window.rootViewController = tabBar
                 
             } else {
