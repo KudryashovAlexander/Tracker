@@ -10,7 +10,7 @@ import UIKit
 final class TrackersViewController: UIViewController {
     
     private let sController = UISearchController()
-    var categories: [TrackerCategory] = mokVisibaleCategory
+    var categories: [TrackerCategory] = []
     var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var currentDate = Date()
@@ -23,12 +23,15 @@ final class TrackersViewController: UIViewController {
     private var calendar = CalendarHelper().calendar
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
+    private var trackerCategoryStore = TrackerCategoryStory()
     
     private var searchText: String? = nil
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        categories = trackerCategoryStore.trackerCategory
+        
         navigationSupport()
         filterCollectionView()
 
@@ -170,14 +173,6 @@ final class TrackersViewController: UIViewController {
         self.present(naVC, animated: true)
     }
     
-}
-
-//MARK: - Extension TrackerConfigurationViewControllerProtocol{
-extension TrackersViewController: TrackerConfigurationViewControllerProtocol {
-    func addEndTracker(newCategory: TrackerCategory) {
-        categories.append(newCategory)
-        collectionView.reloadData()
-    }
 }
 
 //MARK: - Extension TrackersViewControllerProtocol

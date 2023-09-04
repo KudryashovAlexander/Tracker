@@ -7,17 +7,12 @@
 
 import UIKit
 
-protocol TrackerConfigurationViewControllerProtocol: AnyObject {
-    func addEndTracker(newCategory: TrackerCategory)
-}
 
 final class TrackerConfigurationViewController: UIViewController {
     
     var navName = String()
     var isRegular: Bool = false
-    
-    weak var delegate: TrackerConfigurationViewControllerProtocol?
-    
+        
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .ypWhite
@@ -68,6 +63,8 @@ final class TrackerConfigurationViewController: UIViewController {
     var schedule = Schedule()
     
     private let alertPresenter = AlertPresener()
+    
+    private let trackerCatogoryStore = TrackerCategoryStory()
     
     
     override func viewDidLoad() {
@@ -306,14 +303,18 @@ final class TrackerConfigurationViewController: UIViewController {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 
-                let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
+                let trackerCategory = TrackerCategory(name: "Testing", trackers: [tracker])
+                do {
+                    try trackerCatogoryStore.addTracker(at: tracker, category: trackerCategory)
+                } catch {
+                    print("Не удалось сохранить новую категорию")
+                }
+                
                 
                 guard let window = UIApplication.shared.windows.first else {
                     fatalError("Invalid Configuration") }
 
                 let tabBar = TabBarController()
-                delegate = tabBar.trackerViewController
-                delegate?.addEndTracker(newCategory: trackerCategory)
                 window.rootViewController = tabBar
                 
             } else {

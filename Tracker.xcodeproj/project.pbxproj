@@ -131,7 +131,6 @@
 				7F34B3A32A975A830068359E /* ScheduleView */,
 				7F8475452A7E921200BBF9EF /* Welcome */,
 				7F20E6272A75A22E00C49C3E /* Helper */,
-				7F9523F62AA3124700EA4B11 /* CoreDataStore */,
 				7F9523EF2AA311BF00EA4B11 /* CoreData */,
 			);
 			path = Tracker;
@@ -234,18 +233,11 @@
 			isa = PBXGroup;
 			children = (
 				7F9523EC2AA311A700EA4B11 /* Model.xcdatamodeld */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
-		7F9523F62AA3124700EA4B11 /* CoreDataStore */ = {
-			isa = PBXGroup;
-			children = (
 				7F9523F02AA311F300EA4B11 /* TrackerStore.swift */,
 				7F9523F22AA3121500EA4B11 /* TrackerCategoryStore.swift */,
 				7F9523F42AA3122800EA4B11 /* TrackerRecordStore.swift */,
 			);
-			path = CoreDataStore;
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -65,8 +65,6 @@ class TrackerRecordStore: NSObject {
         try context.save()
     }
     
-    
-    
     func updateTrackerRecordCoreData(_ trackerRecord: TrackerRecord) -> TrackerRecordCoreData {
         let trackerRecordCoreData = TrackerRecordCoreData()
         trackerRecordCoreData.id = trackerRecord.id
@@ -97,6 +95,8 @@ extension TrackerRecordStore:NSFetchedResultsControllerDelegate {
         delegate?.store(self,
                         didUpdate: TrackerRecordUpdate(insertedIndexes: insertedIndexes!,
                                                        deletedIndexes: deletedIndexes!))
+        insertedIndexes = nil
+        deletedIndexes = nil
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -107,11 +107,7 @@ extension TrackerRecordStore:NSFetchedResultsControllerDelegate {
         case .delete:
             guard let indexPath = indexPath else {fatalError(debugDescription)}
             deletedIndexes?.insert(indexPath.item)
-        case .update:
-            print(TrackerRecordError.changeErrorUpdate)
-        case .move:
-            print(TrackerRecordError.changeErrorMove)
-        @unknown default:
+        default:
             fatalError()
         }
     }
