@@ -14,19 +14,8 @@ enum TrackerCategoryError: Error {
     case convertErrorTrackerCategoryTrackersCoreData
 }
 
-struct TrackerCategoryUpdate {
-    struct Move: Hashable {
-        let oldIndex: IndexPath
-        let newIndex: IndexPath
-    }
-    let insertedIndexes: IndexPath
-    let deletedIndexes: IndexPath
-    let updateIndexes: IndexPath
-    let movedIndexes: Set<Move>
-}
-
 protocol TrackerCategoryStoryDelegate: AnyObject {
-    func store( _ store: TrackerCategoryStory, didUpdate update: TrackerCategoryUpdate)
+    func store(didUpdate trackerCategory: [TrackerCategory])
 }
 
 class TrackerCategoryStory: NSObject {
@@ -34,10 +23,6 @@ class TrackerCategoryStory: NSObject {
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
     weak var delegate: TrackerCategoryStoryDelegate?
-    private var insertedIndexes: IndexPath?
-    private var deletedIndexes: IndexPath?
-    private var updateIndexes: IndexPath?
-    private var movedIndexes: Set<TrackerCategoryUpdate.Move>?
     private var currentTrackerCategory: TrackerCategory?
     
     private var trackerStore = TrackerStore()
@@ -69,16 +54,14 @@ class TrackerCategoryStory: NSObject {
         try controller.performFetch()
     }
     
-    func updateTrackerCategoryCoreData(_ trackerCategoryCoreData: TrackerCategoryCoreData,
+    private func updateTrackerCategoryCoreData(_ trackerCategoryCoreData: TrackerCategoryCoreData,
                                        with trackerCategory: TrackerCategory) throws {
         trackerCategoryCoreData.name = trackerCategory.name
         let trackerSet = NSSet()
-        
         trackerCategoryCoreData.trackers = trackerSet
-        
     }
     
-    func updateTrackerCategory( _ trackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
+    private func updateTrackerCategory( _ trackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
         guard let name = trackerCategoryCoreData.name else {
             throw TrackerCategoryError.decodingErrorInvalidName
         }
@@ -88,7 +71,6 @@ class TrackerCategoryStory: NSObject {
                 try trackers.append(trackerStore.updateTracker(tracker as! TrackerCoreData))
             }
         }
-        
         return TrackerCategory(name: name, trackers: trackers)
     }
     
@@ -116,7 +98,6 @@ class TrackerCategoryStory: NSObject {
                 try context.save()
             }
         }
-        
     }
     
     func addTracker(at newTracker: Tracker, category: TrackerCategory) throws {
@@ -155,52 +136,13 @@ class TrackerCategoryStory: NSObject {
             }
         }
     }
-    
-    
 }
 
 //MARK: - Extension NSFetchedResultsControllerDelegate
 extension TrackerCategoryStory: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedIndexes = IndexPath()
-        deletedIndexes = IndexPath()
-        updateIndexes = IndexPath()
-        movedIndexes = Set<TrackerCategoryUpdate.Move>()
-    }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store(
-            self,
-            didUpdate: TrackerCategoryUpdate(
-                insertedIndexes: insertedIndexes!,
-                deletedIndexes: deletedIndexes!,
-                updateIndexes: updateIndexes!,
-                movedIndexes: movedIndexes!
-            ))
-        
-        insertedIndexes = nil
-        deletedIndexes = nil
-        updateIndexes = nil
-        movedIndexes = nil
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            guard let indexPath = newIndexPath else {fatalError()}
-            insertedIndexes = indexPath
-        case .delete:
-            guard let indexPath = indexPath else {fatalError(debugDescription)}
-            deletedIndexes = indexPath
-        case .update:
-            guard let indexPath = indexPath else {fatalError()}
-            updateIndexes = indexPath
-        case .move:
-            guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else {fatalError()}
-            movedIndexes?.insert(.init(oldIndex: oldIndexPath, newIndex: newIndexPath))
-        @unknown default:
-            fatalError()
-        }
+        delegate?.store(didUpdate: trackerCategory)
     }
     
 }

@@ -19,6 +19,7 @@ enum TrackerStoreError: Error {
 class TrackerStore: NSObject {
     
     private let context: NSManagedObjectContext
+    private var trackerRecordStore = TrackerRecordStore()
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
@@ -43,10 +44,11 @@ class TrackerStore: NSObject {
         for trackerCoreData in object {
             if trackerCoreData.id == tracker.id {
                 context.delete(trackerCoreData)
+                try context.save()
+                try trackerRecordStore.deleteTrackerRecord(tracker.id) 
                 break
             }
         }
-        try context.save()
     }
     
     func deleteTrackerCoreData(_ trackerCoreData: TrackerCoreData) throws {
@@ -54,14 +56,13 @@ class TrackerStore: NSObject {
         try context.save()
     }
     
-    func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) throws {
+    private func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) throws {
         trackerCoreData.name = tracker.name
         trackerCoreData.colorHex = tracker.color.hexStringFromColor()
         trackerCoreData.emojie = tracker.emojie
         trackerCoreData.scheduleString = tracker.schedule.daysOnString()
         trackerCoreData.id = tracker.id
     }
-    
     
     func updateTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker {
         guard let name = trackerCoreData.name else {

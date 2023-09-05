@@ -91,11 +91,8 @@ class TrackerRecordStore: NSObject {
             print("Ошибка в подсчете выбран ли день")
         }
         
-        
         return (countDay, dayIsDone)
     }
-    
-    
     
     func changeRecord(_ record: TrackerRecord) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
@@ -112,12 +109,22 @@ class TrackerRecordStore: NSObject {
         try context.save()
     }
     
-    func updateTrackerRecordCoreData(_ trackerRecordCoreData: TrackerRecordCoreData, trackerRecord: TrackerRecord) {
+    func deleteTrackerRecord(_ id: UUID) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
+        for trackerRecord in object {
+            if trackerRecord.id == id {
+                context.delete(trackerRecord)
+            }
+            try context.save()
+        }
+    }
+    
+    private func updateTrackerRecordCoreData(_ trackerRecordCoreData: TrackerRecordCoreData, trackerRecord: TrackerRecord) {
         trackerRecordCoreData.id = trackerRecord.id
         trackerRecordCoreData.date = trackerRecord.date
     }
     
-    func updateTrackerRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws -> TrackerRecord {
+    private func updateTrackerRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws -> TrackerRecord {
         guard let id = trackerRecordCoreData.id else {
             throw TrackerRecordError.decodingErrorInvalidId
         }

@@ -212,22 +212,9 @@ extension TrackersViewController: TrackerConfigurationViewControllerDelegate {
 
 //MARK: - Extension TrackerCategoryStoryDelegate
 extension TrackersViewController: TrackerCategoryStoryDelegate {
-    func store( _ store: TrackerCategoryStory, didUpdate update: TrackerCategoryUpdate) {
+    func store(didUpdate trackerCategory: [TrackerCategory]) {
+        categories = trackerCategory
         collectionView.reloadData()
-      //Ниже метод не работает, простите, что оставил, может попозже смогу решить ее
-//        categories = trackerCategoryStore.trackerCategory
-//        collectionView.performBatchUpdates {
-//            let inserterIndexPaths = update.insertedIndexes
-//            let deletedIndexPaths = update.deletedIndexes
-//            let updatedIndexPaths = update.updateIndexes
-//
-//            collectionView.insertItems(at: [inserterIndexPaths])
-//            collectionView.deleteItems(at: [deletedIndexPaths])
-//            collectionView.insertItems(at: [updatedIndexPaths])
-//            for move in update.movedIndexes {
-//                collectionView.moveItem(at: move.oldIndex, to: move.newIndex)
-//            }
-//        }
     }
 }
 

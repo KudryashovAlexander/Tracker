@@ -15,25 +15,10 @@ extension Formatter {
         formatter.dateFormat = "E"
         return formatter
     }()
-    
-    static let pickerDateFormat: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "dd.MM.YY"
-        return formatter
-    }()
-    
+
 }
 
 extension Date {
-
-    var weekdayNameString: String {
-        Formatter.weekdayName.string(from: self)
-    }
-    
-    var dayMounthYearString: String {
-        Formatter.pickerDateFormat.string(from: self)
-    }
     
     func isAfter(_ date: Date = Date()) -> Bool {
         

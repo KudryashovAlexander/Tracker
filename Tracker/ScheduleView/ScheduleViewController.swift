@@ -133,6 +133,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate  {
             return UITableViewCell()
         }
         cell.delegate = self
+        cell.selectionStyle = .none
         let dayName = calendar.dayNameOfWeek[indexPath.row]
         let numberDay = calendar.dayNumber[indexPath.row]
         let isOn = schedule.daysOn.contains(calendar.dayNumber[indexPath.row])

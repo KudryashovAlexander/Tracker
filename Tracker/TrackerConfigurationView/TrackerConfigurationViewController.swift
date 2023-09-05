@@ -307,7 +307,7 @@ final class TrackerConfigurationViewController: UIViewController {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 
-                // ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
+                //MARK: - ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
                 let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
                 
                 guard let window = UIApplication.shared.windows.first else {
@@ -368,7 +368,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     }
     
     private func createCategoryViewController() {
-        //Дописать метод
+        //В 17 спринте
     }
 }
 
