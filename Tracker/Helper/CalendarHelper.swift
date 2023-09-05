@@ -10,7 +10,7 @@ import Foundation
 
 class CalendarHelper {
     
-    var calendar: Calendar = {
+    var calendarUse: Calendar = {
         var calendar = Calendar.current
         calendar.firstWeekday = 2
         calendar.locale = Locale(identifier: "ru_RU")
@@ -18,12 +18,17 @@ class CalendarHelper {
         return calendar
     }()
     
+    func dateWithoutTime(_ date: Date) -> Date {
+        let dateComponents = self.calendarUse.dateComponents([.year, .month, .day], from: date)
+        return calendarUse.date(from: dateComponents) ?? date
+    }
+    
     lazy var dayNumber:[Int] = {
         return [2,3,4,5,6,7,1]
     }()
     
     lazy var dayNameOfWeek: [String] = {
-        var dayOfWeek = calendar.weekdaySymbols
+        var dayOfWeek = calendarUse.weekdaySymbols
         dayOfWeek.append(dayOfWeek[0])
         dayOfWeek.removeFirst()
         var days = dayOfWeek.compactMap { dayString in
@@ -33,7 +38,7 @@ class CalendarHelper {
     }()
     
     lazy var shortNameAllDay: [String] = {
-        var shortdayOfWeek = calendar.shortWeekdaySymbols
+        var shortdayOfWeek = calendarUse.shortWeekdaySymbols
         shortdayOfWeek.append(shortdayOfWeek[0])
         shortdayOfWeek.removeFirst()
         return shortdayOfWeek

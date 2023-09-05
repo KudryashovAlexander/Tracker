@@ -15,22 +15,28 @@ enum TrackerRecordError: Error {
     case changeErrorMove
 }
 
-struct TrackerRecordUpdate {
-    let insertedIndexes: IndexSet
-    let deletedIndexes: IndexSet
-}
-
-protocol TrackerRecordDelegate: AnyObject {
-    func store( _ store: TrackerRecordStore, didUpdate update: TrackerRecordUpdate)
+protocol TrackerRecordStoreDelegate: AnyObject {
+    func store( _ store: [TrackerRecord])
 }
 
 class TrackerRecordStore: NSObject {
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData>!
-    weak var delegate: TrackerRecordDelegate?
-    private var insertedIndexes: IndexSet?
-    private var deletedIndexes: IndexSet?
+    weak var delegate: TrackerRecordStoreDelegate?
+    
+    var trackerRecords: [TrackerRecord] {
+        do {
+            guard
+                let object = self.fetchedResultsController.fetchedObjects,
+                let trackerRecord = try? object.map({ try self.updateTrackerRecord($0)})
+            else {
+                print("Ошибка в получении данных ТрекерРекордКорДата")
+                return []
+            }
+            return trackerRecord
+        }
+    }
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
@@ -52,27 +58,66 @@ class TrackerRecordStore: NSObject {
         try controller.performFetch()
     }
     
-    func newRecord(_ record: TrackerRecord) throws {
-        guard var object = self.fetchedResultsController.fetchedObjects else { return }
+    func countDayAndIsDone(id: UUID, date: Date) -> (Int,Bool) {
+        var countDay = 0
+        var dayIsDone = false
+        let trackerIDString = id.uuidString
+        
+        let requestDayCount = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        
+        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
+        requestDayCount.predicate = predicateForDay
+        requestDayCount.resultType = .countResultType
+        do {
+            let count = try context.count(for:requestDayCount)
+            countDay = count
+        } catch {
+            print("Ошибка в подсчете количества для рекорда")
+            countDay = 0
+        }
+        
+        let requestIsDayDone = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        let predicateIsDone = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.date), date as CVarArg)
+        let sumPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateForDay, predicateIsDone])
+        
+        requestIsDayDone.predicate = sumPredicate
+        
+        do {
+            let count = try context.count(for:requestIsDayDone)
+            if count > 0 {
+                dayIsDone = true
+            }
+        } catch {
+            print("Ошибка в подсчете выбран ли день")
+        }
+        
+        
+        return (countDay, dayIsDone)
+    }
+    
+    
+    
+    func changeRecord(_ record: TrackerRecord) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerRecord in object {
             if trackerRecord.id == record.id &&
                 trackerRecord.date == record.date {
                 context.delete(trackerRecord)
-            } else {
-                let newTrackerRecord = updateTrackerRecordCoreData(record)
+                try context.save()
+                return
             }
         }
+        let trackerRecordCD = TrackerRecordCoreData(context: context)
+        updateTrackerRecordCoreData(trackerRecordCD, trackerRecord: record)
         try context.save()
     }
     
-    func updateTrackerRecordCoreData(_ trackerRecord: TrackerRecord) -> TrackerRecordCoreData {
-        let trackerRecordCoreData = TrackerRecordCoreData()
+    func updateTrackerRecordCoreData(_ trackerRecordCoreData: TrackerRecordCoreData, trackerRecord: TrackerRecord) {
         trackerRecordCoreData.id = trackerRecord.id
         trackerRecordCoreData.date = trackerRecord.date
-        return trackerRecordCoreData
     }
     
-    func updateTrackerrecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws -> TrackerRecord {
+    func updateTrackerRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws -> TrackerRecord {
         guard let id = trackerRecordCoreData.id else {
             throw TrackerRecordError.decodingErrorInvalidId
         }
@@ -86,29 +131,8 @@ class TrackerRecordStore: NSObject {
 //MARK: - Extension TrackerRecordDelegate
 extension TrackerRecordStore:NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedIndexes = IndexSet()
-        deletedIndexes = IndexSet()
-    }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store(self,
-                        didUpdate: TrackerRecordUpdate(insertedIndexes: insertedIndexes!,
-                                                       deletedIndexes: deletedIndexes!))
-        insertedIndexes = nil
-        deletedIndexes = nil
+        delegate?.store(trackerRecords)
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            guard let indexPath = newIndexPath else {fatalError()}
-            insertedIndexes?.insert(indexPath.item)
-        case .delete:
-            guard let indexPath = indexPath else {fatalError(debugDescription)}
-            deletedIndexes?.insert(indexPath.item)
-        default:
-            fatalError()
-        }
-    }
 }

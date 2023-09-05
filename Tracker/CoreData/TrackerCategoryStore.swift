@@ -102,10 +102,21 @@ class TrackerCategoryStory: NSObject {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerCategory in object {
             if trackerCategory.name == category.name {
+                if let trackers = trackerCategory.trackers {
+                    let trackerArray = trackers.compactMap { $0 as? TrackerCoreData}
+                    for tracker in trackerArray {
+                        do {
+                            try trackerStore.deleteTrackerCoreData(tracker)
+                        } catch {
+                            print("Не удалось удалить трекер \(tracker.name ?? "")")
+                        }
+                    }
+                }
                 context.delete(trackerCategory)
+                try context.save()
             }
         }
-        try context.save()
+        
     }
     
     func addTracker(at newTracker: Tracker, category: TrackerCategory) throws {

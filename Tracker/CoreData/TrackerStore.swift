@@ -49,6 +49,11 @@ class TrackerStore: NSObject {
         try context.save()
     }
     
+    func deleteTrackerCoreData(_ trackerCoreData: TrackerCoreData) throws {
+        context.delete(trackerCoreData)
+        try context.save()
+    }
+    
     func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) throws {
         trackerCoreData.name = tracker.name
         trackerCoreData.colorHex = tracker.color.hexStringFromColor()

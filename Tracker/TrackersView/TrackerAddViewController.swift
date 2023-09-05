@@ -12,7 +12,6 @@ final class TrackerAddViewController: UIViewController {
     
     private var trackerButton = UIButton()
     private var notRegularButton = UIButton()
-    
         
     override func viewDidLoad() {
         super.viewDidLoad()
