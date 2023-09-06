@@ -31,7 +31,6 @@ class TrackerRecordStore: NSObject {
                 let object = self.fetchedResultsController.fetchedObjects,
                 let trackerRecord = try? object.map({ try self.updateTrackerRecord($0)})
             else {
-                print("Ошибка в получении данных ТрекерРекордКорДата")
                 return []
             }
             return trackerRecord

@@ -5,8 +5,8 @@
 //  Created by Александр Кудряшов on 02.09.2023.
 //
 
-import UIKit
 import CoreData
+import UIKit
 
 enum TrackerCategoryError: Error {
     case decodingErrorInvalidName
