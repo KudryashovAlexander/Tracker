@@ -7,17 +7,16 @@
 
 import UIKit
 
-protocol TrackerConfigurationViewControllerProtocol: AnyObject {
-    func addEndTracker(newCategory: TrackerCategory)
+protocol TrackerConfigurationViewControllerDelegate: AnyObject {
+    func createTracker(_ newTracker: Tracker, category: TrackerCategory)
 }
+
 
 final class TrackerConfigurationViewController: UIViewController {
     
     var navName = String()
     var isRegular: Bool = false
-    
-    weak var delegate: TrackerConfigurationViewControllerProtocol?
-    
+        
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .ypWhite
@@ -68,6 +67,8 @@ final class TrackerConfigurationViewController: UIViewController {
     var schedule = Schedule()
     
     private let alertPresenter = AlertPresener()
+    
+    var delegate: TrackerConfigurationViewControllerDelegate?
     
     
     override func viewDidLoad() {
@@ -306,14 +307,16 @@ final class TrackerConfigurationViewController: UIViewController {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 
+                //MARK: - ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
                 let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
                 
                 guard let window = UIApplication.shared.windows.first else {
                     fatalError("Invalid Configuration") }
 
                 let tabBar = TabBarController()
-                delegate = tabBar.trackerViewController
-                delegate?.addEndTracker(newCategory: trackerCategory)
+                self.delegate = tabBar.trackerViewController
+                delegate?.createTracker(tracker, category: trackerCategory)
+                
                 window.rootViewController = tabBar
                 
             } else {
@@ -365,7 +368,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     }
     
     private func createCategoryViewController() {
-        //Дописать метод
+        //В 17 спринте
     }
 }
 

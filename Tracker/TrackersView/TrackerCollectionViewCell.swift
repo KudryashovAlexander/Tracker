@@ -7,7 +7,7 @@
 
 import UIKit
 protocol TrackersViewCellProtocol: AnyObject {
-    func addOrRemoveTrackerRecord(id: UUID, isAdd: Bool, indexPath: IndexPath)
+    func addOrRemoveTrackerRecord(id: UUID)
 }
 
 
@@ -21,9 +21,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             dayCountLabel.text = dayCounterString(dayCount)
         }
     }
-    
-    var indexPath: IndexPath?
-    
+        
     var dayIsDone = false {
         didSet {
             if dayIsDone == true {
@@ -197,9 +195,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func addDayCount() {
-        if let indexPath = indexPath {
-            delegate?.addOrRemoveTrackerRecord(id: trackerID, isAdd: !dayIsDone, indexPath: indexPath)
-        }
+        delegate?.addOrRemoveTrackerRecord(id: trackerID)
     }
     
     func pinCell() {

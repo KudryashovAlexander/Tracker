@@ -18,5 +18,19 @@ enum WeekDay: Int {
 }
 
 struct Schedule {
-    var daysOn = Set<WeekDay.RawValue>()
+    var daysOn: Set<WeekDay.RawValue>
+    
+    init(daysOn: Set<WeekDay.RawValue> = Set<WeekDay.RawValue>()) {
+        self.daysOn = daysOn
+    }
+    
+    init(numberDaysString: String) {
+        let array = numberDaysString.compactMap({WeekDay.RawValue(String($0))})
+        self.daysOn = Set(array)
+    }
+    
+    func daysOnString() -> String {
+       return daysOn.map({String($0)}).reduce("",+)
+    }
+    
 }
