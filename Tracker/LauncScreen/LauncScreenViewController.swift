@@ -37,7 +37,7 @@ class LauncScreenViewController: UIViewController {
         
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
 
-        let tabBar = TabBarController()
+        let tabBar = WelcomePageViewController()
         window.rootViewController = tabBar
     }
     

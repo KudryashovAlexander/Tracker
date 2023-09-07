@@ -163,8 +163,8 @@
 		7F8475452A7E921200BBF9EF /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
-				7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */,
 				7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */,
+				7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */,
 			);
 			path = Welcome;
 			sourceTree = "<group>";
