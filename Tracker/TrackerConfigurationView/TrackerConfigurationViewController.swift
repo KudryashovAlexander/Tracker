@@ -38,7 +38,7 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private let nameTrackerConteiner = UIView()
     
-    private let nameTrackerTextField = UITextField()
+    private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
     
     private var attentionLabel: UILabel {
         let label = UILabel()
@@ -85,6 +85,7 @@ final class TrackerConfigurationViewController: UIViewController {
         
         propertyTableView.delegate = self
         propertyTableView.dataSource = self
+        nameTrackerTextField.delegate = self
         
         nameTrackerConteinerSupport()
         nameTrackerTextFieldSupport()
@@ -191,16 +192,6 @@ final class TrackerConfigurationViewController: UIViewController {
     }
     
     private func nameTrackerTextFieldSupport() {
-        nameTrackerTextField.layer.masksToBounds = true
-        nameTrackerTextField.layer.cornerRadius = 16
-        nameTrackerTextField.backgroundColor = .ypBackground
-        nameTrackerTextField.font = .yPRegular17
-        nameTrackerTextField.textAlignment = .left
-        nameTrackerTextField.placeholder = "Введите название трекера"
-        
-        nameTrackerTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: nameTrackerTextField.frame.height))
-        nameTrackerTextField.leftViewMode = .always
-        
         let rightView = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: nameTrackerTextField.frame.height))
     
         let button = UIButton(type: .custom)
@@ -327,6 +318,10 @@ final class TrackerConfigurationViewController: UIViewController {
         }
     }
 
+}
+//MARK: - Extension UITexFieldDelegate
+extension TrackerConfigurationViewController: UITextFieldDelegate {
+    //Метод отслеживающий изменения textField.text
 }
 
 //MARK: - Extension TableView

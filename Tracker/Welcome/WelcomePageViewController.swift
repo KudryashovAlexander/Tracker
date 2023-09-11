@@ -65,13 +65,14 @@ final class WelcomePageViewController: UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.modalPresentationStyle = .overFullScreen
+        
+        view.addSubview(pressButton)
+        view.addSubview(pageControl)
         
         pressButton.addTarget(self,
                          action: #selector(clickButton),
                          for: .touchUpInside)
-        
-        view.addSubview(pressButton)
-        view.addSubview(pageControl)
         
         self.delegate = self
         self.dataSource = self
@@ -82,8 +83,8 @@ final class WelcomePageViewController: UIPageViewController {
     @objc
     private func clickButton() {
         let tabBar = TabBarController()
+        UserDefaults.standard.set(UserProfile.joinSuccess, forKey: UserProfile.joinSuccess)
         self.present(tabBar, animated: true)
-
     }
     
     private func pageControlSupport() {

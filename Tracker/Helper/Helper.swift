@@ -7,6 +7,10 @@
 
 import UIKit
 
+struct UserProfile {
+    static let joinSuccess = "JoinSuccess"
+}
+
 struct EmojieCollection {
     let name = "Emoji"
     let array: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -21,8 +25,8 @@ struct ColorCollection {
                             .ypCS13, .ypCS14, .ypCS15, .ypCS16, .ypCS17, .ypCS18]
 }
 
-// Для МОК Данных
-
+// Для использования МОК данных в без Кор даты
+/*
 let monday = WeekDay.monday.rawValue
 let thusdey = WeekDay.thusdey.rawValue
 let wednesday = WeekDay.wednesday.rawValue
@@ -55,5 +59,5 @@ let sportLife = TrackerCategory(name: "ЗОЖ",
                                 trackers: [tracker4,tracker5])
 
 let mokVisibaleCategory: [TrackerCategory] = [homeWork,goAway,sportLife]
-
+*/
 
