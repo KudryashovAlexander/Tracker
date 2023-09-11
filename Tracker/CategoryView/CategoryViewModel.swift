@@ -8,7 +8,11 @@
 import Foundation
 
 struct CategoryViewModel {
-    let id: String
-    let categoryName: String
-    let categoryIsSelected: Bool
+    
+    let id: String?
+    @Observable
+    private(set) var categoryName: String?
+    
+    @Observable
+    private(set) var categoryIsSelected: Bool?
 }

@@ -36,8 +36,8 @@ final class ScheduleViewController: UIViewController {
     
     private var scheduleContainer = UIView()
     private var scheduleTableView = UITableView()
-    private var schedule = Schedule()
-    private var doneButton = UIButton()
+    var schedule = Schedule()
+    private var doneButton = UIButton().customBlackButton(title: "Готово")
     
     weak var delegate:ScheduleViewControllerProtocol?
     
@@ -49,13 +49,11 @@ final class ScheduleViewController: UIViewController {
         
         scheduleContainerSupport()
         scheduleTableViewSupport()
-        doneButtonSupport()
         
         scheduleTableView.dataSource = self
         scheduleTableView.delegate = self
 
         layoutSupport()
-        
     }
     
     private func layoutSupport() {
@@ -69,6 +67,7 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.translatesAutoresizingMaskIntoConstraints = false
         scheduleContainer.addSubview(scheduleTableView)
         
+        doneButton.addTarget(self, action: #selector(createSchedule), for: .touchUpInside)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(doneButton)
         
@@ -103,14 +102,6 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.separatorInset.right = 16
         scheduleTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
         scheduleTableView.tableHeaderView = UIView()
-    }
-    
-    private func doneButtonSupport() {
-        doneButton.backgroundColor = .ypBlack
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.layer.masksToBounds = true
-        doneButton.layer.cornerRadius = 16
-        doneButton.addTarget(self, action: #selector(createSchedule), for: .touchUpInside)
     }
     
     @objc

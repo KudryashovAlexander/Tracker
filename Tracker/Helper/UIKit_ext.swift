@@ -9,7 +9,7 @@ import UIKit
 
 extension UIButton {
     func customBlackButton(title: String) -> UIButton {
-        var button = UIButton()
+        let button = UIButton()
         button.backgroundColor = .ypBlack
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 16
@@ -18,11 +18,24 @@ extension UIButton {
         button.titleLabel?.textAlignment = .center
         return button
     }
+    func customRedButton(title: String) -> UIButton {
+        let button = UIButton()
+        button.backgroundColor = .ypWhite
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.ypRed, for: .normal)
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        let color = UIColor.ypRed.cgColor
+        button.layer.borderColor = color
+        button.layer.borderWidth = 1
+        return button
+    }
+    
 }
 
 extension UITextField {
     func customTextField(placeHolder: String) -> UITextField {
-        var textField = UITextField()
+        let textField = UITextField()
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 16
         textField.backgroundColor = .ypBackground

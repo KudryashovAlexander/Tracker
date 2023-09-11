@@ -33,6 +33,17 @@ class TrackerCategoryStory: NSObject {
             else { return [] }
             return trackerCategory
     }
+    var trackerCategoryViewModel: [CategoryViewModel] {
+        guard
+            let object = self.fetchedResultsController.fetchedObjects,
+            let trackerCategory = try? object.map({ trackerCategoryCoreData in
+                CategoryViewModel(id: trackerCategoryCoreData.objectID.uriRepresentation().absoluteString,
+                                  categoryName: trackerCategoryCoreData.name,
+                                  categoryIsSelected: nil)
+            })
+        else { return [] }
+        return trackerCategory
+    }
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext

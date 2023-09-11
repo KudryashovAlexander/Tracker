@@ -9,27 +9,14 @@ import UIKit
 
 final class WelcomePageViewController: UIPageViewController {
     
-    private let pressButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.titleLabel?.font = .yPMedium16
-        button.backgroundColor = .ypBlack
-
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 16
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let pressButton = UIButton().customBlackButton(title: "Вот это технологии!")
     
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        
         pageControl.currentPageIndicatorTintColor = .ypBlack
         pageControl.pageIndicatorTintColor = .ypLightGray.withAlphaComponent(0.3)
-        
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
     }()
     
@@ -68,12 +55,14 @@ final class WelcomePageViewController: UIPageViewController {
         self.modalPresentationStyle = .overFullScreen
         
         view.addSubview(pressButton)
-        view.addSubview(pageControl)
-        
         pressButton.addTarget(self,
                          action: #selector(clickButton),
                          for: .touchUpInside)
-        
+        pressButton.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(pageControl)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+
         self.delegate = self
         self.dataSource = self
         

@@ -40,15 +40,7 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
     
-    private var attentionLabel: UILabel {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = .yPRegular17
-        label.textColor = .ypRed
-        label.text = "Ограничение 38 символов"
-        label.isEnabled = false
-        return label
-    }
+    private var attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
     
     private var propertyTracker = ["Категория","Расписание"]
     
@@ -61,8 +53,8 @@ final class TrackerConfigurationViewController: UIViewController {
     private var colorCollectionView = ColorView()
     private let colorNameLabel = UILabel()
     
-    private let canselButton = UIButton()
-    private let createButton = UIButton()
+    private let canselButton = UIButton().customRedButton(title: "Отменить")
+    private let createButton = UIButton().customBlackButton(title: "Создать")
     
     var schedule = Schedule()
     
@@ -95,9 +87,6 @@ final class TrackerConfigurationViewController: UIViewController {
         
         emojieNameLabelSupport()
         colorNameLabelSupport()
-        
-        canselButtonSupport()
-        createButtonSupport()
                 
         layoutSupport()
     }
@@ -130,9 +119,11 @@ final class TrackerConfigurationViewController: UIViewController {
         colorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorNameLabel)
         
+        canselButton.addTarget(self, action: #selector(canselPress), for: .touchUpInside)
         canselButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(canselButton)
         
+        createButton.addTarget(self, action: #selector(createPress), for: .touchUpInside)
         createButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(createButton)
         
@@ -264,30 +255,9 @@ final class TrackerConfigurationViewController: UIViewController {
         colorNameLabel.textAlignment = .left
     }
     
-    private func canselButtonSupport() {
-        canselButton.backgroundColor = .ypWhite
-        canselButton.setTitle("Отменить", for: .normal)
-        canselButton.setTitleColor(.ypRed, for: .normal)
-        canselButton.layer.masksToBounds = true
-        canselButton.layer.cornerRadius = 16
-        let color = UIColor.ypRed.cgColor
-        canselButton.layer.borderColor = color
-        canselButton.layer.borderWidth = 1
-        canselButton.addTarget(self, action: #selector(canselPress), for: .touchUpInside)
-    }
-    
     @objc
     private func canselPress() {
         self.dismiss(animated: true)
-    }
-    
-    private func createButtonSupport() {
-        createButton.setTitle("Создать", for: .normal)
-        createButton.backgroundColor = .ypBlack
-        createButton.layer.masksToBounds = true
-        createButton.layer.cornerRadius = 16
-        createButton.setTitleColor(.ypWhite, for: .normal)
-        createButton.addTarget(self, action: #selector(createPress), for: .touchUpInside)
     }
     
     @objc
@@ -357,13 +327,16 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     
     private func createScheduleViewController() {
         let vc = ScheduleViewController()
+        vc.schedule = schedule
         vc.delegate = self
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
     
     private func createCategoryViewController() {
-        //В 17 спринте
+        let vc = CategoryViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
 }
 

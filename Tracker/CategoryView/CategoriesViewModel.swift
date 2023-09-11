@@ -9,7 +9,9 @@ import Foundation
 
 class CategoriesViewModel {
     
+    @Observable
     private(set) var cateories = [CategoryViewModel]()
+    private var trackerCatStory = TrackerCategoryStory()
     
     //Подключить TrackerCategoryStore
     
@@ -18,5 +20,10 @@ class CategoriesViewModel {
     //Добавить функцию удаления категории
     
     //Добавить делегат для категори вью?
+    
+    private func getCategoryFromStore() -> [CategoryViewModel] {
+        return trackerCatStory.trackerCategoryViewModel
+    }
+    
     
 }
