@@ -14,6 +14,8 @@ final class CategoryAddViewModel {
         didSet{
             if let categoryName = categoryName {
                 numberSimbol?(categoryName.count)
+            } else {
+                numberSimbol?(0)
             }
         }
     }

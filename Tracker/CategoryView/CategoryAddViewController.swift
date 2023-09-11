@@ -9,10 +9,10 @@ import UIKit
 
 class CategoryAddViewController: UIViewController {
     
-    private let addCategoryTextField = UITextField().customTextField(placeHolder: " Введите название категории")
-    private let attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
+    private let addCategoryTextField = UITextField().customTextField(placeHolder: "Введите название категории")
+    private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)
     private let addCategoryButton = UIButton().customBlackButton(title: "Готово")
-    private var viewModel: CategoryAddViewModel!
+    private var viewModel = CategoryAddViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +21,16 @@ class CategoryAddViewController: UIViewController {
         self.navigationItem.title = "Новая категория"
         
         bind()
+        checkSimbol(0)
         
         addCategoryTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addCategoryTextField)
         
         NSLayoutConstraint.activate([
-            addCategoryTextField.widthAnchor.constraint(equalTo: view.heightAnchor, constant: -32),
+            addCategoryTextField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -32),
             addCategoryTextField.heightAnchor.constraint(equalToConstant: 75),
             addCategoryTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            addCategoryTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+            addCategoryTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
         ])
         
         attentionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +48,7 @@ class CategoryAddViewController: UIViewController {
         view.addSubview(addCategoryButton)
         
         NSLayoutConstraint.activate([
-            addCategoryButton.widthAnchor.constraint(equalTo: view.heightAnchor, constant: -40),
+            addCategoryButton.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
             addCategoryButton.heightAnchor.constraint(equalToConstant: 60),
             addCategoryButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             addCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
@@ -57,7 +58,6 @@ class CategoryAddViewController: UIViewController {
     }
     
     private func bind() {
-        guard let viewModel = viewModel else { return }
         viewModel.numberSimbol = { [weak self] countChar in
             self?.checkSimbol(countChar)
         }
@@ -71,11 +71,11 @@ class CategoryAddViewController: UIViewController {
     
     private func checkSimbol(_ count: Int) {
         switch count {
-        case ..<0 :
+        case ..<1 :
             addCategoryButton.backgroundColor = .ypGray
             addCategoryButton.isEnabled = false
             attentionLabel.isHidden = true
-        case 1...38 :
+        case 1...25 :
             addCategoryButton.backgroundColor = .ypBlack
             addCategoryButton.isEnabled = true
             attentionLabel.isHidden = true
@@ -91,8 +91,14 @@ class CategoryAddViewController: UIViewController {
 //MARK: - Extension UI
 extension CategoryAddViewController: UITextFieldDelegate {
     
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        viewModel.categoryName = textField.text
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text,
+           let textRange = Range(range, in: text) {
+           let updatedText = text.replacingCharacters(in: textRange, with: string)
+            viewModel.categoryName = updatedText
+        }
+        return true
+    
     }
     
 }

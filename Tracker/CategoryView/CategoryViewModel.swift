@@ -9,7 +9,6 @@ import Foundation
 
 struct CategoryViewModel {
     
-    let id: String?
     @Observable
     private(set) var categoryName: String?
     

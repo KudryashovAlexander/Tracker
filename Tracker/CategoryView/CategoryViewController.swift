@@ -39,6 +39,7 @@ class CategoryViewController: UIViewController {
         scrollView.backgroundColor = .ypWhite
         scrollView.frame = view.bounds
         scrollView.contentSize = contenSize
+        scrollView.isHidden = false
         return scrollView
     }()
     
@@ -50,34 +51,93 @@ class CategoryViewController: UIViewController {
     }()
     
     private var contenSize: CGSize{
-        return CGSize(width: view.frame.width, height: 24 + 75*7 + 24 + 60)
+        return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
-    private var categoryContainer = UIView()
-    private var categoryTableView = UITableView()
+    private var categoryContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypBackground
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 16
+        return view
+    }()
+    
+    private var categoryTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.cellIdentifier)
+        tableView.isScrollEnabled = false
+        tableView.separatorInset.left = 16
+        tableView.separatorInset.right = 16
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        tableView.tableHeaderView = UIView()
+        return tableView
+    }()
+    
+    private let createCategoryButton = UIButton().customBlackButton(title: "Добавить категорию")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         self.navigationItem.title = "Категория"
 
-        view.addSubview(emptyCategoryImageView)
+        layoutSupport()
+
+    }
+    
+    private func layoutSupport() {
+        
         emptyCategoryImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emptyCategoryImageView)
+        
         emptyCategoryLabel.translatesAutoresizingMaskIntoConstraints = false
-
-
         view.addSubview(emptyCategoryLabel)
         
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        categoryContainer.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(categoryContainer)
+        
+        categoryTableView.translatesAutoresizingMaskIntoConstraints = false
+        categoryContainer.addSubview(categoryTableView)
+        
+        createCategoryButton.addTarget(self, action: #selector(createCategory), for: .touchUpInside)
+        createCategoryButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(createCategoryButton)
+        
+
         NSLayoutConstraint.activate([
             emptyCategoryImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emptyCategoryImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -62),
             
             emptyCategoryLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            emptyCategoryLabel.topAnchor.constraint(equalTo: emptyCategoryImageView.bottomAnchor, constant: 8)
+            emptyCategoryLabel.topAnchor.constraint(equalTo: emptyCategoryImageView.bottomAnchor, constant: 8),
+            
+            categoryContainer.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
+            categoryContainer.heightAnchor.constraint(equalToConstant: 75 * 7),
+            categoryContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            categoryContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            categoryTableView.topAnchor.constraint(equalTo: categoryContainer.topAnchor),
+            categoryTableView.bottomAnchor.constraint(equalTo: categoryContainer.bottomAnchor),
+            categoryTableView.leftAnchor.constraint(equalTo: categoryContainer.leftAnchor),
+            categoryTableView.rightAnchor.constraint(equalTo: categoryContainer.rightAnchor),
+            
+            createCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            createCategoryButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40),
+            createCategoryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            createCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
-    //Перенос в ViewModel
+    @objc
+    func createCategory() {
+        let createCategoryVC = CategoryAddViewController()
+        let nc = UINavigationController(rootViewController: createCategoryVC)
+        self.present(nc, animated: true)
+    }
+    
+    //ПЕРЕНЕСТИ ВО ВЬЮМОДЕЛЬ
     private func isCategoryEmpty(_ isEmptyTableView: Bool) {
         if isEmptyTableView {
             emptyCategoryImageView.isHidden = false
@@ -87,28 +147,14 @@ class CategoryViewController: UIViewController {
             emptyCategoryLabel.isHidden = true
         }
     }
-    
-    private func categoryContainerSupport() {
-        categoryContainer.backgroundColor = .ypBackground
-        categoryContainer.layer.masksToBounds = true
-        categoryContainer.layer.cornerRadius = 16
-    }
-    
-    private func categoryTableViewSupport() {
-        categoryTableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.cellIdentifier)
-        categoryTableView.isScrollEnabled = false
-        categoryTableView.separatorInset.left = 16
-        categoryTableView.separatorInset.right = 16
-        categoryTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        categoryTableView.tableHeaderView = UIView()
-    }
 
 }
 
 extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.cateories.count
+        return 7
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -116,7 +162,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
             return UITableViewCell()
         }
         //
-        return cell
+        return UITableViewCell()
     }
     
 }

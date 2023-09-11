@@ -37,8 +37,7 @@ class TrackerCategoryStory: NSObject {
         guard
             let object = self.fetchedResultsController.fetchedObjects,
             let trackerCategory = try? object.map({ trackerCategoryCoreData in
-                CategoryViewModel(id: trackerCategoryCoreData.objectID.uriRepresentation().absoluteString,
-                                  categoryName: trackerCategoryCoreData.name,
+                CategoryViewModel(categoryName: trackerCategoryCoreData.name,
                                   categoryIsSelected: nil)
             })
         else { return [] }
