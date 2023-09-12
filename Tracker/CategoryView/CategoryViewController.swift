@@ -39,7 +39,6 @@ class CategoryViewController: UIViewController {
         scrollView.backgroundColor = .ypWhite
         scrollView.frame = view.bounds
         scrollView.contentSize = contenSize
-        scrollView.isHidden = false
         return scrollView
     }()
     
@@ -50,28 +49,11 @@ class CategoryViewController: UIViewController {
         return view
     }()
     
-    private var contenSize: CGSize{
-        return CGSize(width: view.frame.width, height: view.frame.height)
+    private var contenSize: CGSize {
+        return CGSize(width: view.frame.width, height: 800)
     }
     
-    private var categoryContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .ypBackground
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 16
-        return view
-    }()
-    
-    private var categoryTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.cellIdentifier)
-        tableView.isScrollEnabled = false
-        tableView.separatorInset.left = 16
-        tableView.separatorInset.right = 16
-        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        tableView.tableHeaderView = UIView()
-        return tableView
-    }()
+    private var categoryTableView = UITableView()
     
     private let createCategoryButton = UIButton().customBlackButton(title: "Добавить категорию")
     
@@ -79,8 +61,19 @@ class CategoryViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         self.navigationItem.title = "Категория"
-
+        
+        viewModel = CategoriesViewModel()
+        viewModel.$cateories.bind { [weak self] _ in
+            guard let self = self else {return}
+            self.categoryTableView.reloadData()
+        }
+        
+        tableViewSupport()
+        
         layoutSupport()
+        
+        categoryTableView.dataSource = self
+        categoryTableView.delegate = self
 
     }
     
@@ -95,11 +88,8 @@ class CategoryViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        categoryContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(categoryContainer)
-        
         categoryTableView.translatesAutoresizingMaskIntoConstraints = false
-        categoryContainer.addSubview(categoryTableView)
+        contentView.addSubview(categoryTableView)
         
         createCategoryButton.addTarget(self, action: #selector(createCategory), for: .touchUpInside)
         createCategoryButton.translatesAutoresizingMaskIntoConstraints = false
@@ -113,21 +103,24 @@ class CategoryViewController: UIViewController {
             emptyCategoryLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emptyCategoryLabel.topAnchor.constraint(equalTo: emptyCategoryImageView.bottomAnchor, constant: 8),
             
-            categoryContainer.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
-            categoryContainer.heightAnchor.constraint(equalToConstant: 75 * 7),
-            categoryContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            categoryContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            categoryTableView.topAnchor.constraint(equalTo: categoryContainer.topAnchor),
-            categoryTableView.bottomAnchor.constraint(equalTo: categoryContainer.bottomAnchor),
-            categoryTableView.leftAnchor.constraint(equalTo: categoryContainer.leftAnchor),
-            categoryTableView.rightAnchor.constraint(equalTo: categoryContainer.rightAnchor),
+            categoryTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            categoryTableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            categoryTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             
             createCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             createCategoryButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40),
             createCategoryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             createCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func tableViewSupport() {
+        categoryTableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.cellIdentifier)
+        categoryTableView.isScrollEnabled = false
+        categoryTableView.separatorInset.left = 16
+        categoryTableView.separatorInset.right = 16
+        categoryTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        categoryTableView.tableHeaderView = UIView()
     }
     
     @objc
@@ -153,7 +146,8 @@ class CategoryViewController: UIViewController {
 extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        print(viewModel.cateories.count)
+        return viewModel.cateories.count
         
     }
     
@@ -161,7 +155,9 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         guard let cell = categoryTableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.cellIdentifier, for: indexPath) as? CategoryTableViewCell else {
             return UITableViewCell()
         }
-        //
+        cell.selectionStyle = .none
+        cell.viewModel = viewModel.cateories[indexPath.row]
+        print(cell.viewModel.categoryName)
         return UITableViewCell()
     }
     

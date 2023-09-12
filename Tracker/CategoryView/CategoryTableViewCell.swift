@@ -25,25 +25,16 @@ class CategoryTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    var viewModel: CategoryViewModel!
+    var viewModel: CategoryViewModel! {
+        didSet {
+            self.categoryNameLabel.text = viewModel.categoryName
+            self.chooseCategoryImageView.isHidden = !viewModel.categoryIsSelected
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        viewModel = CategoryViewModel()
-        
-        viewModel.$categoryName.bind { [weak self] nameOptional in
-            guard let self = self,
-                  let name = nameOptional else { return }
-            self.categoryNameLabel.text = name
-        }
-        
-        viewModel.$categoryIsSelected.bind { [weak self] chooseCategoryOptional in
-            guard let self = self,
-                  let chooseCategory = chooseCategoryOptional else { return }
-            self.chooseCategoryImageView.isHidden = chooseCategory
-        }
-        
+             
         categoryNameLabel.translatesAutoresizingMaskIntoConstraints = false
         chooseCategoryImageView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -51,6 +42,7 @@ class CategoryTableViewCell: UITableViewCell {
         contentView.addSubview(chooseCategoryImageView)
         
         NSLayoutConstraint.activate([
+            contentView.heightAnchor.constraint(equalToConstant: 75),
             categoryNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             categoryNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16)
         ])

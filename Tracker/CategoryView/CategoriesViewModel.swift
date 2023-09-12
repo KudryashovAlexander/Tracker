@@ -11,13 +11,20 @@ class CategoriesViewModel {
     
     @Observable
     private(set) var cateories = [CategoryViewModel]()
-    private var trackerCatStory = TrackerCategoryStory()
     
-    //Подключить TrackerCategoryStore
+    private var trackerCatStory: TrackerCategoryStory
     
-    //Добавить функцию для добавления Категории
+    init(trackerCatStory: TrackerCategoryStory = TrackerCategoryStory() ) {
+        self.trackerCatStory = trackerCatStory
+        self.cateories = getCategoryFromStore()
+    }
     
     //Добавить функцию удаления категории
+    private func deleteCategory(name: String) {
+        //НАПИСАТЬ МЕТОД ПОПОЗЖЕ
+        let categoryviewModel = CategoryViewModel(categoryName: name, categoryIsSelected: false)
+        try! trackerCatStory.deleteCategory(TrackerCategory(name: categoryviewModel.categoryName, trackers: []))
+    }
     
     //Добавить делегат для категори вью?
     

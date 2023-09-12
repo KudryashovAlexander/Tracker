@@ -33,12 +33,13 @@ class TrackerCategoryStory: NSObject {
             else { return [] }
             return trackerCategory
     }
+    
     var trackerCategoryViewModel: [CategoryViewModel] {
         guard
             let object = self.fetchedResultsController.fetchedObjects,
             let trackerCategory = try? object.map({ trackerCategoryCoreData in
-                CategoryViewModel(categoryName: trackerCategoryCoreData.name,
-                                  categoryIsSelected: nil)
+                CategoryViewModel(categoryName: trackerCategoryCoreData.name!,
+                                  categoryIsSelected: false)
             })
         else { return [] }
         return trackerCategory

@@ -14,7 +14,9 @@ protocol ScheduleViewControllerProtocol: AnyObject {
 final class ScheduleViewController: UIViewController {
     
     private let calendar = CalendarHelper()
-    
+    var schedule = Schedule()
+    weak var delegate:ScheduleViewControllerProtocol?
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .ypWhite
@@ -30,78 +32,69 @@ final class ScheduleViewController: UIViewController {
         return view
     }()
     
-    private var contenSize: CGSize{
-        return CGSize(width: view.frame.width, height: 24 + 75*7 + 24 + 60)
-    }
+    private var contenSize = CGSize()
     
-    private var scheduleContainer = UIView()
-    private var scheduleTableView = UITableView()
-    var schedule = Schedule()
+    private var scheduleTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.cellIdentifier)
+        tableView.isScrollEnabled = false
+        tableView.separatorInset.left = 16
+        tableView.separatorInset.right = 16
+        tableView.backgroundColor = .ypBackground
+        tableView.layer.masksToBounds = true
+        tableView.layer.cornerRadius = 16
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        tableView.tableHeaderView = UIView()
+        return tableView
+    }()
+    
     private var doneButton = UIButton().customBlackButton(title: "Готово")
-    
-    weak var delegate:ScheduleViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhite
         self.navigationItem.title = "Расписание"
-        
-        scheduleContainerSupport()
-        scheduleTableViewSupport()
-        
-        scheduleTableView.dataSource = self
-        scheduleTableView.delegate = self
-
-        layoutSupport()
-    }
-    
-    private func layoutSupport() {
+                
+        updateContentSize()
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        scheduleContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(scheduleContainer)
-        
         scheduleTableView.translatesAutoresizingMaskIntoConstraints = false
-        scheduleContainer.addSubview(scheduleTableView)
+        contentView.addSubview(scheduleTableView)
+
         
         doneButton.addTarget(self, action: #selector(createSchedule), for: .touchUpInside)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(doneButton)
+       
+        layoutSupport()
         
+        scheduleTableView.dataSource = self
+        scheduleTableView.delegate = self
+    }
+    
+    private func layoutSupport() {
         NSLayoutConstraint.activate([
-            scheduleContainer.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
-            scheduleContainer.heightAnchor.constraint(equalToConstant: 75 * 7),
-            scheduleContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            scheduleContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+            scheduleTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            scheduleTableView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            scheduleTableView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
+            scheduleTableView.heightAnchor.constraint(equalToConstant: 75*7),
             
-            scheduleTableView.topAnchor.constraint(equalTo: scheduleContainer.topAnchor),
-            scheduleTableView.bottomAnchor.constraint(equalTo: scheduleContainer.bottomAnchor),
-            scheduleTableView.leftAnchor.constraint(equalTo: scheduleContainer.leftAnchor),
-            scheduleTableView.rightAnchor.constraint(equalTo: scheduleContainer.rightAnchor),
-            
-            doneButton.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 24),
+            doneButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             doneButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40),
             doneButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             doneButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
-    private func scheduleContainerSupport() {
-        scheduleContainer.backgroundColor = .ypBackground
-        scheduleContainer.layer.masksToBounds = true
-        scheduleContainer.layer.cornerRadius = 16
-    }
-    
-    private func scheduleTableViewSupport() {
-        scheduleTableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.cellIdentifier)
-        scheduleTableView.isScrollEnabled = false
-        scheduleTableView.separatorInset.left = 16
-        scheduleTableView.separatorInset.right = 16
-        scheduleTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        scheduleTableView.tableHeaderView = UIView()
+    private func updateContentSize() {
+        let heighElement: CGFloat = CGFloat(integerLiteral: 24 + calendar.dayNameOfWeek.count * 75 + 24 + 60 + 16)
+        let viewHeight = view.bounds.height - 148
+        let maxView = heighElement > viewHeight ? heighElement : viewHeight
+        contenSize = CGSize(width: view.frame.width, height: maxView)
     }
     
     @objc
