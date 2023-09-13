@@ -12,7 +12,7 @@ class CategoryAddViewController: UIViewController {
     private let addCategoryTextField = UITextField().customTextField(placeHolder: "Введите название категории")
     private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)
     private let addCategoryButton = UIButton().customBlackButton(title: "Готово")
-    private var viewModel = CategoryAddViewModel()
+    var viewModel = CategoryAddViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

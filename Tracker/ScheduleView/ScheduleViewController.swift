@@ -40,7 +40,6 @@ final class ScheduleViewController: UIViewController {
         tableView.isScrollEnabled = false
         tableView.separatorInset.left = 16
         tableView.separatorInset.right = 16
-        tableView.backgroundColor = .ypBackground
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
@@ -81,7 +80,7 @@ final class ScheduleViewController: UIViewController {
             scheduleTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             scheduleTableView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             scheduleTableView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
-            scheduleTableView.heightAnchor.constraint(equalToConstant: 75*7),
+            scheduleTableView.heightAnchor.constraint(equalToConstant: CGFloat(calendar.dayNameOfWeek.count * 75) ),
             
             doneButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             doneButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40),

@@ -7,8 +7,13 @@
 
 import Foundation
 
+protocol CategoryAddViewModelDelegate {
+    func addNewCategory()
+}
+
 final class CategoryAddViewModel {
     
+    var delegate: CategoryAddViewModelDelegate?
     var numberSimbol: ((Int) -> Void)?
     var categoryName: String? {
         didSet{
@@ -26,5 +31,7 @@ final class CategoryAddViewModel {
         guard let categoryName = categoryName else { return }
         let trackerCategory = TrackerCategory(name: categoryName, trackers: [])
         try! trackerCategoryStore.addCategory(trackerCategory)
+        delegate?.addNewCategory()
     }
 }
+

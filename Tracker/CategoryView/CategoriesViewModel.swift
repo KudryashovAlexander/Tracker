@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CategoriesViewModel {
+final class CategoriesViewModel {
     
     @Observable
     private(set) var cateories = [CategoryViewModel]()
@@ -20,10 +20,11 @@ class CategoriesViewModel {
     }
     
     //Добавить функцию удаления категории
-    private func deleteCategory(name: String) {
-        //НАПИСАТЬ МЕТОД ПОПОЗЖЕ
-        let categoryviewModel = CategoryViewModel(categoryName: name, categoryIsSelected: false)
+    func deleteCategory(index: Int) {
+        
+        let categoryviewModel = cateories[index]
         try! trackerCatStory.deleteCategory(TrackerCategory(name: categoryviewModel.categoryName, trackers: []))
+        self.cateories = getCategoryFromStore()
     }
     
     //Добавить делегат для категори вью?
@@ -32,5 +33,11 @@ class CategoriesViewModel {
         return trackerCatStory.trackerCategoryViewModel
     }
     
-    
+}
+
+//MARK: - Extension CategoryAddViewModelDelegate
+extension CategoriesViewModel: CategoryAddViewModelDelegate {
+    func addNewCategory() {
+        self.cateories = getCategoryFromStore()
+    }
 }

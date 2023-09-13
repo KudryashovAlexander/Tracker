@@ -25,10 +25,11 @@ class CategoryTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    var viewModel: CategoryViewModel! {
+    var viewModel:CategoryViewModel! {
         didSet {
-            self.categoryNameLabel.text = viewModel.categoryName
-            self.chooseCategoryImageView.isHidden = !viewModel.categoryIsSelected
+            self.categoryNameLabel.text = self.viewModel.categoryName
+            self.selectedCategory(viewModel.categoryIsSelected)
+            bind()
         }
     }
     
@@ -53,12 +54,28 @@ class CategoryTableViewCell: UITableViewCell {
         ])
     }
     
+    private func bind() {
+        guard let viewModel = viewModel else {
+            return
+        }
+        viewModel.$categoryName.bind { [weak self] name in
+            guard let self = self else { return }
+            self.categoryNameLabel.text = self.viewModel.categoryName
+        }
+        
+        viewModel.$categoryIsSelected.bind { [weak self] isSelected in
+            guard let self = self else {return}
+            self.selectedCategory(isSelected)
+        }
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func selectedCategory(_ selected: Bool) {
-        chooseCategoryImageView.isHidden = selected
+    private func selectedCategory(_ selected: Bool) {
+        chooseCategoryImageView.isHidden = !selected
     }
     
 }
