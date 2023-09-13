@@ -37,7 +37,7 @@ final class CategoriesViewModel {
 
 //MARK: - Extension CategoryAddViewModelDelegate
 extension CategoriesViewModel: CategoryAddViewModelDelegate {
-    func addNewCategory() {
+    func changeCategory() {
         self.cateories = getCategoryFromStore()
     }
 }

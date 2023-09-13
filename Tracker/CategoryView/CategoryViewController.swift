@@ -164,9 +164,15 @@ class CategoryViewController: UIViewController {
         self.present(nc, animated: true)
     }
     
-    private func changeCategory(indexPath: IndexPath) {
-        //метод редактирования категории
+    private func changeCategory(index: Int) {
+        let createCategoryVC = CategoryAddViewController()
+        let categoryName = viewModel.cateories[index].categoryName
         
+        createCategoryVC.viewModel = CategoryAddViewModel(oldNCategoryName: categoryName)
+        
+        createCategoryVC.viewModel.delegate = viewModel
+        let nc = UINavigationController(rootViewController: createCategoryVC)
+        self.present(nc, animated: true)
     }
     
     private func deleteCategory(index: Int) {
@@ -218,7 +224,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             let action1 = UIAction(title: "Редактировать") { [weak self] _ in
-                self?.changeCategory(indexPath: indexPath)
+                self?.changeCategory(index: indexPath.row)
             }
             let action2 = UIAction(title: "Удалить") { [weak self] _ in
                 self?.deleteCategory(index: indexPath.row)

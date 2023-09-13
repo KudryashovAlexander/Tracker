@@ -12,16 +12,23 @@ class CategoryAddViewController: UIViewController {
     private let addCategoryTextField = UITextField().customTextField(placeHolder: "Введите название категории")
     private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)
     private let addCategoryButton = UIButton().customBlackButton(title: "Готово")
-    var viewModel = CategoryAddViewModel()
+    private var categoryIsChange: Bool = false
+    
+    var viewModel: CategoryAddViewModel! {
+        didSet {
+            if viewModel.oldNCategoryName != nil {
+                categoryIsChange = true
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = "Новая категория"
         
         bind()
-        checkSimbol(0)
+        checkView()
         
         addCategoryTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addCategoryTextField)
@@ -43,7 +50,6 @@ class CategoryAddViewController: UIViewController {
         ])
         
         
-        addCategoryButton.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
         addCategoryButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addCategoryButton)
         
@@ -57,6 +63,20 @@ class CategoryAddViewController: UIViewController {
         addCategoryTextField.delegate = self
     }
     
+    private func checkView() {
+        if categoryIsChange {
+            self.navigationItem.title = "Редактирование категории"
+            addCategoryButton.addTarget(self, action: #selector(changeCategoryName), for: .touchUpInside)
+            guard let text = viewModel.oldNCategoryName else { return }
+            addCategoryTextField.text = text
+            checkSimbol(text.count)
+        } else {
+            self.navigationItem.title = "Новая категория"
+            addCategoryButton.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
+            checkSimbol(0)
+        }
+    }
+    
     private func bind() {
         viewModel.numberSimbol = { [weak self] countChar in
             self?.checkSimbol(countChar)
@@ -64,8 +84,15 @@ class CategoryAddViewController: UIViewController {
     }
     
     @objc
-    func addCategory() {
+    private func addCategory() {
         viewModel.saveCategory()
+        dismiss(animated: true)
+    }
+    
+    @objc
+    private func changeCategoryName() {
+        guard let text = addCategoryTextField.text else { return }
+        viewModel.renameCategory(newName: text)
         dismiss(animated: true)
     }
     

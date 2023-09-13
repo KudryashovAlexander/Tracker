@@ -128,8 +128,29 @@ class TrackerCategoryStory: NSObject {
                 }
             }
         }
-        try addCategory(category)
-        try addTracker(at: newTracker, category: category)
+    }
+    
+    func changeNameCategory(oldName: String, newName: String) throws {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.name), oldName)
+        request.predicate = predicate
+        
+        do {
+            let results = try context.fetch(request)
+            
+            for trackerCoreData in results {
+                if let name = trackerCoreData.name {
+                    if name == oldName {
+                        trackerCoreData.name = newName
+                        try context.save()
+                    }
+                }
+            }
+            
+        } catch {
+            print("Ошибка при редактировании трекера")
+        }
+        
     }
     
     func deleteTracker(at tracker: Tracker, category: TrackerCategory) throws {
