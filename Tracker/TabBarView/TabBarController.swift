@@ -18,6 +18,9 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite
         self.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+        
+        
+    
 
         let trackerNavController = UINavigationController(rootViewController: trackerViewController)
         let statisticNavController = UINavigationController(rootViewController: statisticViewController)
@@ -34,6 +37,22 @@ class TabBarController: UITabBarController {
             selectedImage: nil)
         
         self.viewControllers = [trackerNavController,statisticNavController]
+        
+        tabBarBorder()
     }
     
+    func tabBarBorder() {
+        let lineView = UIView()
+        lineView.backgroundColor = .ypGray
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        
+        tabBar.addSubview(lineView)
+        
+        NSLayoutConstraint.activate([
+            lineView.leftAnchor.constraint(equalTo: tabBar.leftAnchor),
+            lineView.rightAnchor.constraint(equalTo: tabBar.rightAnchor),
+            lineView.topAnchor.constraint(equalTo: tabBar.topAnchor),
+            lineView.heightAnchor.constraint(equalToConstant: 1.0)
+        ])
+    }
 }

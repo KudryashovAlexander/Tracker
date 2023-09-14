@@ -20,8 +20,9 @@ final class CategoriesViewModel {
     var delegate:CategoriesViewModelDelegate
     var selectedCategoryName: String?
     
-    init(delegate: CategoriesViewModelDelegate) {
+    init(delegate: CategoriesViewModelDelegate, selectedCategoryName: String? = nil) {
         self.delegate = delegate
+        self.selectedCategoryName = selectedCategoryName
         self.cateories = getCategoryFromStore()
     }
     

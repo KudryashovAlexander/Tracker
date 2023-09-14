@@ -103,10 +103,13 @@ final class TrackersViewController: UIViewController {
         guard let navControl = navigationController else { return }
         let navBar = navControl.navigationBar
         
-        let leftButton = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(add))
+        let imageAdd = UIImage(named: "plusTracker") ?? UIImage()
+        
+        let leftButton = UIBarButtonItem(image: imageAdd,
+                                         style: .done,
+                                         target: self,
+                                         action: #selector(add))
+        
         leftButton.tintColor = .ypBlack
         navBar.topItem?.leftBarButtonItem = leftButton
                 
@@ -185,10 +188,18 @@ extension TrackersViewController: TrackersViewCellProtocol {
 //MARK: - Extension UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text,
+           let textRange = Range(range, in: text) {
+           let updatedText = text.replacingCharacters(in: textRange, with: string)
+            searchText = updatedText
+            filterCollectionView()
+        }        
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        searchText = textField.text
-        filterCollectionView()
         return true
     }
     
@@ -198,6 +209,11 @@ extension TrackersViewController: UITextFieldDelegate {
         filterCollectionView()
         return true
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
 }
 //MARK: - Extension TrackerConfigurationViewControllerDelegate
 extension TrackersViewController: TrackerConfigurationViewControllerDelegate {

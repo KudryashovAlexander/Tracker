@@ -149,8 +149,8 @@
 				7F9523EB2AA310EB00EA4B11 /* StaticticView */,
 				7F34B3A32A975A830068359E /* ScheduleView */,
 				7F8475452A7E921200BBF9EF /* Welcome */,
-				7F20E6272A75A22E00C49C3E /* Helper */,
 				7F9523EF2AA311BF00EA4B11 /* CoreData */,
+				7F20E6272A75A22E00C49C3E /* Helper */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";

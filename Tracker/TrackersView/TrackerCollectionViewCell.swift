@@ -29,11 +29,13 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
                 addTrackerDayButton.setImage(image, for: .normal)
                 addTrackerDayButton.backgroundColor = .ypWhite
                 addTrackerDayButton.tintColor = tracker.color
+                
             } else {
                 let image = UIImage(named: "add_Tracker_button") ?? UIImage()
                 addTrackerDayButton.setImage(image, for: .normal)
-                addTrackerDayButton.backgroundColor = tracker.color
-                addTrackerDayButton.tintColor = .ypWhite
+                addTrackerDayButton.backgroundColor = .ypWhite
+                addTrackerDayButton.tintColor = tracker.color
+                
             }
         }
     }

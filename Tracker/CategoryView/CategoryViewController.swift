@@ -212,6 +212,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         cell.viewModel.selectedCategory(select: true)
         viewModel.selectedCategoryName = viewModel.cateories[indexPath.row].categoryName
         viewModel.selectCategory()
+        self.dismiss(animated: true)
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

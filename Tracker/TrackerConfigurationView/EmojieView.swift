@@ -70,7 +70,7 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? EmojieCell {
             selectedEmojie = cell.returnText()
-            cell.backgroundColor = .lightGray
+            cell.backgroundColor = .ypLightGray
         }
     }
     

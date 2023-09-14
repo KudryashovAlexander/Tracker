@@ -81,6 +81,7 @@ final class TrackerConfigurationViewController: UIViewController {
         
         if isRegular == false {
             propertyTracker.removeLast()
+            schedule.allDayOn()
         }
         
         propertyTableView.delegate = self
@@ -315,6 +316,15 @@ extension TrackerConfigurationViewController: UITextFieldDelegate {
             }
         return true
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 //MARK: - Extension TableView
@@ -364,8 +374,7 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     private func createCategoryViewController() {
         
         let vc = CategoryViewController()
-        let viewModel = CategoriesViewModel(delegate: self)
-        viewModel.selectedCategoryName = currentCategoryName
+        let viewModel = CategoriesViewModel(delegate: self, selectedCategoryName: currentCategoryName)
         
         vc.viewModel = viewModel
         let navVC = UINavigationController(rootViewController: vc)
