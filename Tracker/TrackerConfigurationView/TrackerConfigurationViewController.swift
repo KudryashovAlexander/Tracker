@@ -16,6 +16,8 @@ final class TrackerConfigurationViewController: UIViewController {
     
     var navName = String()
     var isRegular: Bool = false
+    
+    private var calendarUse = CalendarHelper()
         
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -42,7 +44,10 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private var attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
     
-    private var propertyTracker = ["Категория","Расписание"]
+    private let categoryViewModel = ConfigTableViewCellViewModel(propertyName: "Категория", selectedPoperty: nil)
+    private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: "Расписание", selectedPoperty: nil)
+    
+    private var propertyTracker: [ConfigTableViewCellViewModel] = []
     
     private let propertyTableViewConteiner = UIView()
     private let propertyTableView = UITableView()
@@ -57,6 +62,7 @@ final class TrackerConfigurationViewController: UIViewController {
     private let createButton = UIButton().customBlackButton(title: "Создать")
     
     var schedule = Schedule()
+    var currentCategoryName: String?
     
     private let alertPresenter = AlertPresener()
     
@@ -67,6 +73,7 @@ final class TrackerConfigurationViewController: UIViewController {
         
         
         super.viewDidLoad()
+        propertyTracker = [categoryViewModel,scheduleViewModel]
         
         view.backgroundColor = .ypWhite
         self.navigationItem.title = navName
@@ -213,35 +220,35 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private func propertyTableViewSupport() {
         
-        propertyTableView.register(NewTrackerTableViewCell.self, forCellReuseIdentifier: NewTrackerTableViewCell.cellIdentifier)
+        propertyTableView.register(ConfigTableViewCell.self, forCellReuseIdentifier: ConfigTableViewCell.cellIdentifier)
         propertyTableView.isScrollEnabled = false
         propertyTableView.separatorInset.left = 16
         propertyTableView.separatorInset.right = 16
         propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
     }
     
-    
-    private func attentionLabelSupport(_ textCount: Int) {
-        if textCount > 37 {
-            
-            attentionLabel.isEnabled = true
-            attentionLabel.translatesAutoresizingMaskIntoConstraints = false
-
-            nameTrackerConteiner.addSubview(attentionLabel)
-            
-            NSLayoutConstraint.activate([
-                nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75 + 38),
-
-                attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8),
-                attentionLabel.bottomAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor,constant: -8),
-                attentionLabel.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor)
-            
-            ])
-
-        } else {
-            attentionLabel.isEnabled = false
-        }
-    }
+//
+//    private func attentionLabelSupport(_ textCount: Int) {
+//        if textCount > 37 {
+//
+//            attentionLabel.isEnabled = true
+//            attentionLabel.translatesAutoresizingMaskIntoConstraints = false
+//
+//            nameTrackerConteiner.addSubview(attentionLabel)
+//
+//            NSLayoutConstraint.activate([
+//                nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75 + 38),
+//
+//                attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8),
+//                attentionLabel.bottomAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor,constant: -8),
+//                attentionLabel.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor)
+//
+//            ])
+//
+//        } else {
+//            attentionLabel.isEnabled = false
+//        }
+//    }
     
     private func emojieNameLabelSupport() {
         emojieNameLabel.text = EmojieCollection().name
@@ -268,12 +275,18 @@ final class TrackerConfigurationViewController: UIViewController {
             if !name.isEmpty {
                 let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
                 
-                //MARK: - ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
-                let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
+                guard let currentCategoryName = currentCategoryName else {
+                    
+                    let alertModel = AlertModel(title: "Выберите категорию", message: "Не выбрана категория", buttonTitle: "Ок")
+                    alertPresenter.showAlert(model: alertModel, viewController: self) { }
+    
+                    return
+                }
+                
+                let trackerCategory = TrackerCategory(name: currentCategoryName, trackers: [tracker])
                 
                 guard let window = UIApplication.shared.windows.first else {
                     fatalError("Invalid Configuration") }
-
                 let tabBar = TabBarController()
                 self.delegate = tabBar.trackerViewController
                 delegate?.createTracker(tracker, category: trackerCategory)
@@ -281,7 +294,8 @@ final class TrackerConfigurationViewController: UIViewController {
                 window.rootViewController = tabBar
                 
             } else {
-                alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
+                let alertModel = AlertModel(title: "Нет наименования трекера", message: "Введите название трекера", buttonTitle: "ОК")
+                alertPresenter.showAlert(model: alertModel, viewController: self) {
                     self.createButton.backgroundColor = .ypBlack
                 }
             }
@@ -301,14 +315,19 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewTrackerTableViewCell.cellIdentifier, for: indexPath)
-        guard let newTrackerCell = cell as? NewTrackerTableViewCell else {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConfigTableViewCell.cellIdentifier, for: indexPath)
+        guard let newTrackerCell = cell as? ConfigTableViewCell else {
              return UITableViewCell()
         }
-        newTrackerCell.propertyName = propertyTracker[indexPath.row]
-        if indexPath.row == propertyTracker.count {
-            newTrackerCell.separatorInset.left = tableView.frame.maxX
+        
+        if indexPath.row == 0 {
+            newTrackerCell.viewModel = categoryViewModel
         }
+        
+        if indexPath.row == 1 {
+            newTrackerCell.viewModel = scheduleViewModel
+        }
+        
         newTrackerCell.selectionStyle = .none
         newTrackerCell.backgroundColor = .ypBackground
         return newTrackerCell
@@ -334,7 +353,12 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     }
     
     private func createCategoryViewController() {
+        
         let vc = CategoryViewController()
+        let viewModel = CategoriesViewModel(delegate: self)
+        viewModel.selectedCategoryName = currentCategoryName
+        
+        vc.viewModel = viewModel
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
@@ -344,6 +368,17 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
 extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
     func updateSchedule(_ newSchedule: Schedule) {
         schedule = newSchedule
+        guard let daysIsOn = calendarUse.shortNameSchedule(at: schedule.daysOn) else { return }
+        scheduleViewModel.changeSelectedProperty(daysIsOn)
     }
+}
+
+//MARK: - Extension 
+extension TrackerConfigurationViewController:CategoriesViewModelDelegate {
     
+    func updateSelectedCategory(name: String?) {
+        guard let name = name else { return }
+        currentCategoryName = name
+        categoryViewModel.changeSelectedProperty(name)
+    }
 }

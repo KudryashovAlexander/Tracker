@@ -9,7 +9,7 @@ import UIKit
 
 class CategoryViewController: UIViewController {
     
-    private var viewModel: CategoriesViewModel!
+    var viewModel: CategoriesViewModel!
     private var alertPresenter = AlertPresener()
     
     private var emptyCategoryImageView: UIImageView = {
@@ -78,7 +78,6 @@ class CategoryViewController: UIViewController {
         modalPresentationStyle = .none
         viewHight = view.frame.maxY - 98
         
-        viewModel = CategoriesViewModel()
         viewModel.$cateories.bind { [weak self] _ in
             guard let self = self else {return}
 
@@ -159,6 +158,7 @@ class CategoryViewController: UIViewController {
     @objc
     private func createCategory() {
         let createCategoryVC = CategoryAddViewController()
+        createCategoryVC.viewModel = CategoryAddViewModel()
         createCategoryVC.viewModel.delegate = viewModel
         let nc = UINavigationController(rootViewController: createCategoryVC)
         self.present(nc, animated: true)
@@ -210,6 +210,8 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = categoryTableView.cellForRow(at: indexPath) as? CategoryTableViewCell else { return }
         cell.viewModel.selectedCategory(select: true)
+        viewModel.selectedCategoryName = viewModel.cateories[indexPath.row].categoryName
+        viewModel.selectCategory()
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

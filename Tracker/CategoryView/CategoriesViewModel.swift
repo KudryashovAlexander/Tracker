@@ -7,30 +7,44 @@
 
 import Foundation
 
+protocol CategoriesViewModelDelegate {
+    func updateSelectedCategory(name: String?)
+}
+
 final class CategoriesViewModel {
     
     @Observable
     private(set) var cateories = [CategoryViewModel]()
     
-    private var trackerCatStory: TrackerCategoryStory
+    private var trackerCatStory = TrackerCategoryStory()
+    var delegate:CategoriesViewModelDelegate
+    var selectedCategoryName: String?
     
-    init(trackerCatStory: TrackerCategoryStory = TrackerCategoryStory() ) {
-        self.trackerCatStory = trackerCatStory
+    init(delegate: CategoriesViewModelDelegate) {
+        self.delegate = delegate
         self.cateories = getCategoryFromStore()
     }
     
-    //Добавить функцию удаления категории
     func deleteCategory(index: Int) {
         
         let categoryviewModel = cateories[index]
         try! trackerCatStory.deleteCategory(TrackerCategory(name: categoryviewModel.categoryName, trackers: []))
         self.cateories = getCategoryFromStore()
     }
-    
-    //Добавить делегат для категори вью?
-    
+        
     private func getCategoryFromStore() -> [CategoryViewModel] {
-        return trackerCatStory.trackerCategoryViewModel
+        var categoryArray = [CategoryViewModel]()
+        for category in trackerCatStory.trackerCategoryViewModel {
+            if category.categoryName == selectedCategoryName {
+                category.selectedCategory(select: true)
+            }
+            categoryArray.append(category)
+        }
+        return categoryArray
+    }
+    
+    func selectCategory() {
+        delegate.updateSelectedCategory(name: selectedCategoryName)
     }
     
 }

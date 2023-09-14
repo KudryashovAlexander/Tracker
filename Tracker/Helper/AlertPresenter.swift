@@ -10,17 +10,13 @@ import UIKit
 
 final class AlertPresener {
     
-    private let defaultAlert = AlertModel(title: "Не хватает параметров",
-                                         message: "Введите: ",
-                                         buttonTitle: "OK")
-    
-    func showAlert(message: String, viewController: UIViewController, completion: @escaping () -> Void) {
+    func showAlert(model: AlertModel, viewController: UIViewController, completion: @escaping () -> Void) {
         
-        let alert = UIAlertController(title: defaultAlert.title,
-                                      message: defaultAlert.message + message,
+        let alert = UIAlertController(title: model.title,
+                                      message: model.message,
                                       preferredStyle: .alert)
         
-        let action = UIAlertAction(title: defaultAlert.buttonTitle, style: .default) { _ in
+        let action = UIAlertAction(title: model.buttonTitle, style: .default) { _ in
             completion()
         }
         
