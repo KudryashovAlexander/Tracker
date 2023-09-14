@@ -14,7 +14,7 @@ protocol CategoriesViewModelDelegate {
 final class CategoriesViewModel {
     
     @Observable
-    private(set) var cateories = [CategoryViewModel]()
+    private(set) var categories = [CategoryViewModel]()
     
     private var trackerCatStory = TrackerCategoryStory()
     var delegate:CategoriesViewModelDelegate
@@ -23,14 +23,18 @@ final class CategoriesViewModel {
     init(delegate: CategoriesViewModelDelegate, selectedCategoryName: String? = nil) {
         self.delegate = delegate
         self.selectedCategoryName = selectedCategoryName
-        self.cateories = getCategoryFromStore()
+        self.categories = getCategoryFromStore()
     }
     
     func deleteCategory(index: Int) {
         
-        let categoryviewModel = cateories[index]
-        try! trackerCatStory.deleteCategory(TrackerCategory(name: categoryviewModel.categoryName, trackers: []))
-        self.cateories = getCategoryFromStore()
+        let categoryviewModel = categories[index]
+        do {
+            try trackerCatStory.deleteCategory(TrackerCategory(name: categoryviewModel.categoryName, trackers: []))
+        } catch {
+            print("Не удалось удалить категорию")
+        }
+        self.categories = getCategoryFromStore()
     }
         
     private func getCategoryFromStore() -> [CategoryViewModel] {
@@ -53,6 +57,6 @@ final class CategoriesViewModel {
 //MARK: - Extension CategoryAddViewModelDelegate
 extension CategoriesViewModel: CategoryAddViewModelDelegate {
     func changeCategory() {
-        self.cateories = getCategoryFromStore()
+        self.categories = getCategoryFromStore()
     }
 }

@@ -9,8 +9,8 @@ import UIKit
 
 class CategoryViewController: UIViewController {
     
-    var viewModel: CategoriesViewModel!
-    private var alertPresenter = AlertPresener()
+    private let viewModel: CategoriesViewModel
+    private let alertPresenter = AlertPresener()
     
     private var emptyCategoryImageView: UIImageView = {
         let imageView = UIImageView()
@@ -71,6 +71,16 @@ class CategoryViewController: UIViewController {
     private var heightTableViewConstaraint: NSLayoutConstraint?
     private var viewHight = CGFloat()
     
+    init(viewModel: CategoriesViewModel) {
+        self.viewModel = viewModel
+        super .init(nibName: nil, bundle: nil)
+    
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
@@ -78,10 +88,10 @@ class CategoryViewController: UIViewController {
         modalPresentationStyle = .none
         viewHight = view.frame.maxY - 98
         
-        viewModel.$cateories.bind { [weak self] _ in
+        viewModel.$categories.bind { [weak self] _ in
             guard let self = self else {return}
 
-            self.countElement = self.viewModel.cateories.count
+            self.countElement = self.viewModel.categories.count
             self.categoryIsEmpty(self.countElement)
             self.categoryTableView.reloadData()
             self.updateContentSize()
@@ -96,7 +106,7 @@ class CategoryViewController: UIViewController {
     
     private func layoutSupport() {
 
-        countElement = viewModel.cateories.count
+        countElement = viewModel.categories.count
         categoryIsEmpty(countElement)
         
         updateContentSize()
@@ -126,10 +136,13 @@ class CategoryViewController: UIViewController {
         createCategoryButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(createCategoryButton)
         
-        createCategoryButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50).isActive = true
-        createCategoryButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40).isActive = true
-        createCategoryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        createCategoryButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        NSLayoutConstraint.activate([
+            createCategoryButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50),
+            createCategoryButton.widthAnchor.constraint(equalToConstant: contentView.frame.width - 40),
+            createCategoryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            createCategoryButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        
     }
     
     private func setHeightTableView(_ height: CGFloat) {
@@ -166,7 +179,7 @@ class CategoryViewController: UIViewController {
     
     private func changeCategory(index: Int) {
         let createCategoryVC = CategoryAddViewController()
-        let categoryName = viewModel.cateories[index].categoryName
+        let categoryName = viewModel.categories[index].categoryName
         
         createCategoryVC.viewModel = CategoryAddViewModel(oldNCategoryName: categoryName)
         
@@ -192,8 +205,8 @@ class CategoryViewController: UIViewController {
 extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(viewModel.cateories.count)
-        return viewModel.cateories.count
+        print(viewModel.categories.count)
+        return viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -201,7 +214,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        cell.viewModel = viewModel.cateories[indexPath.row]
+        cell.viewModel = viewModel.categories[indexPath.row]
         cell.backgroundColor = .ypBackground
         return cell
     }
@@ -210,7 +223,12 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = categoryTableView.cellForRow(at: indexPath) as? CategoryTableViewCell else { return }
         cell.viewModel.selectedCategory(select: true)
-        viewModel.selectedCategoryName = viewModel.cateories[indexPath.row].categoryName
+        if viewModel.selectedCategoryName == viewModel.categories[indexPath.row].categoryName {
+            viewModel.selectedCategoryName = nil
+        } else {
+            viewModel.selectedCategoryName = viewModel.categories[indexPath.row].categoryName
+        }
+        
         viewModel.selectCategory()
         self.dismiss(animated: true)
     }

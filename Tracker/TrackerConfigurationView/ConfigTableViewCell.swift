@@ -44,12 +44,15 @@ final class ConfigTableViewCell: UITableViewCell {
         let image = UIImage(named: "property_nextView") ?? UIImage()
         return UIImageView(image: image)
     }()
+    
+    private var propertyNameLabelTopAnchor: NSLayoutConstraint?
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
         
-        
-        layoutConfiguration(selectedIsActive: isSelectedProperty)
+        propertyNameLabelTopAnchor = propertyNameLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor)
+        setHeight(isActivate: isSelectedProperty)
+        layoutConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -67,27 +70,40 @@ final class ConfigTableViewCell: UITableViewCell {
         }
         
         viewModel.$selectedPoperty.bind { [weak self] name in
-            guard let self = self,
-                  let name = name else { return }
+            guard let self = self else { return }
+            guard let name = name else {
+                self.setHeight(isActivate: false)
+                return
+            }
             self.selectedPropertyLabel.text = name
-            self.layoutConfiguration(selectedIsActive:true)
+            self.setHeight(isActivate: true)
+        }
+        
+    }
+    
+    private func setHeight(isActivate: Bool) {
+        selectedPropertyLabel.isHidden = !isActivate
+
+        if isActivate {
+            propertyNameLabelTopAnchor?.constant = 26
+        } else {
+            propertyNameLabelTopAnchor?.constant = 75/2
+
         }
         
     }
 
-    private func layoutConfiguration(selectedIsActive: Bool) {
+    private func layoutConfiguration() {
         
         contentView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         
         propertyNameLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(propertyNameLabel)
         propertyNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
-        propertyNameLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: 26).isActive = selectedIsActive
-        propertyNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = !selectedIsActive
+        propertyNameLabelTopAnchor?.isActive = true
         
         selectedPropertyLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(selectedPropertyLabel)
-        selectedPropertyLabel.isHidden = !selectedIsActive
         selectedPropertyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
         selectedPropertyLabel.topAnchor.constraint(equalTo: propertyNameLabel.bottomAnchor, constant: 2).isActive = true
 

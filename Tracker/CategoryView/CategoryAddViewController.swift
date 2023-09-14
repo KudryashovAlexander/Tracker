@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoryAddViewController: UIViewController {
+final class CategoryAddViewController: UIViewController {
     
     private let addCategoryTextField = UITextField().customTextField(placeHolder: "Введите название категории")
     private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)

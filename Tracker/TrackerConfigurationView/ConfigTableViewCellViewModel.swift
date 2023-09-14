@@ -20,10 +20,8 @@ class ConfigTableViewCellViewModel {
         self.selectedPoperty = selectedPoperty
     }
     
-    func changeSelectedProperty(_ text: String) {
+    func changeSelectedProperty(_ text: String?) {
         selectedPoperty = text
     }
-    
-    
     
 }

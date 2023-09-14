@@ -65,7 +65,7 @@ class CalendarHelper {
             var index = 0
             for dayofWeek in dayNumber {
                 if day == dayofWeek {
-                    shortNames = shortNames + shortNameAllDay[index] + " ,"
+                    shortNames = shortNames + shortNameAllDay[index] + ", "
                 }
                 index += 1
             }

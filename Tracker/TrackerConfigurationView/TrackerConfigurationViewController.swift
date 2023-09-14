@@ -373,10 +373,8 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     
     private func createCategoryViewController() {
         
-        let vc = CategoryViewController()
         let viewModel = CategoriesViewModel(delegate: self, selectedCategoryName: currentCategoryName)
-        
-        vc.viewModel = viewModel
+        let vc = CategoryViewController(viewModel: viewModel)
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
@@ -386,7 +384,10 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
 extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
     func updateSchedule(_ newSchedule: Schedule) {
         schedule = newSchedule
-        guard let daysIsOn = calendarUse.shortNameSchedule(at: schedule.daysOn) else { return }
+        guard let daysIsOn = calendarUse.shortNameSchedule(at: schedule.daysOn) else {
+            scheduleViewModel.changeSelectedProperty(nil)
+            return
+        }
         scheduleViewModel.changeSelectedProperty(daysIsOn)
     }
 }
@@ -395,7 +396,6 @@ extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
 extension TrackerConfigurationViewController:CategoriesViewModelDelegate {
     
     func updateSelectedCategory(name: String?) {
-        guard let name = name else { return }
         currentCategoryName = name
         categoryViewModel.changeSelectedProperty(name)
     }

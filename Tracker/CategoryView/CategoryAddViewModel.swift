@@ -11,6 +11,11 @@ protocol CategoryAddViewModelDelegate {
     func changeCategory()
 }
 
+enum ErrorCategoryAddViewModel: Error {
+    case invalidSaveCategory
+    case invalidRenameCategory
+}
+
 final class CategoryAddViewModel {
     
     var delegate: CategoryAddViewModelDelegate?
@@ -25,25 +30,34 @@ final class CategoryAddViewModel {
             }
         }
     }
+    private let trackerCategoryStore = TrackerCategoryStory()
     
     init(oldNCategoryName: String? = nil) {
         self.oldNCategoryName = oldNCategoryName
     }
     
-    private let trackerCategoryStore = TrackerCategoryStory()
-    
     func saveCategory() {
         guard let categoryName = categoryName else { return }
         let trackerCategory = TrackerCategory(name: categoryName, trackers: [])
-        try! trackerCategoryStore.addCategory(trackerCategory)
-        delegate?.changeCategory()
+        do {
+            try trackerCategoryStore.addCategory(trackerCategory)
+            delegate?.changeCategory()
+        } catch {
+            print(ErrorCategoryAddViewModel.invalidSaveCategory)
+        }
+        
     }
     
     func renameCategory(newName: String) {
         guard let oldName = oldNCategoryName else {return}
         if newName != oldName {
-            try! trackerCategoryStore.changeNameCategory(oldName: oldName, newName: newName)
-            delegate?.changeCategory()
+            do {
+                try trackerCategoryStore.changeNameCategory(oldName: oldName, newName: newName)
+                delegate?.changeCategory()
+            } catch {
+                 print(ErrorCategoryAddViewModel.invalidSaveCategory)
+            }
+           
         }
     }
 }
