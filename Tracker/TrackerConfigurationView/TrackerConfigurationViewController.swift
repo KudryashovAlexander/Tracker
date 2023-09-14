@@ -39,6 +39,7 @@ final class TrackerConfigurationViewController: UIViewController {
     }
     
     private let nameTrackerConteiner = UIView()
+    private var hightNameTrackerConteinerConstraint: NSLayoutConstraint?
     
     private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
     
@@ -94,19 +95,31 @@ final class TrackerConfigurationViewController: UIViewController {
         
         emojieNameLabelSupport()
         colorNameLabelSupport()
-                
-        layoutSupport()
+        
+        hightNameTrackerConteinerConstraint = nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75)
+        layoutSupport(attention: false)
     }
     
-    private func layoutSupport() {
+    private func layoutSupport(attention: Bool) {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         nameTrackerConteiner.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameTrackerConteiner)
+        nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24).isActive = true
+        nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32).isActive = true
+        setHeightTableView(attention)
+        hightNameTrackerConteinerConstraint?.isActive = true
+        nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
         nameTrackerTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTrackerConteiner.addSubview(nameTrackerTextField)
+        
+        attentionLabel.translatesAutoresizingMaskIntoConstraints = false
+        attentionLabel.isHidden = !attention
+        nameTrackerConteiner.addSubview(attentionLabel)
+        attentionLabel.centerXAnchor.constraint(equalTo: nameTrackerConteiner.centerXAnchor).isActive = attention
+        attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8).isActive = attention
         
         propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(propertyTableViewConteiner)
@@ -135,11 +148,6 @@ final class TrackerConfigurationViewController: UIViewController {
         contentView.addSubview(createButton)
         
         NSLayoutConstraint.activate([
-            
-            nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
-            nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75),
-            nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             nameTrackerTextField.topAnchor.constraint(equalTo: nameTrackerConteiner.topAnchor),
             nameTrackerTextField.leftAnchor.constraint(equalTo: nameTrackerConteiner.leftAnchor),
@@ -185,6 +193,14 @@ final class TrackerConfigurationViewController: UIViewController {
         
     }
     
+    private func setHeightTableView(_ attention: Bool) {
+        if attention {
+            hightNameTrackerConteinerConstraint?.constant = 113
+        } else {
+            hightNameTrackerConteinerConstraint?.constant = 75
+        }
+    }
+    
     private func nameTrackerConteinerSupport() {
         nameTrackerConteiner.backgroundColor = .white
     }
@@ -227,28 +243,6 @@ final class TrackerConfigurationViewController: UIViewController {
         propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
     }
     
-//
-//    private func attentionLabelSupport(_ textCount: Int) {
-//        if textCount > 37 {
-//
-//            attentionLabel.isEnabled = true
-//            attentionLabel.translatesAutoresizingMaskIntoConstraints = false
-//
-//            nameTrackerConteiner.addSubview(attentionLabel)
-//
-//            NSLayoutConstraint.activate([
-//                nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75 + 38),
-//
-//                attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8),
-//                attentionLabel.bottomAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor,constant: -8),
-//                attentionLabel.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor)
-//
-//            ])
-//
-//        } else {
-//            attentionLabel.isEnabled = false
-//        }
-//    }
     
     private func emojieNameLabelSupport() {
         emojieNameLabel.text = EmojieCollection().name
@@ -305,7 +299,18 @@ final class TrackerConfigurationViewController: UIViewController {
 }
 //MARK: - Extension UITexFieldDelegate
 extension TrackerConfigurationViewController: UITextFieldDelegate {
-    //Метод отслеживающий изменения textField.text
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text,
+           let textRange = Range(range, in: text) {
+                let updatedText = text.replacingCharacters(in: textRange, with: string)
+                if updatedText.count > 37 {
+                    layoutSupport(attention: true)
+                } else {
+                    layoutSupport(attention: false)
+                }
+            }
+        return true
+    }
 }
 
 //MARK: - Extension TableView
