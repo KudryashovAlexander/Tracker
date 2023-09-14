@@ -305,8 +305,12 @@ extension TrackerConfigurationViewController: UITextFieldDelegate {
                 let updatedText = text.replacingCharacters(in: textRange, with: string)
                 if updatedText.count > 37 {
                     layoutSupport(attention: true)
+                    createButton.isEnabled = false
+                    createButton.backgroundColor = .ypGray
                 } else {
                     layoutSupport(attention: false)
+                    createButton.isEnabled = true
+                    createButton.backgroundColor = .ypBlack
                 }
             }
         return true
