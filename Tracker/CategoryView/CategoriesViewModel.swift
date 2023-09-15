@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CategoriesViewModelDelegate {
+protocol CategoriesViewModelDelegate: AnyObject {
     func updateSelectedCategory(name: String?)
 }
 
@@ -16,8 +16,8 @@ final class CategoriesViewModel {
     @Observable
     private(set) var categories = [CategoryViewModel]()
     
-    private var trackerCatStory = TrackerCategoryStory()
-    var delegate:CategoriesViewModelDelegate
+    private var trackerCatStory = TrackerCategoryStore()
+    weak var delegate:CategoriesViewModelDelegate?
     var selectedCategoryName: String?
     
     init(delegate: CategoriesViewModelDelegate, selectedCategoryName: String? = nil) {
@@ -49,7 +49,7 @@ final class CategoriesViewModel {
     }
     
     func selectCategory() {
-        delegate.updateSelectedCategory(name: selectedCategoryName)
+        delegate?.updateSelectedCategory(name: selectedCategoryName)
     }
     
 }

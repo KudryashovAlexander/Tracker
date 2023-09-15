@@ -20,7 +20,7 @@ final class TrackerAddViewController: UIViewController {
         self.navigationItem.title = "Создание трекера"
         
         trackerButton.addTarget(self,
-                                action: #selector(pressAddTreker),
+                                action: #selector(pressAddTracker),
                                 for: .touchUpInside)
         view.addSubview(trackerButton)
         trackerButton.translatesAutoresizingMaskIntoConstraints = false
@@ -47,19 +47,17 @@ final class TrackerAddViewController: UIViewController {
     }
     
     @objc
-    private func pressAddTreker(){
-        showTrackerConfigurationView(trackerName: "Новая привычка", isRegular: true)
+    private func pressAddTracker(){
+        let viewModel = TrackerConfigurationViewModel(trackerType: .regular, trackerConfigurationType: .add)
+        let trackerConfugurationView = TrackerConfigurationViewController(viewModel: viewModel)
+        let naVC = UINavigationController(rootViewController: trackerConfugurationView)
+        self.present(naVC, animated: true)
     }
     
     @objc
     private func pressAddNotRegularTrack() {
-        showTrackerConfigurationView(trackerName: "Новое нерегелярное событие", isRegular: false)
-    }
-    
-    private func showTrackerConfigurationView(trackerName: String, isRegular: Bool) {
-        let trackerConfugurationView = TrackerConfigurationViewController()
-        trackerConfugurationView.navName = trackerName
-        trackerConfugurationView.isRegular = isRegular
+        let viewModel = TrackerConfigurationViewModel(trackerType: .notRegular, trackerConfigurationType: .add)
+        let trackerConfugurationView = TrackerConfigurationViewController(viewModel: viewModel)
         let naVC = UINavigationController(rootViewController: trackerConfugurationView)
         self.present(naVC, animated: true)
     }

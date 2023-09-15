@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    private let sController = UISearchController()
+    private let sController = UISearchController(searchResultsController: nil)
     var categories: [TrackerCategory] = []
     var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController {
     private var calendarHelper = CalendarHelper()
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
-    private var trackerCategoryStore = TrackerCategoryStory()
+    private var trackerCategoryStore = TrackerCategoryStore()
     private var trackerRecordStore = TrackerRecordStore()
     
     private var searchText: String? = nil
@@ -62,7 +62,7 @@ final class TrackersViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             emptyCollectiionImage.heightAnchor.constraint(equalToConstant: 80),
             emptyCollectiionImage.widthAnchor.constraint(equalToConstant: 80),
@@ -77,6 +77,7 @@ final class TrackersViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
+        sController.searchBar.delegate = self
         
     }
     
@@ -161,7 +162,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func trackerFind(id: UUID) -> (Int,Bool) {
-        return trackerRecordStore.countDayAndIsDone(id: id, date: currentDate)
+        return (trackerRecordStore.countDay(id: id), trackerRecordStore.dayIsDone(id: id, date: currentDate))
     }
     
     @objc
@@ -172,6 +173,26 @@ final class TrackersViewController: UIViewController {
     }
     
 }
+//MARK: - Extension UISearchBarDelegate
+extension TrackersViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+            cancelButton.setTitle("Отменить", for: .normal)
+            cancelButton.titleLabel?.adjustsFontSizeToFitWidth = false
+                cancelButton.titleLabel?.lineBreakMode = .byTruncatingTail
+                cancelButton.frame = CGRect(x: cancelButton.frame.origin.x, y: cancelButton.frame.origin.y, width: 104, height: cancelButton.frame.height)
+        }
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        // после отмены посика
+    }
+    
+}
+
 
 //MARK: - Extension TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewCellProtocol {
@@ -214,16 +235,6 @@ extension TrackersViewController: UITextFieldDelegate {
         view.endEditing(true)
     }
     
-}
-//MARK: - Extension TrackerConfigurationViewControllerDelegate
-extension TrackersViewController: TrackerConfigurationViewControllerDelegate {
-    func createTracker(_ newTracker: Tracker, category: TrackerCategory) {
-        do {
-            try trackerCategoryStore.addTracker(at: newTracker, category: category)
-        } catch {
-            print("Ошибка в добавлении нового трекера")
-        }
-    }
 }
 
 //MARK: - Extension TrackerCategoryStoryDelegate

@@ -45,6 +45,7 @@
 		7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F84755C2A86AF7C00BBF9EF /* Helper.swift */; };
 		7F8475612A86B52C00BBF9EF /* TrackerAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */; };
 		7F8475632A8D514C00BBF9EF /* TrackerConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */; };
+		7F89F0B72AB4918E0079159E /* TrackersConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F89F0B62AB4918E0079159E /* TrackersConfigurationViewModel.swift */; };
 		7F9523EA2AA239C700EA4B11 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9523E92AA239C700EA4B11 /* CalendarHelper.swift */; };
 		7F9523EE2AA311A700EA4B11 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7F9523EC2AA311A700EA4B11 /* Model.xcdatamodeld */; };
 		7F9523F12AA311F400EA4B11 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9523F02AA311F300EA4B11 /* TrackerStore.swift */; };
@@ -96,6 +97,7 @@
 		7F84755C2A86AF7C00BBF9EF /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerAddViewController.swift; sourceTree = "<group>"; };
 		7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerConfigurationViewController.swift; sourceTree = "<group>"; };
+		7F89F0B62AB4918E0079159E /* TrackersConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersConfigurationViewModel.swift; sourceTree = "<group>"; };
 		7F9523E92AA239C700EA4B11 /* CalendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		7F9523ED2AA311A700EA4B11 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7F9523F02AA311F300EA4B11 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				7F8475622A8D514C00BBF9EF /* TrackerConfigurationViewController.swift */,
+				7F89F0B62AB4918E0079159E /* TrackersConfigurationViewModel.swift */,
 				7F16D7562A93CF370054FFF1 /* ConfigTableViewCell.swift */,
 				7F6D3E502AB21E0E00FF0419 /* ConfigTableViewCellViewModel.swift */,
 				7F16D75C2A9666580054FFF1 /* EmojieView.swift */,
@@ -367,6 +370,7 @@
 				7F34B3A22A975A790068359E /* ScheduleViewController.swift in Sources */,
 				7F84754E2A7F7C0000BBF9EF /* TrackersViewController.swift in Sources */,
 				7F9523F12AA311F400EA4B11 /* TrackerStore.swift in Sources */,
+				7F89F0B72AB4918E0079159E /* TrackersConfigurationViewModel.swift in Sources */,
 				7F16D7612A96B7420054FFF1 /* ColorView.swift in Sources */,
 				7F6D3E4F2AAEFC4B00FF0419 /* CategoryAddViewModel.swift in Sources */,
 				7F84755B2A8429F500BBF9EF /* TrackerRecord.swift in Sources */,

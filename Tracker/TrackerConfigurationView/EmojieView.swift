@@ -7,17 +7,22 @@
 
 import UIKit
 
+protocol EmojieViewDelegate: AnyObject {
+    func selectedEmogie( _ emogie: String)
+}
+
 final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private var emojieCollection = EmojieCollection()
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: UICollectionViewFlowLayout())
-    
-    var selectedEmojie = String()
-    
-    override init(frame: CGRect) {
-        super .init(frame: frame)
-        selectedEmojie = emojieCollection.array.first!
+    weak var delegate: EmojieViewDelegate?
+        
+    init(delegate: EmojieViewDelegate?) {
+        self.delegate = delegate
+        
+        super .init(frame: CGRect())
+        
         collectionView.register(EmojieCell.self, forCellWithReuseIdentifier: EmojieCell.cellIdentifier)
                 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,6 +39,7 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
         
         collectionView.dataSource = self
         collectionView.delegate = self
+
     }
 
     
@@ -67,9 +73,14 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
         return 0
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
+        return sectionInset
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? EmojieCell {
-            selectedEmojie = cell.returnText()
+            delegate?.selectedEmogie(cell.returnText())
             cell.backgroundColor = .ypLightGray
         }
     }

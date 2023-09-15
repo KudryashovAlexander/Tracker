@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CategoryAddViewModelDelegate {
+protocol CategoryAddViewModelDelegate: AnyObject {
     func changeCategory()
 }
 
@@ -18,7 +18,7 @@ enum ErrorCategoryAddViewModel: Error {
 
 final class CategoryAddViewModel {
     
-    var delegate: CategoryAddViewModelDelegate?
+    weak var delegate: CategoryAddViewModelDelegate?
     var numberSimbol: ((Int) -> Void)?
     var oldNCategoryName: String?
     var categoryName: String? {
@@ -30,7 +30,7 @@ final class CategoryAddViewModel {
             }
         }
     }
-    private let trackerCategoryStore = TrackerCategoryStory()
+    private let trackerCategoryStore = TrackerCategoryStore()
     
     init(oldNCategoryName: String? = nil) {
         self.oldNCategoryName = oldNCategoryName
