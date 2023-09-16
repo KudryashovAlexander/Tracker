@@ -295,7 +295,11 @@ extension TrackerConfigurationViewController: UITextFieldDelegate {
         if let text = textField.text,
            let textRange = Range(range, in: text) {
             let updatedText = text.replacingCharacters(in: textRange, with: string)
-            viewModel.trackerName = updatedText
+            if updatedText.isEmpty {
+                viewModel.trackerName = nil
+            } else {
+                viewModel.trackerName = updatedText
+            }
         }
         return true
     }
@@ -310,7 +314,7 @@ extension TrackerConfigurationViewController: UITextFieldDelegate {
     }
 }
 
-//MARK: - Extension TableView
+//MARK: - Extension UITableViewDataSource, UITableViewDelegate
 extension TrackerConfigurationViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.tableViewCellViewModel.count

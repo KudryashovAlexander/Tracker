@@ -18,6 +18,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private let datePicker = UIDatePicker()
+    var searchBarIsHidden = false
     
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -37,6 +38,9 @@ final class TrackersViewController: UIViewController {
         categories = trackerCategoryStore.trackerCategory
         completedTrackers = trackerRecordStore.trackerRecords
         
+        self.navigationController?.hidesBarsOnSwipe = false
+        sController.hidesNavigationBarDuringPresentation = false
+
         navigationSupport()
         filterCollectionView()
         
@@ -49,6 +53,7 @@ final class TrackersViewController: UIViewController {
         emptyCollectiionImageSupport()
         emptyCollectionLabelSupport()
         
+        collectionView.alwaysBounceVertical = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
@@ -77,7 +82,6 @@ final class TrackersViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
-        sController.searchBar.delegate = self
         
     }
     
@@ -96,12 +100,20 @@ final class TrackersViewController: UIViewController {
     }
     
     private func collectionIsEmpty(_ isHidden: Bool){
+        if searchText == nil, visibleCategories.isEmpty {
+            emptyCollectiionImage.image = UIImage(named: "noTracker") ?? UIImage()
+            emptyCollectionLabel.text = "Что будем отслеживать?"
+        } else {
+            emptyCollectiionImage.image = UIImage(named: "noSearch") ?? UIImage()
+            emptyCollectionLabel.text = "Ничего не найдено"
+        }
         emptyCollectiionImage.isHidden = isHidden
         emptyCollectionLabel.isHidden = isHidden
     }
     
     private func navigationSupport() {
         guard let navControl = navigationController else { return }
+        navControl.hidesBarsOnSwipe = false
         let navBar = navControl.navigationBar
         
         let imageAdd = UIImage(named: "plusTracker") ?? UIImage()
@@ -128,7 +140,7 @@ final class TrackersViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .always
         self.navigationItem.searchController = sController
         
-        self.sController.hidesNavigationBarDuringPresentation = false
+        sController.hidesNavigationBarDuringPresentation = false
         sController.searchBar.searchTextField.placeholder = "Поиск"
         sController.searchBar.searchTextField.delegate = self
 
@@ -173,27 +185,6 @@ final class TrackersViewController: UIViewController {
     }
     
 }
-//MARK: - Extension UISearchBarDelegate
-extension TrackersViewController: UISearchBarDelegate {
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
-            cancelButton.setTitle("Отменить", for: .normal)
-            cancelButton.titleLabel?.adjustsFontSizeToFitWidth = false
-                cancelButton.titleLabel?.lineBreakMode = .byTruncatingTail
-                cancelButton.frame = CGRect(x: cancelButton.frame.origin.x, y: cancelButton.frame.origin.y, width: 104, height: cancelButton.frame.height)
-        }
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(false, animated: true)
-        // после отмены посика
-    }
-    
-}
-
-
 //MARK: - Extension TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewCellProtocol {
     
