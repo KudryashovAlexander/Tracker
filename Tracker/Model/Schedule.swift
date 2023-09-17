@@ -33,4 +33,22 @@ struct Schedule {
        return daysOn.map({String($0)}).reduce("",+)
     }
     
+    mutating func allDayOn() {
+        let monday = WeekDay.monday.rawValue
+        let thusdey = WeekDay.thusdey.rawValue
+        let wednesday = WeekDay.wednesday.rawValue
+        let thursday = WeekDay.thursday.rawValue
+        let friday = WeekDay.friday.rawValue
+        let saturday = WeekDay.saturday.rawValue
+        let sunday = WeekDay.sunday.rawValue
+        
+        self.daysOn.insert(monday)
+        self.daysOn.insert(thusdey)
+        self.daysOn.insert(wednesday)
+        self.daysOn.insert(thursday)
+        self.daysOn.insert(friday)
+        self.daysOn.insert(saturday)
+        self.daysOn.insert(sunday)
+    }
+    
 }

@@ -36,9 +36,15 @@ class LauncScreenViewController: UIViewController {
     private func nextViews() {
         
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                
+        if UserDefaults.standard.string(forKey: UserProfile.joinSuccess) != nil {
+            let nextView = TabBarController()
+            window.rootViewController = nextView
+        } else {
+            let nextView = WelcomePageViewController()
+            window.rootViewController = nextView
+        }
 
-        let tabBar = TabBarController()
-        window.rootViewController = tabBar
     }
     
 }

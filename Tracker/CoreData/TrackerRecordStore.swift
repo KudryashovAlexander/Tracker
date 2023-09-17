@@ -57,25 +57,11 @@ class TrackerRecordStore: NSObject {
         try controller.performFetch()
     }
     
-    func countDayAndIsDone(id: UUID, date: Date) -> (Int,Bool) {
-        var countDay = 0
+    func dayIsDone(id: UUID, date: Date) -> Bool {
         var dayIsDone = false
         let trackerIDString = id.uuidString
-        
-        let requestDayCount = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        
-        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
-        requestDayCount.predicate = predicateForDay
-        requestDayCount.resultType = .countResultType
-        do {
-            let count = try context.count(for:requestDayCount)
-            countDay = count
-        } catch {
-            print("Ошибка в подсчете количества для рекорда")
-            countDay = 0
-        }
-        
         let requestIsDayDone = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
         let predicateIsDone = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.date), date as CVarArg)
         let sumPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateForDay, predicateIsDone])
         
@@ -90,7 +76,26 @@ class TrackerRecordStore: NSObject {
             print("Ошибка в подсчете выбран ли день")
         }
         
-        return (countDay, dayIsDone)
+        return dayIsDone
+    }
+    
+    func countDay(id: UUID) -> Int {
+        var countDay = 0
+        let trackerIDString = id.uuidString
+        
+        let requestDayCount = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        
+        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
+        requestDayCount.predicate = predicateForDay
+        requestDayCount.resultType = .countResultType
+        do {
+            let count = try context.count(for:requestDayCount)
+            countDay = count
+        } catch {
+            print("Ошибка в подсчете количества для рекорда")
+            countDay = 0
+        }
+        return countDay
     }
     
     func changeRecord(_ record: TrackerRecord) throws {

@@ -18,12 +18,12 @@ protocol TrackerCategoryStoryDelegate: AnyObject {
     func store(didUpdate trackerCategory: [TrackerCategory])
 }
 
-class TrackerCategoryStory: NSObject {
+class TrackerCategoryStore: NSObject {
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
     weak var delegate: TrackerCategoryStoryDelegate?
-    private var currentTrackerCategory: TrackerCategory?
+    private var currentTrackerCategoryName: String?
     
     private var trackerStore = TrackerStore()
     var trackerCategory: [TrackerCategory] {
@@ -32,6 +32,17 @@ class TrackerCategoryStory: NSObject {
                 let trackerCategory = try? object.map({ try self.updateTrackerCategory($0)})
             else { return [] }
             return trackerCategory
+    }
+    
+    var trackerCategoryViewModel: [CategoryViewModel] {
+        guard
+            let object = self.fetchedResultsController.fetchedObjects,
+            let trackerCategory = try? object.map({ trackerCategoryCoreData in
+                CategoryViewModel(categoryName: trackerCategoryCoreData.name!,
+                                  categoryIsSelected: false)
+            })
+        else { return [] }
+        return trackerCategory
     }
     
     convenience override init() {
@@ -100,12 +111,12 @@ class TrackerCategoryStory: NSObject {
         }
     }
     
-    func addTracker(at newTracker: Tracker, category: TrackerCategory) throws {
-        currentTrackerCategory = category
+    func addTracker(at newTracker: Tracker, categoryName: String) throws {
+        currentTrackerCategoryName = categoryName
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerCategory in object {
 
-            if trackerCategory.name == category.name {
+            if trackerCategory.name == categoryName {
                 if let trackersSet = trackerCategory.trackers {
                     let newTrackerCoreData = try trackerStore.addTracker(at: newTracker)
                     let mutableTrackersSet = NSMutableSet(set: trackersSet)
@@ -117,11 +128,40 @@ class TrackerCategoryStory: NSObject {
                 }
             }
         }
-        try addCategory(category)
-        try addTracker(at: newTracker, category: category)
     }
     
-    func deleteTracker(at tracker: Tracker, category: TrackerCategory) throws {
+    func changeNameCategory(oldName: String, newName: String) throws {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.name), oldName)
+        request.predicate = predicate
+        
+        do {
+            let results = try context.fetch(request)
+            
+            for trackerCoreData in results {
+                if let name = trackerCoreData.name {
+                    if name == oldName {
+                        trackerCoreData.name = newName
+                        try context.save()
+                    }
+                }
+            }
+            
+        } catch {
+            print("Ошибка при редактировании трекера")
+        }
+        
+    }
+    
+    func changeTracker(oldTracker: Tracker, oldCategoryName: String, newTracker: Tracker, newCategoryName: String) throws {
+        if oldCategoryName != newCategoryName {
+            try deleteTracker(at: oldTracker, categoryName: oldCategoryName)
+            try addTracker(at: newTracker, categoryName: newCategoryName)
+        }
+        trackerStore.changeTracker(oldTracker: oldTracker, newTracker: newTracker)
+    }
+    
+    func deleteTracker(at tracker: Tracker, categoryName: String) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         
         for trackerCategory in object {
@@ -139,7 +179,7 @@ class TrackerCategoryStory: NSObject {
 }
 
 //MARK: - Extension NSFetchedResultsControllerDelegate
-extension TrackerCategoryStory: NSFetchedResultsControllerDelegate {
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.store(didUpdate: trackerCategory)

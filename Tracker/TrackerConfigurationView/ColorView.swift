@@ -7,16 +7,23 @@
 
 import UIKit
 
+protocol ColorViewDelegate: AnyObject {
+    func changeColor(_ color: UIColor)
+}
+
 final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var colorCollection = ColorCollection()
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: UICollectionViewFlowLayout())
+    weak var delegate:ColorViewDelegate?
     
-    var selectedColor = UIColor.ypCS1
-    
-    override init(frame: CGRect) {
-        super .init(frame: frame)
+    init(delegate:ColorViewDelegate?) {
+        
+        self.delegate = delegate
+        
+        super .init(frame: CGRect())
+        
         collectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.cellIdentifier)
                 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,13 +74,17 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
+        return sectionInset
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                selectedColor = cell.selectedColor()
-                cell.layer.borderWidth = 3
-                let borderColor = selectedColor.withAlphaComponent(0.3).cgColor
-                cell.layer.borderColor = borderColor
+            cell.layer.borderWidth = 3
+            let borderColor = cell.selectedColor().withAlphaComponent(0.3).cgColor
+            cell.layer.borderColor = borderColor
+            delegate?.changeColor(cell.selectedColor())
         }
     }
     

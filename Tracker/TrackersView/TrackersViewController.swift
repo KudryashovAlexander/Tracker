@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    private let sController = UISearchController()
+    private let sController = UISearchController(searchResultsController: nil)
     var categories: [TrackerCategory] = []
     var visibleCategories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
@@ -18,6 +18,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private let datePicker = UIDatePicker()
+    var searchBarIsHidden = false
     
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -26,7 +27,7 @@ final class TrackersViewController: UIViewController {
     private var calendarHelper = CalendarHelper()
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
-    private var trackerCategoryStore = TrackerCategoryStory()
+    private var trackerCategoryStore = TrackerCategoryStore()
     private var trackerRecordStore = TrackerRecordStore()
     
     private var searchText: String? = nil
@@ -37,6 +38,9 @@ final class TrackersViewController: UIViewController {
         categories = trackerCategoryStore.trackerCategory
         completedTrackers = trackerRecordStore.trackerRecords
         
+        self.navigationController?.hidesBarsOnSwipe = false
+        sController.hidesNavigationBarDuringPresentation = false
+
         navigationSupport()
         filterCollectionView()
         
@@ -49,6 +53,7 @@ final class TrackersViewController: UIViewController {
         emptyCollectiionImageSupport()
         emptyCollectionLabelSupport()
         
+        collectionView.alwaysBounceVertical = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
@@ -62,7 +67,7 @@ final class TrackersViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             emptyCollectiionImage.heightAnchor.constraint(equalToConstant: 80),
             emptyCollectiionImage.widthAnchor.constraint(equalToConstant: 80),
@@ -95,18 +100,29 @@ final class TrackersViewController: UIViewController {
     }
     
     private func collectionIsEmpty(_ isHidden: Bool){
+        if searchText == nil, visibleCategories.isEmpty {
+            emptyCollectiionImage.image = UIImage(named: "noTracker") ?? UIImage()
+            emptyCollectionLabel.text = "Что будем отслеживать?"
+        } else {
+            emptyCollectiionImage.image = UIImage(named: "noSearch") ?? UIImage()
+            emptyCollectionLabel.text = "Ничего не найдено"
+        }
         emptyCollectiionImage.isHidden = isHidden
         emptyCollectionLabel.isHidden = isHidden
     }
     
     private func navigationSupport() {
         guard let navControl = navigationController else { return }
+        navControl.hidesBarsOnSwipe = false
         let navBar = navControl.navigationBar
         
-        let leftButton = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(add))
+        let imageAdd = UIImage(named: "plusTracker") ?? UIImage()
+        
+        let leftButton = UIBarButtonItem(image: imageAdd,
+                                         style: .done,
+                                         target: self,
+                                         action: #selector(add))
+        
         leftButton.tintColor = .ypBlack
         navBar.topItem?.leftBarButtonItem = leftButton
                 
@@ -124,7 +140,7 @@ final class TrackersViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .always
         self.navigationItem.searchController = sController
         
-        self.sController.hidesNavigationBarDuringPresentation = false
+        sController.hidesNavigationBarDuringPresentation = false
         sController.searchBar.searchTextField.placeholder = "Поиск"
         sController.searchBar.searchTextField.delegate = self
 
@@ -158,7 +174,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func trackerFind(id: UUID) -> (Int,Bool) {
-        return trackerRecordStore.countDayAndIsDone(id: id, date: currentDate)
+        return (trackerRecordStore.countDay(id: id), trackerRecordStore.dayIsDone(id: id, date: currentDate))
     }
     
     @objc
@@ -169,7 +185,6 @@ final class TrackersViewController: UIViewController {
     }
     
 }
-
 //MARK: - Extension TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewCellProtocol {
     
@@ -185,10 +200,18 @@ extension TrackersViewController: TrackersViewCellProtocol {
 //MARK: - Extension UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text,
+           let textRange = Range(range, in: text) {
+           let updatedText = text.replacingCharacters(in: textRange, with: string)
+            searchText = updatedText
+            filterCollectionView()
+        }        
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        searchText = textField.text
-        filterCollectionView()
         return true
     }
     
@@ -198,16 +221,11 @@ extension TrackersViewController: UITextFieldDelegate {
         filterCollectionView()
         return true
     }
-}
-//MARK: - Extension TrackerConfigurationViewControllerDelegate
-extension TrackersViewController: TrackerConfigurationViewControllerDelegate {
-    func createTracker(_ newTracker: Tracker, category: TrackerCategory) {
-        do {
-            try trackerCategoryStore.addTracker(at: newTracker, category: category)
-        } catch {
-            print("Ошибка в добавлении нового трекера")
-        }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
+    
 }
 
 //MARK: - Extension TrackerCategoryStoryDelegate

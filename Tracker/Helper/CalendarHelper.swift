@@ -44,24 +44,28 @@ class CalendarHelper {
         return shortdayOfWeek
     }()
     
-    func shortNameSchedule(at days: Set<WeekDay>) -> String {
+    func shortNameSchedule(at days: Set<WeekDay.RawValue>) -> String? {
         if days.isEmpty {
-            return ""
+            return nil
         }
         
         if days.count == 7 {
             return "Каждый день"
         }
         
-        var daysNumber = days.compactMap { $0.rawValue }
-        
+        var days = days.sorted()
+        if days.first == 1 {
+            days.remove(at: 0)
+            days.append(1)
+        }
+                
         var shortNames = String()
 
-        for day in daysNumber {
+        for day in days {
             var index = 0
             for dayofWeek in dayNumber {
                 if day == dayofWeek {
-                    shortNames = shortNames + shortNameAllDay[index] + " ,"
+                    shortNames = shortNames + shortNameAllDay[index] + ", "
                 }
                 index += 1
             }

@@ -10,17 +10,26 @@ import UIKit
 
 final class TrackerAddViewController: UIViewController {
     
-    private var trackerButton = UIButton()
-    private var notRegularButton = UIButton()
+    private var trackerButton = UIButton().customBlackButton(title: "Привычка")
+    private var notRegularButton = UIButton().customBlackButton(title: "Нерегулярное событие")
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhite
         self.navigationItem.title = "Создание трекера"
-
-        trackerButtonCongiguration()
-        notRegularButtonCongiguration()
+        
+        trackerButton.addTarget(self,
+                                action: #selector(pressAddTracker),
+                                for: .touchUpInside)
+        view.addSubview(trackerButton)
+        trackerButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        notRegularButton.addTarget(self,
+                                action: #selector(pressAddNotRegularTrack),
+                                for: .touchUpInside)
+        view.addSubview(notRegularButton)
+        notRegularButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             trackerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -37,48 +46,18 @@ final class TrackerAddViewController: UIViewController {
         ])
     }
     
-    private func trackerButtonCongiguration() {
-        trackerButton = buttonSetup(button: trackerButton, buttonText: "Привычка")
-        trackerButton.addTarget(self,
-                                action: #selector(pressAddTreker),
-                                for: .touchUpInside)
-        view.addSubview(trackerButton)
-    }
-    
-    private func notRegularButtonCongiguration() {
-        notRegularButton = buttonSetup(button: notRegularButton, buttonText: "Нерегулярное событие")
-        notRegularButton.addTarget(self,
-                                action: #selector(pressAddNotRegularTrack),
-                                for: .touchUpInside)
-        view.addSubview(notRegularButton)
-    }
-    
-    
-    private func buttonSetup(button: UIButton, buttonText: String) -> UIButton {
-        button.backgroundColor = .ypBlack
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 16
-        button.setTitle(buttonText, for: .normal)
-        button.titleLabel?.font = .yPMedium16
-        button.titleLabel?.textAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }
-    
     @objc
-    private func pressAddTreker(){
-        showTrackerConfigurationView(trackerName: "Новая привычка", isRegular: true)
+    private func pressAddTracker(){
+        let viewModel = TrackerConfigurationViewModel(trackerType: .regular, trackerConfigurationType: .add)
+        let trackerConfugurationView = TrackerConfigurationViewController(viewModel: viewModel)
+        let naVC = UINavigationController(rootViewController: trackerConfugurationView)
+        self.present(naVC, animated: true)
     }
     
     @objc
     private func pressAddNotRegularTrack() {
-        showTrackerConfigurationView(trackerName: "Новое нерегелярное событие", isRegular: false)
-    }
-    
-    private func showTrackerConfigurationView(trackerName: String, isRegular: Bool) {
-        let trackerConfugurationView = TrackerConfigurationViewController()
-        trackerConfugurationView.navName = trackerName
-        trackerConfugurationView.isRegular = isRegular
+        let viewModel = TrackerConfigurationViewModel(trackerType: .notRegular, trackerConfigurationType: .add)
+        let trackerConfugurationView = TrackerConfigurationViewController(viewModel: viewModel)
         let naVC = UINavigationController(rootViewController: trackerConfugurationView)
         self.present(naVC, animated: true)
     }

@@ -7,15 +7,9 @@
 
 import UIKit
 
-protocol TrackerConfigurationViewControllerDelegate: AnyObject {
-    func createTracker(_ newTracker: Tracker, category: TrackerCategory)
-}
-
-
 final class TrackerConfigurationViewController: UIViewController {
-    
-    var navName = String()
-    var isRegular: Bool = false
+        
+    private let viewModel: TrackerConfigurationViewModel
         
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -32,59 +26,47 @@ final class TrackerConfigurationViewController: UIViewController {
         return view
     }()
     
-    private var contenSize: CGSize{
-        return CGSize(width: view.frame.width, height: 841)
-    }
+    private var contenSize = CGSize()
     
     private let nameTrackerConteiner = UIView()
+    private var hightNameTrackerConteinerConstraint: NSLayoutConstraint?
     
-    private let nameTrackerTextField = UITextField()
+    private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
     
-    private var attentionLabel: UILabel {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = .yPRegular17
-        label.textColor = .ypRed
-        label.text = "Ограничение 38 символов"
-        label.isEnabled = false
-        return label
-    }
-    
-    private var propertyTracker = ["Категория","Расписание"]
+    private var attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
     
     private let propertyTableViewConteiner = UIView()
     private let propertyTableView = UITableView()
     
-    private var emojieCollectionView = EmojieView()
+    private lazy var emojieCollectionView = EmojieView(delegate: self)
     private let emojieNameLabel = UILabel()
     
-    private var colorCollectionView = ColorView()
+    private lazy var colorCollectionView = ColorView(delegate: self)
     private let colorNameLabel = UILabel()
     
-    private let canselButton = UIButton()
-    private let createButton = UIButton()
+    private let canselButton = UIButton().customRedButton(title: "Отменить")
+    private let createButton = UIButton().customBlackButton(title: "Создать")
     
-    var schedule = Schedule()
+    private let alertPresenter = AlertPresenter()
+        
+    init(viewModel: TrackerConfigurationViewModel) {
+        self.viewModel = viewModel
+        super .init(nibName: nil, bundle: nil)
+        bind()
+    }
     
-    private let alertPresenter = AlertPresener()
-    
-    var delegate: TrackerConfigurationViewControllerDelegate?
-    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         
-        
         super.viewDidLoad()
-        
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = navName
-        
-        if isRegular == false {
-            propertyTracker.removeLast()
-        }
         
         propertyTableView.delegate = self
         propertyTableView.dataSource = self
+        nameTrackerTextField.delegate = self
         
         nameTrackerConteinerSupport()
         nameTrackerTextFieldSupport()
@@ -95,21 +77,30 @@ final class TrackerConfigurationViewController: UIViewController {
         emojieNameLabelSupport()
         colorNameLabelSupport()
         
-        canselButtonSupport()
-        createButtonSupport()
-                
+        hightNameTrackerConteinerConstraint = nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75)
+        setHeightTextFieldContainer(viewModel.attentionIsHidden)
+        
         layoutSupport()
+        updateContentSize()
     }
     
     private func layoutSupport() {
         view.addSubview(scrollView)
+        
         scrollView.addSubview(contentView)
         
         nameTrackerConteiner.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameTrackerConteiner)
+        nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24).isActive = true
+        nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32).isActive = true
+        hightNameTrackerConteinerConstraint?.isActive = true
+        nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
         nameTrackerTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTrackerConteiner.addSubview(nameTrackerTextField)
+        
+        attentionLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameTrackerConteiner.addSubview(attentionLabel)
         
         propertyTableViewConteiner.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(propertyTableViewConteiner)
@@ -129,18 +120,16 @@ final class TrackerConfigurationViewController: UIViewController {
         colorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorNameLabel)
         
+        canselButton.addTarget(self, action: #selector(canselPress), for: .touchUpInside)
         canselButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(canselButton)
         
+        createButton.addTarget(self, action: #selector(createPress), for: .touchUpInside)
         createButton.translatesAutoresizingMaskIntoConstraints = false
+        changeCreateButton(viewModel.buttonIsEnabled)
         contentView.addSubview(createButton)
         
         NSLayoutConstraint.activate([
-            
-            nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
-            nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75),
-            nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             nameTrackerTextField.topAnchor.constraint(equalTo: nameTrackerConteiner.topAnchor),
             nameTrackerTextField.leftAnchor.constraint(equalTo: nameTrackerConteiner.leftAnchor),
@@ -150,7 +139,7 @@ final class TrackerConfigurationViewController: UIViewController {
             propertyTableViewConteiner.topAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor, constant: 24),
             propertyTableViewConteiner.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor),
             propertyTableViewConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: CGFloat(75 * propertyTracker.count)),
+            propertyTableViewConteiner.heightAnchor.constraint(equalToConstant: CGFloat(75 * viewModel.tableViewCellViewModel.count)),
             
             propertyTableView.topAnchor.constraint(equalTo: propertyTableViewConteiner.topAnchor),
             propertyTableView.bottomAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor),
@@ -158,17 +147,17 @@ final class TrackerConfigurationViewController: UIViewController {
             propertyTableView.rightAnchor.constraint(equalTo: propertyTableViewConteiner.rightAnchor),
             
             emojieCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            emojieCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
-            emojieCollectionView.topAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor, constant: 74),
-            emojieCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
+            emojieCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width),
+            emojieCollectionView.topAnchor.constraint(equalTo: propertyTableViewConteiner.bottomAnchor, constant: 50),
+            emojieCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3 + 48),
             
             emojieNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 28),
             emojieNameLabel.bottomAnchor.constraint(equalTo: emojieCollectionView.topAnchor),
             
             colorCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            colorCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width - 16 * 2),
-            colorCollectionView.topAnchor.constraint(equalTo: emojieCollectionView.bottomAnchor, constant: 58),
-            colorCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3),
+            colorCollectionView.widthAnchor.constraint(equalToConstant: contentView.frame.width),
+            colorCollectionView.topAnchor.constraint(equalTo: emojieCollectionView.bottomAnchor, constant: 34),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 52 * 3 + 48),
             
             colorNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 28),
             colorNameLabel.bottomAnchor.constraint(equalTo: colorCollectionView.topAnchor),
@@ -184,6 +173,54 @@ final class TrackerConfigurationViewController: UIViewController {
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
         
+        view.layoutIfNeeded()
+        
+    }
+    
+    private func bind() {
+        self.navigationItem.title = viewModel.viewName
+        nameTrackerTextField.text = viewModel.trackerName
+        
+        viewModel.$attentionIsHidden.bind { [weak self] isHidden in
+            guard let self = self else { return }
+            self.setHeightTextFieldContainer(isHidden)
+        }
+        
+        viewModel.$buttonIsEnabled.bind { [weak self] isEnabled in
+            guard let self = self else { return }
+            self.changeCreateButton(isEnabled)
+        }
+        
+    }
+    
+    private func setHeightTextFieldContainer(_ isHidden: Bool) {
+        attentionLabel.isHidden = isHidden
+        attentionLabel.centerXAnchor.constraint(equalTo: nameTrackerConteiner.centerXAnchor).isActive = !isHidden
+        attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8).isActive = !isHidden
+        
+        if isHidden {
+            hightNameTrackerConteinerConstraint?.constant = 75
+            updateContentSize()
+        } else {
+            hightNameTrackerConteinerConstraint?.constant = 113
+            updateContentSize()
+        }
+    }
+    
+    private func changeCreateButton(_ isEnabled: Bool){
+        createButton.isEnabled = isEnabled
+        if isEnabled {
+            createButton.backgroundColor = .ypBlack
+        } else {
+            createButton.backgroundColor = .ypGray
+        }
+    }
+    
+    private func updateContentSize() {
+        let heightElement = 24 + Int(nameTrackerConteiner.frame.size.height) + 25 + viewModel.tableViewCellViewModel.count * 75 + 60 + Int(emojieCollectionView.frame.size.height) + 34 + Int(colorCollectionView.frame.size.height) + 16 + 60 + 34
+        contenSize = CGSize(width: view.frame.width, height: CGFloat(heightElement))
+        scrollView.contentSize = contenSize
+        contentView.frame.size = contenSize
     }
     
     private func nameTrackerConteinerSupport() {
@@ -191,16 +228,6 @@ final class TrackerConfigurationViewController: UIViewController {
     }
     
     private func nameTrackerTextFieldSupport() {
-        nameTrackerTextField.layer.masksToBounds = true
-        nameTrackerTextField.layer.cornerRadius = 16
-        nameTrackerTextField.backgroundColor = .ypBackground
-        nameTrackerTextField.font = .yPRegular17
-        nameTrackerTextField.textAlignment = .left
-        nameTrackerTextField.placeholder = "Введите название трекера"
-        
-        nameTrackerTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: nameTrackerTextField.frame.height))
-        nameTrackerTextField.leftViewMode = .always
-        
         let rightView = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: nameTrackerTextField.frame.height))
     
         let button = UIButton(type: .custom)
@@ -230,36 +257,13 @@ final class TrackerConfigurationViewController: UIViewController {
     }
     
     private func propertyTableViewSupport() {
-        
-        propertyTableView.register(NewTrackerTableViewCell.self, forCellReuseIdentifier: NewTrackerTableViewCell.cellIdentifier)
+        propertyTableView.register(ConfigTableViewCell.self, forCellReuseIdentifier: ConfigTableViewCell.cellIdentifier)
         propertyTableView.isScrollEnabled = false
         propertyTableView.separatorInset.left = 16
         propertyTableView.separatorInset.right = 16
         propertyTableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
     }
     
-    
-    private func attentionLabelSupport(_ textCount: Int) {
-        if textCount > 37 {
-            
-            attentionLabel.isEnabled = true
-            attentionLabel.translatesAutoresizingMaskIntoConstraints = false
-
-            nameTrackerConteiner.addSubview(attentionLabel)
-            
-            NSLayoutConstraint.activate([
-                nameTrackerConteiner.heightAnchor.constraint(equalToConstant: 75 + 38),
-
-                attentionLabel.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 8),
-                attentionLabel.bottomAnchor.constraint(equalTo: nameTrackerConteiner.bottomAnchor,constant: -8),
-                attentionLabel.widthAnchor.constraint(equalTo: nameTrackerConteiner.widthAnchor)
-            
-            ])
-
-        } else {
-            attentionLabel.isEnabled = false
-        }
-    }
     
     private func emojieNameLabelSupport() {
         emojieNameLabel.text = EmojieCollection().name
@@ -273,77 +277,56 @@ final class TrackerConfigurationViewController: UIViewController {
         colorNameLabel.textAlignment = .left
     }
     
-    private func canselButtonSupport() {
-        canselButton.backgroundColor = .ypWhite
-        canselButton.setTitle("Отменить", for: .normal)
-        canselButton.setTitleColor(.ypRed, for: .normal)
-        canselButton.layer.masksToBounds = true
-        canselButton.layer.cornerRadius = 16
-        let color = UIColor.ypRed.cgColor
-        canselButton.layer.borderColor = color
-        canselButton.layer.borderWidth = 1
-        canselButton.addTarget(self, action: #selector(canselPress), for: .touchUpInside)
-    }
-    
     @objc
     private func canselPress() {
         self.dismiss(animated: true)
     }
     
-    private func createButtonSupport() {
-        createButton.setTitle("Создать", for: .normal)
-        createButton.backgroundColor = .ypBlack
-        createButton.layer.masksToBounds = true
-        createButton.layer.cornerRadius = 16
-        createButton.setTitleColor(.ypWhite, for: .normal)
-        createButton.addTarget(self, action: #selector(createPress), for: .touchUpInside)
-    }
     
     @objc
     private func createPress(){
-        createButton.backgroundColor = .ypGray
-        
-        if let name = nameTrackerTextField.text {
-            if !name.isEmpty {
-                let tracker = Tracker(name: name, color: colorCollectionView.selectedColor, emojie: emojieCollectionView.selectedEmojie, schedule: schedule)
-                
-                //MARK: - ЗДЕСЬ ЗАДАЕТСЯ КАСТОМНАЯ КАТЕГОРИЯ
-                let trackerCategory = TrackerCategory(name: "Тестовая", trackers: [tracker])
-                
-                guard let window = UIApplication.shared.windows.first else {
-                    fatalError("Invalid Configuration") }
-
-                let tabBar = TabBarController()
-                self.delegate = tabBar.trackerViewController
-                delegate?.createTracker(tracker, category: trackerCategory)
-                
-                window.rootViewController = tabBar
-                
-            } else {
-                alertPresenter.showAlert(message: "наименование трекера", viewController: self) {
-                    self.createButton.backgroundColor = .ypBlack
-                }
-            }
-        }
+        viewModel.pressButton()
     }
 
 }
+//MARK: - Extension UITexFieldDelegate
+extension TrackerConfigurationViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text,
+           let textRange = Range(range, in: text) {
+            let updatedText = text.replacingCharacters(in: textRange, with: string)
+            if updatedText.isEmpty {
+                viewModel.trackerName = nil
+            } else {
+                viewModel.trackerName = updatedText
+            }
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+}
 
-//MARK: - Extension TableView
+//MARK: - Extension UITableViewDataSource, UITableViewDelegate
 extension TrackerConfigurationViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return propertyTracker.count
+        return viewModel.tableViewCellViewModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewTrackerTableViewCell.cellIdentifier, for: indexPath)
-        guard let newTrackerCell = cell as? NewTrackerTableViewCell else {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConfigTableViewCell.cellIdentifier, for: indexPath)
+        guard let newTrackerCell = cell as? ConfigTableViewCell else {
              return UITableViewCell()
         }
-        newTrackerCell.propertyName = propertyTracker[indexPath.row]
-        if indexPath.row == propertyTracker.count {
-            newTrackerCell.separatorInset.left = tableView.frame.maxX
-        }
+        
+        newTrackerCell.viewModel = viewModel.tableViewCellViewModel[indexPath.row]
         newTrackerCell.selectionStyle = .none
         newTrackerCell.backgroundColor = .ypBackground
         return newTrackerCell
@@ -362,20 +345,30 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     
     private func createScheduleViewController() {
         let vc = ScheduleViewController()
-        vc.delegate = self
+        vc.schedule = self.viewModel.trackerSchedule
+        vc.delegate = self.viewModel
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
     
     private func createCategoryViewController() {
-        //В 17 спринте
+        let viewModel = CategoriesViewModel(delegate: self.viewModel, selectedCategoryName: viewModel.categoryName)
+        let vc = CategoryViewController(viewModel: viewModel)
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
 }
 
-//MARK: - Extension ScheduleViewControllerProtocol
-extension TrackerConfigurationViewController: ScheduleViewControllerProtocol {
-    func updateSchedule(_ newSchedule: Schedule) {
-        schedule = newSchedule
+//MARK: - Exetension EmojieViewDelegate
+extension TrackerConfigurationViewController: EmojieViewDelegate {
+    func selectedEmogie( _ emogie: String) {
+        viewModel.trackerEmodji = emogie
     }
-    
+}
+
+//MARK: - Exetension ColorViewDelegate
+extension TrackerConfigurationViewController: ColorViewDelegate {
+    func changeColor(_ color: UIColor) {
+        viewModel.trackerColor = color
+    }
 }
