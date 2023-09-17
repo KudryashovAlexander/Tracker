@@ -10,7 +10,7 @@ import UIKit
 class CategoryViewController: UIViewController {
     
     private let viewModel: CategoriesViewModel
-    private let alertPresenter = AlertPresener()
+    private let alertPresenter = AlertPresenter()
     
     private var emptyCategoryImageView: UIImageView = {
         let imageView = UIImageView()

@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class AlertPresener {
+final class AlertPresenter {
     
     func showAlert(model: AlertModel, viewController: UIViewController, completion: @escaping () -> Void) {
         

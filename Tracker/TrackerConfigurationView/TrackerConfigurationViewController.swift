@@ -47,7 +47,7 @@ final class TrackerConfigurationViewController: UIViewController {
     private let canselButton = UIButton().customRedButton(title: "Отменить")
     private let createButton = UIButton().customBlackButton(title: "Создать")
     
-    private let alertPresenter = AlertPresener()
+    private let alertPresenter = AlertPresenter()
         
     init(viewModel: TrackerConfigurationViewModel) {
         self.viewModel = viewModel
