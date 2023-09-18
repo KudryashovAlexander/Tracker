@@ -186,13 +186,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func dayCounterString(_ number: Int) -> String {
-        var text = String()
-        switch number {
-        case 1: text = "день"
-        case 2,3,4: text = "дня"
-        default: text = "дней"
-        }
-        return "\(number)" + " " + text
+        return String.localizedStringWithFormat(NSLocalizedString("numberOfdays", comment: "number of check day tracker"),
+                                                number)
     }
     
     @objc

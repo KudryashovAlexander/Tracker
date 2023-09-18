@@ -141,7 +141,6 @@ final class TrackersViewController: UIViewController {
         self.navigationItem.searchController = sController
         
         sController.hidesNavigationBarDuringPresentation = false
-        sController.searchBar.searchTextField.placeholder = "Поиск"
         sController.searchBar.searchTextField.delegate = self
 
     }
