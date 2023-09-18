@@ -12,7 +12,7 @@ final class StatisticViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Статистика"
+        self.navigationItem.title = String().mainStatistic
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     

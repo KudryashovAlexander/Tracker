@@ -24,6 +24,7 @@
 		7F34B3A92A98A46F0068359E /* SupplementaryTrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3A82A98A46F0068359E /* SupplementaryTrackersView.swift */; };
 		7F34B3AB2A98D39F0068359E /* Date_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3AA2A98D39F0068359E /* Date_ext.swift */; };
 		7F4BEE752AB8629D00659BFB /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7F4BEE772AB8629D00659BFB /* Localizable.stringsdict */; };
+		7F4BEE832AB8AE3500659BFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7F4BEE852AB8AE3500659BFB /* Localizable.strings */; };
 		7F6D3E402AACAD2600FF0419 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E3F2AACAD2600FF0419 /* CategoryViewController.swift */; };
 		7F6D3E432AACAD5300FF0419 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E422AACAD5300FF0419 /* CategoriesViewModel.swift */; };
 		7F6D3E452AACAD6A00FF0419 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E442AACAD6A00FF0419 /* CategoryTableViewCell.swift */; };
@@ -78,6 +79,8 @@
 		7F34B3AA2A98D39F0068359E /* Date_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_ext.swift; sourceTree = "<group>"; };
 		7F4BEE762AB8629D00659BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7F4BEE782AB862BD00659BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		7F4BEE842AB8AE3500659BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7F4BEE862AB8AE3D00659BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7F6D3E3F2AACAD2600FF0419 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		7F6D3E422AACAD5300FF0419 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		7F6D3E442AACAD6A00FF0419 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
@@ -147,13 +150,13 @@
 				7F20E6212A759A6E00C49C3E /* Info.plist */,
 				7F8475552A8176BC00BBF9EF /* Model */,
 				7F84754A2A7F707600BBF9EF /* LauncScreen */,
+				7F8475452A7E921200BBF9EF /* Welcome */,
 				7F84755E2A86B4AA00BBF9EF /* TabBarView */,
 				7F84755F2A86B4B700BBF9EF /* TrackersView */,
 				7F8475662A8E940300BBF9EF /* TrackerConfigurationView */,
 				7F6D3E412AACAD2B00FF0419 /* CategoryView */,
 				7F9523EB2AA310EB00EA4B11 /* StaticticView */,
 				7F34B3A32A975A830068359E /* ScheduleView */,
-				7F8475452A7E921200BBF9EF /* Welcome */,
 				7F9523EF2AA311BF00EA4B11 /* CoreData */,
 				7F4BEE742AB8626700659BFB /* Resourses */,
 				7F20E6272A75A22E00C49C3E /* Helper */,
@@ -191,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				7F4BEE772AB8629D00659BFB /* Localizable.stringsdict */,
+				7F4BEE852AB8AE3500659BFB /* Localizable.strings */,
 			);
 			path = Resourses;
 			sourceTree = "<group>";
@@ -350,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F20E6202A759A6E00C49C3E /* LaunchScreen.storyboard in Resources */,
+				7F4BEE832AB8AE3500659BFB /* Localizable.strings in Resources */,
 				7F20E61D2A759A6E00C49C3E /* Assets.xcassets in Resources */,
 				7F4BEE752AB8629D00659BFB /* Localizable.stringsdict in Resources */,
 			);
@@ -428,6 +433,15 @@
 				7F4BEE782AB862BD00659BFB /* ru */,
 			);
 			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+		7F4BEE852AB8AE3500659BFB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7F4BEE842AB8AE3500659BFB /* en */,
+				7F4BEE862AB8AE3D00659BFB /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

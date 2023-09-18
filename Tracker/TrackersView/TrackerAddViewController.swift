@@ -10,14 +10,14 @@ import UIKit
 
 final class TrackerAddViewController: UIViewController {
     
-    private var trackerButton = UIButton().customBlackButton(title: "Привычка")
-    private var notRegularButton = UIButton().customBlackButton(title: "Нерегулярное событие")
+    private var trackerButton = UIButton().customBlackButton(title: String().buttonAddTRacker)
+    private var notRegularButton = UIButton().customBlackButton(title: String().buttonAddNotRegular)
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = "Создание трекера"
+        self.navigationItem.title = String().newTrackerTitle
         
         trackerButton.addTarget(self,
                                 action: #selector(pressAddTracker),

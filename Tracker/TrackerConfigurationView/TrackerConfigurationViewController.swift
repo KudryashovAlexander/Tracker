@@ -31,7 +31,7 @@ final class TrackerConfigurationViewController: UIViewController {
     private let nameTrackerConteiner = UIView()
     private var hightNameTrackerConteinerConstraint: NSLayoutConstraint?
     
-    private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
+    private let nameTrackerTextField = UITextField().customTextField(placeHolder: String().trackerEditPlaceHolder)
     
     private var attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
     
@@ -44,8 +44,8 @@ final class TrackerConfigurationViewController: UIViewController {
     private lazy var colorCollectionView = ColorView(delegate: self)
     private let colorNameLabel = UILabel()
     
-    private let canselButton = UIButton().customRedButton(title: "Отменить")
-    private let createButton = UIButton().customBlackButton(title: "Создать")
+    private let canselButton = UIButton().customRedButton(title: String().buttonCansel)
+    private let createButton = UIButton().customBlackButton(title: String().buttonCreate)
     
     private let alertPresenter = AlertPresenter()
         

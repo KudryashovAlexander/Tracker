@@ -68,8 +68,9 @@ final class TrackerConfigurationViewModel {
     @Observable
     var buttonIsEnabled: Bool = false
     
-    private let categoryViewModel = ConfigTableViewCellViewModel(propertyName: "Категория", selectedPoperty: nil)
-    private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: "Расписание", selectedPoperty: nil)
+    private let categoryViewModel = ConfigTableViewCellViewModel(propertyName: String().categoryName,
+                                                                 selectedPoperty: nil)
+    private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: String().scheduleName, selectedPoperty: nil)
     
     private let trackerRecordStore = TrackerRecordStore()
     private let trackerCategoryStore = TrackerCategoryStore()
@@ -101,11 +102,11 @@ final class TrackerConfigurationViewModel {
     private func viewNameSupport() {
         switch (trackerType,trackerConfigurationType) {
         case (.regular,.add):
-            viewName = "Новая привычка"
+            viewName = String().newTrackerEditTitle
         case (.notRegular, .add):
-            viewName = "Новое нерегулярное событие"
+            viewName = String().newNotRegularTitle
         case ( _ , .change):
-            viewName = "Редактировоание привычки"
+            viewName = String().editTrackerTitle
         }
     }
     

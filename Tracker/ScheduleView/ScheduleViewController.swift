@@ -47,13 +47,13 @@ final class ScheduleViewController: UIViewController {
         return tableView
     }()
     
-    private var doneButton = UIButton().customBlackButton(title: "Готово")
+    private var doneButton = UIButton().customBlackButton(title: String().buttonReady)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = "Расписание"
+        self.navigationItem.title = String().scheduleName
                 
         updateContentSize()
         

@@ -25,10 +25,7 @@ class CategoryViewController: UIViewController {
         let label = UILabel()
         label.font = .yPMedium12
         label.textColor = .ypBlack
-        label.text = """
-                        Привычки и события можно
-                        объединить по смыслу
-                    """
+        label.text = String().categoryEmptyLabel
         label.textAlignment = .center
         label.numberOfLines = 2
         label.isHidden = true
@@ -67,7 +64,7 @@ class CategoryViewController: UIViewController {
         return tableView
     }()
     
-    private let createCategoryButton = UIButton().customBlackButton(title: "Добавить категорию")
+    private let createCategoryButton = UIButton().customBlackButton(title: String().buttonAddCategory)
     private var heightTableViewConstaraint: NSLayoutConstraint?
     private var viewHight = CGFloat()
     
@@ -84,7 +81,7 @@ class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = "Категория"
+        self.navigationItem.title = String().categoryName
         modalPresentationStyle = .none
         viewHight = view.frame.maxY - 98
         
@@ -189,9 +186,9 @@ class CategoryViewController: UIViewController {
     }
     
     private func deleteCategory(index: Int) {
-        let alertModel = AlertModel(title: "Эта категория точно не нужна?",
+        let alertModel = AlertModel(title: String().alertDeleteCategory,
                                     message: "",
-                                    buttonTitle: "Удалить")
+                                    buttonTitle: String().buttonDelete)
         
         alertPresenter.showAlertSheet(model: alertModel,
                                       viewController: self) {
@@ -243,10 +240,10 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         }
         
         return UIContextMenuConfiguration(actionProvider: { actions in
-            let action1 = UIAction(title: "Редактировать") { [weak self] _ in
+            let action1 = UIAction(title: String().cellEdit) { [weak self] _ in
                 self?.changeCategory(index: indexPath.row)
             }
-            let action2 = UIAction(title: "Удалить") { [weak self] _ in
+            let action2 = UIAction(title: String().cellDelete) { [weak self] _ in
                 self?.deleteCategory(index: indexPath.row)
             }
             return UIMenu(children: [action1, action2])

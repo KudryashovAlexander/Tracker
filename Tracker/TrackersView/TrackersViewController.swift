@@ -93,7 +93,7 @@ final class TrackersViewController: UIViewController {
     private func emptyCollectionLabelSupport() {
         emptyCollectionLabel.font = .yPMedium12
         emptyCollectionLabel.textColor = .ypBlack
-        emptyCollectionLabel.text = "Что будем отслеживать?"
+        emptyCollectionLabel.text = String().mainEmptyLabel
         emptyCollectionLabel.textAlignment = .center
         emptyCollectionLabel.numberOfLines = 1
         emptyCollectionLabel.isHidden = true
@@ -102,10 +102,10 @@ final class TrackersViewController: UIViewController {
     private func collectionIsEmpty(_ isHidden: Bool){
         if searchText == nil, visibleCategories.isEmpty {
             emptyCollectiionImage.image = UIImage(named: "noTracker") ?? UIImage()
-            emptyCollectionLabel.text = "Что будем отслеживать?"
+            emptyCollectionLabel.text = String().mainEmptyLabel
         } else {
             emptyCollectiionImage.image = UIImage(named: "noSearch") ?? UIImage()
-            emptyCollectionLabel.text = "Ничего не найдено"
+            emptyCollectionLabel.text = String().mainNoSearch
         }
         emptyCollectiionImage.isHidden = isHidden
         emptyCollectionLabel.isHidden = isHidden
@@ -135,7 +135,7 @@ final class TrackersViewController: UIViewController {
         let rightButton = UIBarButtonItem(customView: datePicker)
         navBar.topItem?.rightBarButtonItem = rightButton
         
-        self.navigationItem.title = "Трекеры"
+        self.navigationItem.title = String().mainTracker
         navBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
         self.navigationItem.searchController = sController
