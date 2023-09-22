@@ -6,15 +6,21 @@
 //
 
 import UIKit
-protocol TrackersViewCellProtocol: AnyObject {
-    func addOrRemoveTrackerRecord(id: UUID)
-}
-
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCollectionCell"
-    weak var delegate: TrackersViewCellProtocol?
+    var viewModel: TrackerViewModel! {
+        didSet {
+            self.trackerLabel.text = viewModel.name
+            self.emojieLabel.text = viewModel.emojie
+            self.trackerView.backgroundColor = viewModel.color
+            self.dayCount = viewModel.countDay
+            self.dayIsDone = viewModel.pressButton
+            self.pinImageView.isHidden = !viewModel.pinTracker
+            bind()
+        }
+    }
     
     var dayCount = 0 {
         didSet {
@@ -28,29 +34,18 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
                 let image = UIImage(named: "done_button") ?? UIImage()
                 addTrackerDayButton.setImage(image, for: .normal)
                 addTrackerDayButton.backgroundColor = .ypWhite
-                addTrackerDayButton.tintColor = tracker.color
+                addTrackerDayButton.tintColor = trackerView.backgroundColor
                 
             } else {
                 let image = UIImage(named: "add_Tracker_button") ?? UIImage()
                 addTrackerDayButton.setImage(image, for: .normal)
                 addTrackerDayButton.backgroundColor = .ypWhite
-                addTrackerDayButton.tintColor = tracker.color
+                addTrackerDayButton.tintColor = trackerView.backgroundColor
                 
             }
         }
     }
     
-    var tracker = Tracker(name: "Тестовая", color: .ypLightGray, emojie: "T"){
-        didSet {
-            emojieLabel.text = tracker.emojie
-            trackerLabel.text = tracker.name
-            trackerView.backgroundColor = tracker.color
-            addTrackerDayButton.backgroundColor = tracker.color
-            trackerID = tracker.id
-        }
-    }
-    
-    private var trackerID = UUID()
     private var trackerView = UIView()
     private var emojieBall = UIView()
     private var emojieLabel = UILabel()
@@ -58,14 +53,37 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private var trackerLabel = UILabel()
     private var dayCountLabel = UILabel()
     private var addTrackerDayButton = UIButton()
-
+    
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super .init(frame: frame)
         cellCreate()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func bind() {
+        
+        guard let viewModel = viewModel else {return}
+        viewModel.$name.bind { [weak self] name in
+            self?.trackerLabel.text = name
+        }
+        viewModel.$emojie.bind { [weak self] emojie in
+            self?.emojieLabel.text = emojie
+        }
+        viewModel.$color.bind { [weak self] color in
+            self?.trackerView.backgroundColor = color
+        }
+        viewModel.$countDay.bind { [weak self] count in
+            self?.dayCount = count
+        }
+        viewModel.$pressButton.bind { [weak self] isPressed in
+            self?.dayIsDone = isPressed
+        }
+        viewModel.$pinTracker.bind { [weak self] isPin in
+            self?.pinImageView.isHidden = !isPin
+        }
         
     }
     
@@ -96,7 +114,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private func trackerViewSupport(){
         trackerView.layer.masksToBounds = true
         trackerView.layer.cornerRadius = 16
-        trackerView.backgroundColor = tracker.color
         
         trackerView.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -112,7 +129,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         emojieLabel.frame.size = CGSize(width: 24, height: 24)
         emojieLabel.font = .yPMedium16
         emojieLabel.textColor = .ypBlack
-        emojieLabel.text = tracker.emojie
         emojieLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -127,7 +143,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         trackerLabel.textColor = .ypWhite
         trackerLabel.numberOfLines = 2
         trackerLabel.textAlignment = .left
-        trackerLabel.text = tracker.name
         
         trackerLabel.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -136,7 +151,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         dayCountLabel.font = .yPMedium12
         dayCountLabel.textAlignment = .left
         dayCountLabel.textColor = .ypBlack
-        dayCountLabel.text = dayCounterString(dayCount)
 
         dayCountLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -192,11 +206,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func addDayCount() {
-        delegate?.addOrRemoveTrackerRecord(id: trackerID)
+        viewModel?.changeRecord()
     }
-    
-    func pinCell() {
-        pinImageView.isHidden = !pinImageView.isHidden
-    }
+
     
 }

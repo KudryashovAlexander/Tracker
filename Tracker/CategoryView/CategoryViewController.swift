@@ -239,16 +239,17 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
             return nil
         }
         
-        return UIContextMenuConfiguration(actionProvider: { actions in
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let action1 = UIAction(title: String().cellEdit) { [weak self] _ in
                 self?.changeCategory(index: indexPath.row)
             }
-            let action2 = UIAction(title: String().cellDelete) { [weak self] _ in
+            
+            let action2 = UIAction(title: String().cellDelete, attributes: .destructive) { [weak self] _ in
                 self?.deleteCategory(index: indexPath.row)
             }
             return UIMenu(children: [action1, action2])
-        })
-        
+        }
+        return configuration
     }
     
 }

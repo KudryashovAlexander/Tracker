@@ -20,19 +20,17 @@ protocol TrackerCategoryStoryDelegate: AnyObject {
 
 class TrackerCategoryStore: NSObject {
     
+    static let shared = TrackerCategoryStore()
+    
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
     weak var delegate: TrackerCategoryStoryDelegate?
     private var currentTrackerCategoryName: String?
     
     private var trackerStore = TrackerStore()
-    var trackerCategory: [TrackerCategory] {
-            guard
-                let object = self.fetchedResultsController.fetchedObjects,
-                let trackerCategory = try? object.map({ try self.updateTrackerCategory($0)})
-            else { return [] }
-            return trackerCategory
-    }
+    
+    @Observable
+    private(set) var trackerCategory: [TrackerCategory] = []
     
     var trackerCategoryViewModel: [CategoryViewModel] {
         guard
@@ -63,6 +61,16 @@ class TrackerCategoryStore: NSObject {
         controller.delegate = self
         self.fetchedResultsController = controller
         try controller.performFetch()
+        getTrackerCategory()
+    }
+    
+    private func getTrackerCategory() {
+        trackerCategory = { guard
+            let object = self.fetchedResultsController.fetchedObjects,
+            let trackerCategory = try? object.map({ try self.updateTrackerCategory($0)})
+            else { return [] }
+            return trackerCategory
+        }()
     }
     
     private func updateTrackerCategoryCoreData(_ trackerCategoryCoreData: TrackerCategoryCoreData,
@@ -180,9 +188,9 @@ class TrackerCategoryStore: NSObject {
 
 //MARK: - Extension NSFetchedResultsControllerDelegate
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store(didUpdate: trackerCategory)
+        getTrackerCategory()
     }
     
 }

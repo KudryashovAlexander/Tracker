@@ -20,7 +20,7 @@ enum TrackerStoreError: Error {
 class TrackerStore: NSObject {
     
     private let context: NSManagedObjectContext
-    private var trackerRecordStore = TrackerRecordStore()
+    private let trackerRecordStore = TrackerRecordStore.shared
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext

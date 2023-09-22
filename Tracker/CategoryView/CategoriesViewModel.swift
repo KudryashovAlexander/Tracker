@@ -16,7 +16,7 @@ final class CategoriesViewModel {
     @Observable
     private(set) var categories = [CategoryViewModel]()
     
-    private var trackerCatStory = TrackerCategoryStore()
+    private let trackerCatStory = TrackerCategoryStore.shared
     weak var delegate:CategoriesViewModelDelegate?
     var selectedCategoryName: String?
     

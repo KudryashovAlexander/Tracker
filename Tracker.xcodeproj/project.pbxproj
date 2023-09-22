@@ -25,6 +25,7 @@
 		7F34B3AB2A98D39F0068359E /* Date_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F34B3AA2A98D39F0068359E /* Date_ext.swift */; };
 		7F4BEE752AB8629D00659BFB /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7F4BEE772AB8629D00659BFB /* Localizable.stringsdict */; };
 		7F4BEE832AB8AE3500659BFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7F4BEE852AB8AE3500659BFB /* Localizable.strings */; };
+		7F6537802ABC3733006F5046 /* TrackerCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F65377F2ABC3733006F5046 /* TrackerCategoryViewModel.swift */; };
 		7F6D3E402AACAD2600FF0419 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E3F2AACAD2600FF0419 /* CategoryViewController.swift */; };
 		7F6D3E432AACAD5300FF0419 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E422AACAD5300FF0419 /* CategoriesViewModel.swift */; };
 		7F6D3E452AACAD6A00FF0419 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E442AACAD6A00FF0419 /* CategoryTableViewCell.swift */; };
@@ -34,6 +35,10 @@
 		7F6D3E4D2AACBD4500FF0419 /* UIKit_ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E4C2AACBD4500FF0419 /* UIKit_ext.swift */; };
 		7F6D3E4F2AAEFC4B00FF0419 /* CategoryAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E4E2AAEFC4B00FF0419 /* CategoryAddViewModel.swift */; };
 		7F6D3E512AB21E0E00FF0419 /* ConfigTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D3E502AB21E0E00FF0419 /* ConfigTableViewCellViewModel.swift */; };
+		7F7F95472ABB4707002D225A /* TrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F95462ABB4707002D225A /* TrackerViewModel.swift */; };
+		7F7F95492ABB9CC3002D225A /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F95482ABB9CC3002D225A /* TrackersViewModel.swift */; };
+		7F7F954B2ABBA2A6002D225A /* TrackerPinStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F954A2ABBA2A6002D225A /* TrackerPinStore.swift */; };
+		7F7F954D2ABBA48B002D225A /* TrackersPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F954C2ABBA48B002D225A /* TrackersPin.swift */; };
 		7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */; };
 		7F8475472A7E923000BBF9EF /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */; };
 		7F8475492A7F693F00BBF9EF /* LauncScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8475482A7F693F00BBF9EF /* LauncScreenViewController.swift */; };
@@ -81,6 +86,7 @@
 		7F4BEE782AB862BD00659BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7F4BEE842AB8AE3500659BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7F4BEE862AB8AE3D00659BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7F65377F2ABC3733006F5046 /* TrackerCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewModel.swift; sourceTree = "<group>"; };
 		7F6D3E3F2AACAD2600FF0419 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		7F6D3E422AACAD5300FF0419 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		7F6D3E442AACAD6A00FF0419 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
@@ -90,6 +96,10 @@
 		7F6D3E4C2AACBD4500FF0419 /* UIKit_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKit_ext.swift; sourceTree = "<group>"; };
 		7F6D3E4E2AAEFC4B00FF0419 /* CategoryAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddViewModel.swift; sourceTree = "<group>"; };
 		7F6D3E502AB21E0E00FF0419 /* ConfigTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		7F7F95462ABB4707002D225A /* TrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewModel.swift; sourceTree = "<group>"; };
+		7F7F95482ABB9CC3002D225A /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
+		7F7F954A2ABBA2A6002D225A /* TrackerPinStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerPinStore.swift; sourceTree = "<group>"; };
+		7F7F954C2ABBA48B002D225A /* TrackersPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersPin.swift; sourceTree = "<group>"; };
 		7F8475432A7E868400BBF9EF /* WelcomeViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewContoller.swift; sourceTree = "<group>"; };
 		7F8475462A7E923000BBF9EF /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
 		7F8475482A7F693F00BBF9EF /* LauncScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncScreenViewController.swift; sourceTree = "<group>"; };
@@ -149,7 +159,7 @@
 				7F20E61E2A759A6E00C49C3E /* LaunchScreen.storyboard */,
 				7F20E6212A759A6E00C49C3E /* Info.plist */,
 				7F8475552A8176BC00BBF9EF /* Model */,
-				7F84754A2A7F707600BBF9EF /* LauncScreen */,
+				7F84754A2A7F707600BBF9EF /* LaunchScreen */,
 				7F8475452A7E921200BBF9EF /* Welcome */,
 				7F84755E2A86B4AA00BBF9EF /* TabBarView */,
 				7F84755F2A86B4B700BBF9EF /* TrackersView */,
@@ -221,12 +231,12 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
-		7F84754A2A7F707600BBF9EF /* LauncScreen */ = {
+		7F84754A2A7F707600BBF9EF /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
 				7F8475482A7F693F00BBF9EF /* LauncScreenViewController.swift */,
 			);
-			path = LauncScreen;
+			path = LaunchScreen;
 			sourceTree = "<group>";
 		};
 		7F8475552A8176BC00BBF9EF /* Model */ = {
@@ -235,6 +245,7 @@
 				7F8475532A8176A000BBF9EF /* Tracker.swift */,
 				7F8475582A84299800BBF9EF /* TrackerCategory.swift */,
 				7F84755A2A8429F500BBF9EF /* TrackerRecord.swift */,
+				7F7F954C2ABBA48B002D225A /* TrackersPin.swift */,
 				7FE9C52C2A9CE25F00C7C769 /* Schedule.swift */,
 				7FE9C52E2A9E757C00C7C769 /* ALertModel.swift */,
 			);
@@ -253,8 +264,11 @@
 			isa = PBXGroup;
 			children = (
 				7F84754D2A7F7C0000BBF9EF /* TrackersViewController.swift */,
+				7F7F95482ABB9CC3002D225A /* TrackersViewModel.swift */,
 				7F8475602A86B52C00BBF9EF /* TrackerAddViewController.swift */,
 				7F8475512A8170B700BBF9EF /* TrackerCollectionViewCell.swift */,
+				7F7F95462ABB4707002D225A /* TrackerViewModel.swift */,
+				7F65377F2ABC3733006F5046 /* TrackerCategoryViewModel.swift */,
 				7F34B3A82A98A46F0068359E /* SupplementaryTrackersView.swift */,
 			);
 			path = TrackersView;
@@ -290,6 +304,7 @@
 				7F9523F02AA311F300EA4B11 /* TrackerStore.swift */,
 				7F9523F22AA3121500EA4B11 /* TrackerCategoryStore.swift */,
 				7F9523F42AA3122800EA4B11 /* TrackerRecordStore.swift */,
+				7F7F954A2ABBA2A6002D225A /* TrackerPinStore.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -371,7 +386,9 @@
 				7FE9C52D2A9CE25F00C7C769 /* Schedule.swift in Sources */,
 				7F8475522A8170B700BBF9EF /* TrackerCollectionViewCell.swift in Sources */,
 				7F8475632A8D514C00BBF9EF /* TrackerConfigurationViewController.swift in Sources */,
+				7F7F954D2ABBA48B002D225A /* TrackersPin.swift in Sources */,
 				7F9523F32AA3121500EA4B11 /* TrackerCategoryStore.swift in Sources */,
+				7F7F95472ABB4707002D225A /* TrackerViewModel.swift in Sources */,
 				7F8475472A7E923000BBF9EF /* WelcomePageViewController.swift in Sources */,
 				7F6D3E4B2AACBC8200FF0419 /* CategoryAddViewController.swift in Sources */,
 				7F20E6292A75A27D00C49C3E /* UIColor_ext.swift in Sources */,
@@ -382,6 +399,7 @@
 				7F84754C2A7F73ED00BBF9EF /* TabBarController.swift in Sources */,
 				7FE9C52F2A9E757C00C7C769 /* ALertModel.swift in Sources */,
 				7F16D7572A93CF370054FFF1 /* ConfigTableViewCell.swift in Sources */,
+				7F7F954B2ABBA2A6002D225A /* TrackerPinStore.swift in Sources */,
 				7F8475492A7F693F00BBF9EF /* LauncScreenViewController.swift in Sources */,
 				7F84755D2A86AF7C00BBF9EF /* Helper.swift in Sources */,
 				7F6D3E492AACB02900FF0419 /* Observable.swift in Sources */,
@@ -403,6 +421,7 @@
 				7F6D3E402AACAD2600FF0419 /* CategoryViewController.swift in Sources */,
 				7F20E6142A759A6C00C49C3E /* AppDelegate.swift in Sources */,
 				7F20E6162A759A6C00C49C3E /* SceneDelegate.swift in Sources */,
+				7F7F95492ABB9CC3002D225A /* TrackersViewModel.swift in Sources */,
 				7F8475442A7E868400BBF9EF /* WelcomeViewContoller.swift in Sources */,
 				7F6D3E4D2AACBD4500FF0419 /* UIKit_ext.swift in Sources */,
 				7F9523EE2AA311A700EA4B11 /* Model.xcdatamodeld in Sources */,
@@ -412,6 +431,7 @@
 				7F16D75D2A9666580054FFF1 /* EmojieView.swift in Sources */,
 				7F20E62B2A75C1F200C49C3E /* UIFont_ext.swift in Sources */,
 				7F34B3A52A975B340068359E /* ScheduleTableViewCell.swift in Sources */,
+				7F6537802ABC3733006F5046 /* TrackerCategoryViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,27 +15,14 @@ enum TrackerRecordError: Error {
     case changeErrorMove
 }
 
-protocol TrackerRecordStoreDelegate: AnyObject {
-    func store( _ store: [TrackerRecord])
-}
-
 class TrackerRecordStore: NSObject {
     
+    static let shared = TrackerRecordStore()
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData>!
-    weak var delegate: TrackerRecordStoreDelegate?
     
-    var trackerRecords: [TrackerRecord] {
-        do {
-            guard
-                let object = self.fetchedResultsController.fetchedObjects,
-                let trackerRecord = try? object.map({ try self.updateTrackerRecord($0)})
-            else {
-                return []
-            }
-            return trackerRecord
-        }
-    }
+    @Observable
+    private(set) var trackerRecords: [TrackerRecord] = []
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
@@ -55,47 +42,36 @@ class TrackerRecordStore: NSObject {
         controller.delegate = self
         self.fetchedResultsController = controller
         try controller.performFetch()
+        getTrackerRecords()
+    }
+    
+    private func getTrackerRecords() {
+        trackerRecords = {
+            guard
+                let object = self.fetchedResultsController.fetchedObjects,
+                let trackerRecord = try? object.map({ try self.updateTrackerRecord($0)})
+            else {
+                return []
+            }
+            return trackerRecord
+        }()
     }
     
     func dayIsDone(id: UUID, date: Date) -> Bool {
-        var dayIsDone = false
-        let trackerIDString = id.uuidString
-        let requestIsDayDone = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
-        let predicateIsDone = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.date), date as CVarArg)
-        let sumPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateForDay, predicateIsDone])
-        
-        requestIsDayDone.predicate = sumPredicate
-        
-        do {
-            let count = try context.count(for:requestIsDayDone)
-            if count > 0 {
-                dayIsDone = true
-            }
-        } catch {
-            print("Ошибка в подсчете выбран ли день")
+        guard let fetchedObjects = fetchedResultsController.fetchedObjects else {
+            return false
         }
-        
-        return dayIsDone
+        let trackerContain = fetchedObjects.filter { $0.id == id && $0.date == date }
+        return !trackerContain.isEmpty
     }
     
+    
     func countDay(id: UUID) -> Int {
-        var countDay = 0
-        let trackerIDString = id.uuidString
-        
-        let requestDayCount = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        
-        let predicateForDay = NSPredicate(format: "%K == %@", (\TrackerRecordCoreData.id)._kvcKeyPathString!, trackerIDString)
-        requestDayCount.predicate = predicateForDay
-        requestDayCount.resultType = .countResultType
-        do {
-            let count = try context.count(for:requestDayCount)
-            countDay = count
-        } catch {
-            print("Ошибка в подсчете количества для рекорда")
-            countDay = 0
+        guard let fetchedObjects = fetchedResultsController.fetchedObjects else {
+            return 0
         }
-        return countDay
+        let filteredObjects = fetchedObjects.filter { $0.id == id }
+        return filteredObjects.count
     }
     
     func changeRecord(_ record: TrackerRecord) throws {
@@ -143,7 +119,7 @@ class TrackerRecordStore: NSObject {
 extension TrackerRecordStore:NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store(trackerRecords)
+        getTrackerRecords()
     }
     
 }
