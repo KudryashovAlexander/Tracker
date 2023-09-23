@@ -63,6 +63,7 @@ class TrackersViewModel {
     private var trackerCategoryStore = TrackerCategoryStore.shared
     private var trackerRecordStore = TrackerRecordStore.shared
     private let trackerPinStore = TrackerPinStore.shared
+    private let trackerStore = TrackerStore.shared
     
     
     init(searchText: String? = nil,
@@ -199,12 +200,23 @@ class TrackersViewModel {
         
     }
     
-    func changeTracker(id: UUID) {
-        //..
+    func changeTracker(id: UUID) -> (Tracker?,TrackerCategory?) {
+        for trackerCategory in categories {
+            for tracker in trackerCategory.trackers {
+                if tracker.id == id {
+                    return (tracker, trackerCategory)
+                }
+            }
+        }
+        return (nil,nil)
     }
     
     func deleteTracker(id: UUID) {
-        //
+        do {
+            try trackerStore.deleteTracker(at: id)
+        } catch {
+            print("Не удалось удалить трекер")
+        }
     }
     
     

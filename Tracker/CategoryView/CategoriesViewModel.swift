@@ -24,6 +24,7 @@ final class CategoriesViewModel {
         self.delegate = delegate
         self.selectedCategoryName = selectedCategoryName
         self.categories = getCategoryFromStore()
+        bind()
     }
     
     func deleteCategory(index: Int) {
@@ -39,11 +40,14 @@ final class CategoriesViewModel {
         
     private func getCategoryFromStore() -> [CategoryViewModel] {
         var categoryArray = [CategoryViewModel]()
-        for category in trackerCatStory.trackerCategoryViewModel {
-            if category.categoryName == selectedCategoryName {
-                category.selectedCategory(select: true)
+        for category in trackerCatStory.trackerCategory {
+            if category.name == selectedCategoryName {
+                let categoryViewModel = CategoryViewModel(categoryName: category.name, categoryIsSelected: true)
+                categoryArray.append(categoryViewModel)
+            } else {
+                let categoryViewModel = CategoryViewModel(categoryName: category.name, categoryIsSelected: false)
+                categoryArray.append(categoryViewModel)
             }
-            categoryArray.append(category)
         }
         return categoryArray
     }
@@ -52,11 +56,17 @@ final class CategoriesViewModel {
         delegate?.updateSelectedCategory(name: selectedCategoryName)
     }
     
+    func bind() {
+        trackerCatStory.$trackerCategory.bind { [weak self] _ in
+            self?.categories = self?.getCategoryFromStore() ?? []
+        }
+    }
+    
 }
 
 //MARK: - Extension CategoryAddViewModelDelegate
-extension CategoriesViewModel: CategoryAddViewModelDelegate {
-    func changeCategory() {
-        self.categories = getCategoryFromStore()
-    }
-}
+//extension CategoriesViewModel: CategoryAddViewModelDelegate {
+//    func changeCategory() {
+//        self.categories = getCategoryFromStore()
+//    }
+//}

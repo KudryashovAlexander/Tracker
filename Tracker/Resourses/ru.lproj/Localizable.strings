@@ -45,6 +45,7 @@
 "button.delete" = "Удалить";
 "button.cancel" = "Отменить";
 "button.ready" = "Готово";
+"button.save" = "Сохранить";
 "button.addCategory" = "Добавить категорию";
 
 //Алерт

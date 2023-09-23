@@ -22,6 +22,7 @@ final class TrackersViewController: UIViewController {
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
     private var searchText: String? = nil
+    private let alertpresenter = AlertPresenter()
     
     init(viewModel: TrackersViewModel) {
         self.viewModel = viewModel
@@ -36,6 +37,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
         
         self.navigationController?.hidesBarsOnSwipe = false
         sController.hidesNavigationBarDuringPresentation = false
@@ -44,7 +46,7 @@ final class TrackersViewController: UIViewController {
 
         self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
         self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
-        
+        collectionView.backgroundColor = .ypWhite
         emptyCollectiionImageSupport()
         emptyCollectionLabelSupport()
         
@@ -149,6 +151,8 @@ final class TrackersViewController: UIViewController {
         datePicker.maximumDate = Date()
         datePicker.calendar = calendarHelper.calendarUse
         
+        
+        
         datePicker.addTarget(self, action: #selector(changeDate), for: .valueChanged)
         
         let rightButton = UIBarButtonItem(customView: datePicker)
@@ -163,6 +167,24 @@ final class TrackersViewController: UIViewController {
         sController.searchBar.searchTextField.delegate = self
 
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // Проверяем поддержку в iOS тёмного режима — от версии 13
+        if #available(iOS 13.0, *),
+             // Проверяем только изменение цветовой схемы
+             traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+             
+             if traitCollection.userInterfaceStyle == .dark {
+                 datePicker.backgroundColor = .ypDatePicker
+                 datePicker.setValue(UIColor.black, forKeyPath: "textColor")
+             } else {
+                 datePicker.backgroundColor = .ypDatePicker
+                 datePicker.setValue(UIColor.black, forKeyPath: "textColor")
+             }
+         }
+    }
+    
     @objc
     private func changeDate() {
         viewModel.changeDate(datePicker.date)
@@ -243,11 +265,26 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     private func changeTracker(id: UUID) {
-        viewModel.changeTracker(id: id)
+        let trackerAndcategory = viewModel.changeTracker(id: id)
+        guard let tracker = trackerAndcategory.0,
+              let trackerCategory = trackerAndcategory.1 else { return }
+        
+        let viewModel = TrackerConfigurationViewModel(trackerType: .regular,
+                                                      trackerConfigurationType: .change,
+                                                      tracker: tracker,
+                                                      trackerCategory: trackerCategory)
+        let trackerConfugurationView = TrackerConfigurationViewController(viewModel: viewModel)
+        let naVC = UINavigationController(rootViewController: trackerConfugurationView)
+        self.present(naVC, animated: true)
     }
     
     private func deleteTracker(id: UUID) {
-        viewModel.deleteTracker(id: id)
+        let alertModel = AlertModel(title: "Уверены что хотите удалить трекер?",
+                                    message: "",
+                                    buttonTitle: "Удалить")
+        alertpresenter.showAlertSheet(model: alertModel, viewController: self) {
+            self.viewModel.deleteTracker(id: id)
+        }
     }
     
 }

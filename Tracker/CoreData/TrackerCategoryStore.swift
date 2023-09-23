@@ -14,38 +14,27 @@ enum TrackerCategoryError: Error {
     case convertErrorTrackerCategoryTrackersCoreData
 }
 
-protocol TrackerCategoryStoryDelegate: AnyObject {
-    func store(didUpdate trackerCategory: [TrackerCategory])
-}
-
 class TrackerCategoryStore: NSObject {
     
     static let shared = TrackerCategoryStore()
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
-    weak var delegate: TrackerCategoryStoryDelegate?
     private var currentTrackerCategoryName: String?
     
-    private var trackerStore = TrackerStore()
+    private var trackerStore = TrackerStore.shared
     
     @Observable
     private(set) var trackerCategory: [TrackerCategory] = []
     
-    var trackerCategoryViewModel: [CategoryViewModel] {
-        guard
-            let object = self.fetchedResultsController.fetchedObjects,
-            let trackerCategory = try? object.map({ trackerCategoryCoreData in
-                CategoryViewModel(categoryName: trackerCategoryCoreData.name!,
-                                  categoryIsSelected: false)
-            })
-        else { return [] }
-        return trackerCategory
-    }
-    
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
         try! self.init(context: context)
+        
+        trackerStore.$trackers.bind { _ in
+            self.getTrackerCategory()
+        }
+        
     }
     
     init(context: NSManagedObjectContext) throws {
@@ -119,7 +108,7 @@ class TrackerCategoryStore: NSObject {
         }
     }
     
-    func addTracker(at newTracker: Tracker, categoryName: String) throws {
+    func addTrackerToCategory(at newTracker: Tracker, categoryName: String) throws {
         currentTrackerCategoryName = categoryName
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         for trackerCategory in object {
@@ -163,13 +152,13 @@ class TrackerCategoryStore: NSObject {
     
     func changeTracker(oldTracker: Tracker, oldCategoryName: String, newTracker: Tracker, newCategoryName: String) throws {
         if oldCategoryName != newCategoryName {
-            try deleteTracker(at: oldTracker, categoryName: oldCategoryName)
-            try addTracker(at: newTracker, categoryName: newCategoryName)
+            try deleteTrackerInCategory(at: oldTracker, categoryName: oldCategoryName)
+            try addTrackerToCategory(at: newTracker, categoryName: newCategoryName)
         }
         trackerStore.changeTracker(oldTracker: oldTracker, newTracker: newTracker)
     }
     
-    func deleteTracker(at tracker: Tracker, categoryName: String) throws {
+    func deleteTrackerInCategory(at tracker: Tracker, categoryName: String) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         
         for trackerCategory in object {
@@ -179,7 +168,8 @@ class TrackerCategoryStore: NSObject {
             let trackerArray = trackers.compactMap { $0 as? TrackerCoreData }
             for trackerCoreData in trackerArray {
                 if trackerCoreData.id == tracker.id {
-                    try trackerStore.deleteTracker(at: tracker)
+                    context.delete(trackerCoreData)
+                    try context.save()
                 }
             }
         }

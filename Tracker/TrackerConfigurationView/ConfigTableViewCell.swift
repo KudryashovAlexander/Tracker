@@ -15,11 +15,13 @@ final class ConfigTableViewCell: UITableViewCell {
     var viewModel: ConfigTableViewCellViewModel! {
         didSet {
             self.propertyNameLabel.text = viewModel.propertyName
-            bind()
+            
             if let text = viewModel.selectedPoperty {
                 self.selectedPropertyLabel.text = text
                 self.isSelectedProperty = true
+                setHeight(isActivate: isSelectedProperty)
             }
+            bind()
         }
     }
 

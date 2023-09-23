@@ -45,6 +45,7 @@
 "button.delete" = "Delete";
 "button.cancel" = "Cancel";
 "button.ready" = "Ready";
+"button.save" = "Save";
 "button.addCategory" = "Add category";
 
 //Алерт

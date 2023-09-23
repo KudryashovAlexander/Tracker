@@ -10,7 +10,7 @@ import UIKit
 final class CategoryAddViewController: UIViewController {
     
     private let addCategoryTextField = UITextField().customTextField(placeHolder: String().categoryPlaceHolder)
-    private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)
+    private let attentionLabel = UILabel().attenteionLabel()
     private let addCategoryButton = UIButton().customBlackButton(title: String().buttonReady)
     private var categoryIsChange: Bool = false
     
@@ -102,7 +102,7 @@ final class CategoryAddViewController: UIViewController {
             addCategoryButton.backgroundColor = .ypGray
             addCategoryButton.isEnabled = false
             attentionLabel.isHidden = true
-        case 1...25 :
+        case 1...38 :
             addCategoryButton.backgroundColor = .ypBlack
             addCategoryButton.isEnabled = true
             attentionLabel.isHidden = true

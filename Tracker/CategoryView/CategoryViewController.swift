@@ -49,6 +49,7 @@ class CategoryViewController: UIViewController {
     
     private var contenSize = CGSize()
     private var countElement = 0
+    private var selectedCategory: String?
     
     private var categoryTableView: UITableView = {
         let tableView = UITableView()
@@ -71,6 +72,7 @@ class CategoryViewController: UIViewController {
     init(viewModel: CategoriesViewModel) {
         self.viewModel = viewModel
         super .init(nibName: nil, bundle: nil)
+        selectedCategory = viewModel.selectedCategoryName
     
     }
     
@@ -169,7 +171,6 @@ class CategoryViewController: UIViewController {
     private func createCategory() {
         let createCategoryVC = CategoryAddViewController()
         createCategoryVC.viewModel = CategoryAddViewModel()
-        createCategoryVC.viewModel.delegate = viewModel
         let nc = UINavigationController(rootViewController: createCategoryVC)
         self.present(nc, animated: true)
     }
@@ -180,7 +181,6 @@ class CategoryViewController: UIViewController {
         
         createCategoryVC.viewModel = CategoryAddViewModel(oldNCategoryName: categoryName)
         
-        createCategoryVC.viewModel.delegate = viewModel
         let nc = UINavigationController(rootViewController: createCategoryVC)
         self.present(nc, animated: true)
     }
@@ -212,6 +212,13 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         cell.selectionStyle = .none
         cell.viewModel = viewModel.categories[indexPath.row]
         cell.backgroundColor = .ypBackground
+        
+        //FIXME: - метод предварительного выбора не работает!
+//        if self.selectedCategory == viewModel.categories[indexPath.row].categoryName {
+//            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .top)
+//                cell.viewModel.selectedCategory(select: true)
+//            }
+
         return cell
     }
     

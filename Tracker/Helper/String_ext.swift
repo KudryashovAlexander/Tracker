@@ -73,6 +73,7 @@ extension String {
     var buttonDelete: String { NSLocalizedString("button.delete", comment: "Удалить") }
     var buttonCansel: String { NSLocalizedString("button.cancel", comment: "Отменить") }
     var buttonReady: String { NSLocalizedString("button.ready", comment: "Готово") }
+    var buttonSave: String { NSLocalizedString("button.save", comment: "Сохранить") }
     var buttonAddCategory: String { NSLocalizedString("button.addCategory", comment: "Добавить категорию") }
     
     //Алерт

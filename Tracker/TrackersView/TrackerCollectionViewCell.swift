@@ -140,7 +140,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private func trackerLabelSupport(){
         trackerLabel.font = .yPMedium12
-        trackerLabel.textColor = .ypWhite
+        trackerLabel.textColor = .white
         trackerLabel.numberOfLines = 2
         trackerLabel.textAlignment = .left
         

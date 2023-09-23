@@ -25,8 +25,9 @@ final class TrackerConfigurationViewModel {
     private let trackerCategory: TrackerCategory?
     
     var viewName = String()
-    private var recordIsHidden: Bool = false
-    private var daysRecord: Int?
+    var daysRecord: Int?
+    var buttonName: String?
+    
     var trackerName: String? {
         didSet {
             checkCount()
@@ -70,10 +71,10 @@ final class TrackerConfigurationViewModel {
     
     private let categoryViewModel = ConfigTableViewCellViewModel(propertyName: String().categoryName,
                                                                  selectedPoperty: nil)
-    private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: String().scheduleName, selectedPoperty: nil)
+    private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: String().scheduleName, selectedPoperty: "nil")
     
     private let trackerRecordStore = TrackerRecordStore.shared
-    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerCategoryStore = TrackerCategoryStore.shared
     private let calendarHelper = CalendarHelper()
     
     var tableViewCellViewModel: [ConfigTableViewCellViewModel] = []
@@ -88,12 +89,13 @@ final class TrackerConfigurationViewModel {
         self.trackerConfigurationType = trackerConfigurationType
         self.tracker = tracker
         self.trackerCategory = trackerCategory
-        
+    
         viewNameSupport()
         recordSupport()
         trackerSupport()
         trackerScheduleSupport()
         tableViewCellViewModelSupport()
+        buttonNameSupport()
         
         checkCount()
         checkTrackerData()
@@ -113,10 +115,8 @@ final class TrackerConfigurationViewModel {
     private func recordSupport() {
         switch trackerConfigurationType {
         case .add:
-            recordIsHidden = true
             daysRecord = nil
         case .change:
-            recordIsHidden = false
             daysRecord = recordDays()
         }
     }
@@ -156,11 +156,14 @@ final class TrackerConfigurationViewModel {
             tableViewCellViewModel = [categoryViewModel]
             
         case (.regular,.change):
-            let categoryName = trackerCategory?.name
-            categoryViewModel.changeSelectedProperty(categoryName)
+            if let categoryName = trackerCategory?.name {
+                self.categoryName = categoryName
+                categoryViewModel.changeSelectedProperty(categoryName)
+            }
             
-            let scheduleString = calendarHelper.shortNameSchedule(at: trackerSchedule.daysOn)
-            scheduleViewModel.changeSelectedProperty(scheduleString)
+            if let scheduleString = calendarHelper.shortNameSchedule(at: trackerSchedule.daysOn) {
+                scheduleViewModel.changeSelectedProperty(scheduleString)
+            }
             
             tableViewCellViewModel = [categoryViewModel,scheduleViewModel]
             
@@ -169,6 +172,14 @@ final class TrackerConfigurationViewModel {
             categoryViewModel.changeSelectedProperty(categoryName)
             
             tableViewCellViewModel = [categoryViewModel]
+        }
+    }
+    private func buttonNameSupport() {
+        switch trackerConfigurationType {
+        case .add:
+            buttonName = String().buttonCreate
+        case .change:
+            buttonName = String().buttonSave
         }
     }
     
@@ -225,25 +236,26 @@ final class TrackerConfigurationViewModel {
                                   id: UUID())
            
             do {
-                try trackerCategoryStore.addTracker(at: tracker, categoryName: categoryName)
+                try trackerCategoryStore.addTrackerToCategory(at: tracker, categoryName: categoryName)
                 nextView()
             } catch {
                 print("Ошибка в сохранении трекера")
             }
         case .change:
             
+            guard let tracker = tracker else { return }
+            
             guard let trackerName = trackerName,
                   let trackerColor = trackerColor,
                   let trackerEmodji = trackerEmodji,
                   let categoryName = categoryName,
-                  let tracker = tracker,
                   let trackerCategory = trackerCategory else { return }
             
             let newTracker = Tracker(name: trackerName,
                                   color: trackerColor,
                                   emojie: trackerEmodji,
                                   schedule: trackerSchedule,
-                                  id: UUID())
+                                     id: tracker.id)
             do {
                 try trackerCategoryStore.changeTracker(oldTracker: tracker,
                                                        oldCategoryName: trackerCategory.name,

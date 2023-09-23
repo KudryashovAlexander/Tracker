@@ -18,9 +18,6 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite
         self.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-        
-        
-    
 
         let trackerNavController = UINavigationController(rootViewController: trackerViewController)
         let statisticNavController = UINavigationController(rootViewController: statisticViewController)
@@ -39,6 +36,7 @@ class TabBarController: UITabBarController {
         self.viewControllers = [trackerNavController,statisticNavController]
         
         tabBarBorder()
+        tabBar.backgroundColor = .ypWhite
     }
     
     func tabBarBorder() {

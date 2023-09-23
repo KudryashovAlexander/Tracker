@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol CategoryAddViewModelDelegate: AnyObject {
-    func changeCategory()
-}
-
 enum ErrorCategoryAddViewModel: Error {
     case invalidSaveCategory
     case invalidRenameCategory
@@ -18,7 +14,6 @@ enum ErrorCategoryAddViewModel: Error {
 
 final class CategoryAddViewModel {
     
-    weak var delegate: CategoryAddViewModelDelegate?
     var numberSimbol: ((Int) -> Void)?
     var oldNCategoryName: String?
     var categoryName: String? {
@@ -30,7 +25,7 @@ final class CategoryAddViewModel {
             }
         }
     }
-    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerCategoryStore = TrackerCategoryStore.shared
     
     init(oldNCategoryName: String? = nil) {
         self.oldNCategoryName = oldNCategoryName
@@ -41,7 +36,6 @@ final class CategoryAddViewModel {
         let trackerCategory = TrackerCategory(name: categoryName, trackers: [])
         do {
             try trackerCategoryStore.addCategory(trackerCategory)
-            delegate?.changeCategory()
         } catch {
             print(ErrorCategoryAddViewModel.invalidSaveCategory)
         }
@@ -53,7 +47,6 @@ final class CategoryAddViewModel {
         if newName != oldName {
             do {
                 try trackerCategoryStore.changeNameCategory(oldName: oldName, newName: newName)
-                delegate?.changeCategory()
             } catch {
                  print(ErrorCategoryAddViewModel.invalidSaveCategory)
             }
