@@ -9,7 +9,7 @@ import UIKit
 class TabBarController: UITabBarController {
     
     let trackerViewController = TrackersViewController(viewModel: TrackersViewModel())
-    let statisticViewController = StatisticViewController()
+    let statisticViewController = StatisticViewController(viewModel: StatisticViewModel())
     
     override func awakeFromNib() {
         super.awakeFromNib()
