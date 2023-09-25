@@ -64,6 +64,7 @@ class TrackersViewModel {
     private var trackerRecordStore = TrackerRecordStore.shared
     private let trackerPinStore = TrackerPinStore.shared
     private let trackerStore = TrackerStore.shared
+    private let analyticsService = AnalyticsService()
     
     
     init(searchText: String? = nil,
@@ -208,6 +209,7 @@ class TrackersViewModel {
                 }
             }
         }
+        analyticsService.report(event: "click_Main_Edit", params: ["Edit" : 1])
         return (nil,nil)
     }
     
@@ -230,6 +232,7 @@ extension TrackersViewModel: TrackerViewModelProtocol {
         }
         do{
             try trackerRecordStore.changeRecord(TrackerRecord(id: id, date: currentDate))
+            analyticsService.report(event: "click_main_track", params: ["track" : 1])
         } catch {
             print("Ошибка в изменении трекер рекорда")
         }

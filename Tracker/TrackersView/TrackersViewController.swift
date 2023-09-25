@@ -18,11 +18,26 @@ final class TrackersViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout())
     
-    private let calendarHelper = CalendarHelper()
+    private let filterButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .ypBlue
+        button.setTitle(String().mainFilter, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.font = .yPRegular17
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        button.isHidden = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+   
     private let emptyCollectiionImage = UIImageView()
     private let emptyCollectionLabel = UILabel()
+    private let calendarHelper = CalendarHelper()
     private var searchText: String? = nil
     private let alertpresenter = AlertPresenter()
+    private let analyticsService = AnalyticsService()
     
     init(viewModel: TrackersViewModel) {
         self.viewModel = viewModel
@@ -41,19 +56,11 @@ final class TrackersViewController: UIViewController {
         
         self.navigationController?.hidesBarsOnSwipe = false
         sController.hidesNavigationBarDuringPresentation = false
-
         navigationSupport()
-
-        self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
-        self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
-        collectionView.backgroundColor = .ypWhite
+        
+        //EMPTY COLLECTION
         emptyCollectiionImageSupport()
         emptyCollectionLabelSupport()
-        
-        collectionView.alwaysBounceVertical = true
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
-        
         emptyCollectiionImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyCollectiionImage)
         
@@ -61,11 +68,6 @@ final class TrackersViewController: UIViewController {
         view.addSubview(emptyCollectionLabel)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             emptyCollectiionImage.heightAnchor.constraint(equalToConstant: 80),
             emptyCollectiionImage.widthAnchor.constraint(equalToConstant: 80),
             emptyCollectiionImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -75,25 +77,63 @@ final class TrackersViewController: UIViewController {
             emptyCollectionLabel.topAnchor.constraint(equalTo: emptyCollectiionImage.bottomAnchor, constant: 8),
             
         ])
+
+        //COLLECTION LAYOUT
+        self.collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
+        self.collectionView.register(SupplementaryTrackersView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SupplementaryTrackersView.identifier)
+        collectionView.backgroundColor = .ypWhite
+        collectionView.alwaysBounceVertical = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
         
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
         
+        //FILTER BUTTON
+        filterButton.addTarget(self, action: #selector(showFilter), for: .touchUpInside)
+        view.addSubview(filterButton)
+        NSLayoutConstraint.activate([
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        ])
+        
         collectionIsEmpty(viewModel.collectionEmptyOrNosearch)
+        analyticsService.report(event: "open_main", params: ["open_main" : 1])
+        
         bind()
         
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: "close_main", params: ["close_main" : 1])
+    }
+    
     func bind() {
-//        guard let viewModel = viewModel else { return }
         viewModel.$visibleViewModels.bind { [weak self] _ in
             self?.collectionView.reloadData()
         }
-        viewModel.$collectionEmptyOrNosearch.bind { [weak self] emptyCellection in
-            self?.collectionIsEmpty(emptyCellection)
+        viewModel.$collectionEmptyOrNosearch.bind { [weak self] emptyCollection in
+            self?.collectionIsEmpty(emptyCollection)
         }
     }
+    @objc
+    private func showFilter() {
+        let vc = TrackerFilterViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        self.present(navVC, animated: true)
+        analyticsService.report(event: "click_main_filter", params: ["filter" : 1])
+    }
+    
     
     private func emptyCollectiionImageSupport() {
         emptyCollectiionImage.image = UIImage(named: "noTracker") ?? UIImage()
@@ -113,6 +153,8 @@ final class TrackersViewController: UIViewController {
         if isEmpty == nil {
             emptyCollectiionImage.isHidden = true
             emptyCollectionLabel.isHidden = true
+            collectionView.isHidden = false
+            filterButton.isHidden = false
             return
         }
         if isEmpty == true {
@@ -120,6 +162,10 @@ final class TrackersViewController: UIViewController {
             emptyCollectionLabel.text = String().mainNoSearch
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
+            collectionView.isHidden = true
+            //FIXME: Убрать потом
+
+            filterButton.isHidden = false
             return
         }
         if isEmpty == false {
@@ -127,6 +173,10 @@ final class TrackersViewController: UIViewController {
             emptyCollectionLabel.text = String().mainEmptyLabel
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
+            collectionView.isHidden = true
+            //FIXME: Убрать потом
+
+            filterButton.isHidden = false
             return
         }
     }
@@ -150,9 +200,6 @@ final class TrackersViewController: UIViewController {
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date()
         datePicker.calendar = calendarHelper.calendarUse
-        
-        
-        
         datePicker.addTarget(self, action: #selector(changeDate), for: .valueChanged)
         
         let rightButton = UIBarButtonItem(customView: datePicker)
@@ -195,6 +242,7 @@ final class TrackersViewController: UIViewController {
         let vc = TrackerAddViewController()
         let naVC = UINavigationController(rootViewController: vc)
         self.present(naVC, animated: true)
+        analyticsService.report(event: "click_main_add_track", params: ["add_track" : 1])
     }
     
 }
@@ -285,6 +333,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         alertpresenter.showAlertSheet(model: alertModel, viewController: self) {
             self.viewModel.deleteTracker(id: id)
         }
+        analyticsService.report(event: "click_main_delete", params: ["delete" : 1])
     }
     
 }
