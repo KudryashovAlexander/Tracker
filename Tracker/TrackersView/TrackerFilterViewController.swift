@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TrackerFilterViewControllerDelegate: AnyObject {
+    func changeFilter(newFilter: Int)
+}
+
 class TrackerFilterViewController: UIViewController {
     
     private let filterName = [String().filterAllTracker,
@@ -14,7 +18,8 @@ class TrackerFilterViewController: UIViewController {
                               String().filterComplated,
                               String().filterNotComplated]
     
-    private let selectedFilter = String()
+    var selectedFilter = 1
+    weak var delegate:TrackerFilterViewControllerDelegate?
     
     private var filterTableView: UITableView = {
         let tableView = UITableView()
@@ -69,9 +74,11 @@ extension TrackerFilterViewController: UITableViewDataSource, UITableViewDelegat
         cell.selectionStyle = .none
         cell.backgroundColor = .ypBackground
         cell.configure(name: filterName[indexPath.row])
-        if selectedFilter == filterName[indexPath.row] {
-            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .top)
+        if indexPath.row == selectedFilter {
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
             cell.configureIsSelected(true)
+        } else {
+            cell.configureIsSelected(false)
         }
         return cell
     }
@@ -79,8 +86,10 @@ extension TrackerFilterViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = filterTableView.cellForRow(at: indexPath) as? TrackerFilterViewCell else { return }
         cell.configureIsSelected(true)
+        delegate?.changeFilter(newFilter: indexPath.row)
         self.dismiss(animated: true)
     }
+    
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let cell = filterTableView.cellForRow(at: indexPath) as? TrackerFilterViewCell else { return }
         cell.configureIsSelected(false)

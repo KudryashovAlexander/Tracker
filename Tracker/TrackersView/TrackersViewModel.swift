@@ -29,7 +29,7 @@ class TrackersViewModel {
     
     private var trackerRecord: [TrackerRecord] {
         didSet {
-            convertCategoriesToViewModel()
+            filterText()
         }
     }
     
@@ -58,6 +58,9 @@ class TrackersViewModel {
     
     @Observable
     private(set) var collectionEmptyOrNosearch: Bool?
+    var selectedFilter: Int = 1
+    private var filterDaysOn: Bool = true
+    private var filterRecordOn: Bool? = nil
     
     private let calendarHelper = CalendarHelper()
     private var trackerCategoryStore = TrackerCategoryStore.shared
@@ -93,6 +96,7 @@ class TrackersViewModel {
         trackerCategoryStore.$trackerCategory.bind { [weak self] newCategorios in
             self?.categories = newCategorios
         }
+        
         trackerPinStore.$trackersPin.bind { [weak self] newPintrackers in
             self?.trackersPinId = newPintrackers
         }
@@ -107,13 +111,31 @@ class TrackersViewModel {
     }
     
     private func filterText() {
+        
         let filterText = (searchText ?? "").lowercased()
         let filterWeekDay = calendarHelper.calendarUse.component(.weekday, from: currentDate)
+        
         visibleCategories = pinCategories.compactMap({ category in
             let trackers = category.trackers.filter { tracker in
-                let dateCondition = tracker.schedule.daysOn.contains(filterWeekDay)
-                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
-                return dateCondition && textCondition
+                if filterDaysOn {
+                    let dateCondition = tracker.schedule.daysOn.contains(filterWeekDay)
+                    let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+                    
+                    if filterRecordOn == true {
+                        let recordCondition = trackerRecordStore.dayIsDone(id: tracker.id, date: currentDate)
+                        return dateCondition && textCondition && recordCondition
+                    }
+                    
+                    if filterRecordOn == false {
+                        let recordCondition = !trackerRecordStore.dayIsDone(id: tracker.id, date: currentDate)
+                        return dateCondition && textCondition && recordCondition
+                    }
+                    
+                    return dateCondition && textCondition
+                } else {
+                    let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+                    return textCondition
+                }
             }
             if trackers.isEmpty {
                 return nil
@@ -221,10 +243,9 @@ class TrackersViewModel {
         }
     }
     
-    
 }
 
-//MARK: - Extension
+//MARK: - Extension TrackerViewModelProtocol
 extension TrackersViewModel: TrackerViewModelProtocol {
     func updateTrackerRecord(id: UUID) {
         if currentDate.isAfter() {
@@ -238,3 +259,28 @@ extension TrackersViewModel: TrackerViewModelProtocol {
         }
     }
 }
+
+//MARK: - Extension TrackerFilterViewControllerDelegate
+extension TrackersViewModel: TrackerFilterViewControllerDelegate {
+    func changeFilter(newFilter: Int) {
+        switch newFilter{
+        case 0:
+            filterDaysOn = false
+            filterRecordOn = nil
+        case 1:
+            filterDaysOn = true
+            filterRecordOn = nil
+        case 2:
+            filterDaysOn = true
+            filterRecordOn = true
+        case 3:
+            filterDaysOn = true
+            filterRecordOn = false
+        default:
+            break
+        }
+        selectedFilter = newFilter
+        filterText()
+    }
+}
+

@@ -21,7 +21,7 @@ final class CategoryTableViewCell: UITableViewCell {
     
     private var chooseCategoryImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "categoryDone") ?? UIImage()
+        imageView.image = UIImage(named: "CategoryDone") ?? UIImage()
         imageView.isHidden = true
         return imageView
     }()

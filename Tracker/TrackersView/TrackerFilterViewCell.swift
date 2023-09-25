@@ -21,8 +21,7 @@ final class TrackerFilterViewCell: UITableViewCell {
     
     private var chooseFilterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "categoryDone") ?? UIImage()
-        imageView.isHidden = true
+        imageView.image = UIImage(named: "CategoryDone") ?? UIImage()
         return imageView
     }()
     

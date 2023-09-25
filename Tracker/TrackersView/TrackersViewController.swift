@@ -92,6 +92,7 @@ final class TrackersViewController: UIViewController {
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
@@ -130,6 +131,8 @@ final class TrackersViewController: UIViewController {
     private func showFilter() {
         let vc = TrackerFilterViewController()
         let navVC = UINavigationController(rootViewController: vc)
+        vc.delegate = self.viewModel
+        vc.selectedFilter = self.viewModel.selectedFilter
         self.present(navVC, animated: true)
         analyticsService.report(event: "click_main_filter", params: ["filter" : 1])
     }
@@ -154,7 +157,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = true
             emptyCollectionLabel.isHidden = true
             collectionView.isHidden = false
-            filterButton.isHidden = false
+//            filterButton.isHidden = false
             return
         }
         if isEmpty == true {
@@ -163,9 +166,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
             collectionView.isHidden = true
-            //FIXME: Убрать потом
-
-            filterButton.isHidden = false
+//            filterButton.isHidden = true
             return
         }
         if isEmpty == false {
@@ -174,9 +175,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
             collectionView.isHidden = true
-            //FIXME: Убрать потом
-
-            filterButton.isHidden = false
+//            filterButton.isHidden = true
             return
         }
     }
