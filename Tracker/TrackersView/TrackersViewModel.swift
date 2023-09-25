@@ -93,8 +93,8 @@ class TrackersViewModel {
             self?.trackerRecord = newTrackerRecord
         }
         
-        trackerCategoryStore.$trackerCategory.bind { [weak self] newCategorios in
-            self?.categories = newCategorios
+        trackerCategoryStore.$trackerCategory.bind { [weak self] newCategories in
+            self?.categories = newCategories
         }
         
         trackerPinStore.$trackersPin.bind { [weak self] newPintrackers in
@@ -237,7 +237,7 @@ class TrackersViewModel {
     
     func deleteTracker(id: UUID) {
         do {
-            try trackerStore.deleteTracker(at: id)
+            try trackerCategoryStore.deleteTrackerInCategory(at: id)
         } catch {
             print("Не удалось удалить трекер")
         }

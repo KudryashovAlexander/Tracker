@@ -70,12 +70,19 @@ class TrackerStore: NSObject {
             if trackerCoreData.id == trackerID {
                 context.delete(trackerCoreData)
                 try context.save()
-                break
+                return
             }
         }
     }
     
     func changeTracker(oldTracker: Tracker, newTracker: Tracker) {
+        if oldTracker.name == newTracker.name,
+           oldTracker.color == newTracker.color,
+           oldTracker.emojie == newTracker.emojie,
+           oldTracker.schedule.daysOnString() == newTracker.schedule.daysOnString() {
+            return
+        }
+        
         let trackerIDString = oldTracker.id.uuidString
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         let predicate = NSPredicate(format: "%K == %@", (\TrackerCoreData.id)._kvcKeyPathString!, trackerIDString)

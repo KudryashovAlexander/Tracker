@@ -157,7 +157,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = true
             emptyCollectionLabel.isHidden = true
             collectionView.isHidden = false
-//            filterButton.isHidden = false
+            filterButton.isHidden = false
             return
         }
         if isEmpty == true {
@@ -166,7 +166,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
             collectionView.isHidden = true
-//            filterButton.isHidden = true
+            filterButton.isHidden = true
             return
         }
         if isEmpty == false {
@@ -175,7 +175,7 @@ final class TrackersViewController: UIViewController {
             emptyCollectiionImage.isHidden = false
             emptyCollectionLabel.isHidden = false
             collectionView.isHidden = true
-//            filterButton.isHidden = true
+            filterButton.isHidden = false
             return
         }
     }
@@ -212,23 +212,6 @@ final class TrackersViewController: UIViewController {
         sController.hidesNavigationBarDuringPresentation = false
         sController.searchBar.searchTextField.delegate = self
 
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        // Проверяем поддержку в iOS тёмного режима — от версии 13
-        if #available(iOS 13.0, *),
-             // Проверяем только изменение цветовой схемы
-             traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-             
-             if traitCollection.userInterfaceStyle == .dark {
-                 datePicker.backgroundColor = .ypDatePicker
-                 datePicker.setValue(UIColor.black, forKeyPath: "textColor")
-             } else {
-                 datePicker.backgroundColor = .ypDatePicker
-                 datePicker.setValue(UIColor.black, forKeyPath: "textColor")
-             }
-         }
     }
     
     @objc
@@ -309,6 +292,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     private func pinTracker(id: UUID) {
         viewModel.pinTracker(id: id)
+        
     }
     
     private func changeTracker(id: UUID) {
@@ -333,6 +317,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             self.viewModel.deleteTracker(id: id)
         }
         analyticsService.report(event: "click_main_delete", params: ["delete" : 1])
+        collectionView.reloadData()
     }
     
 }

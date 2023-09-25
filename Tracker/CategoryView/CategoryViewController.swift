@@ -212,13 +212,6 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
         cell.selectionStyle = .none
         cell.viewModel = viewModel.categories[indexPath.row]
         cell.backgroundColor = .ypBackground
-        
-        //FIXME: - метод предварительного выбора не работает!
-//        if self.selectedCategory == viewModel.categories[indexPath.row].categoryName {
-//            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .top)
-//                cell.viewModel.selectedCategory(select: true)
-//            }
-
         return cell
     }
     

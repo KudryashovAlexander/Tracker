@@ -252,9 +252,9 @@ final class TrackerConfigurationViewModel {
                   let trackerCategory = trackerCategory else { return }
             
             let newTracker = Tracker(name: trackerName,
-                                  color: trackerColor,
-                                  emojie: trackerEmodji,
-                                  schedule: trackerSchedule,
+                                     color: trackerColor,
+                                     emojie: trackerEmodji,
+                                     schedule: trackerSchedule,
                                      id: tracker.id)
             do {
                 try trackerCategoryStore.changeTracker(oldTracker: tracker,

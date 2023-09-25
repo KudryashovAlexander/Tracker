@@ -12,4 +12,8 @@ struct StatisticSubViewModel {
     @Observable
     private(set) var statisticNumber: Int
     private(set) var statisticName: String
+    
+    mutating func newNumber(_ newNumber: Int) {
+        self.statisticNumber = newNumber
+    }
 }
