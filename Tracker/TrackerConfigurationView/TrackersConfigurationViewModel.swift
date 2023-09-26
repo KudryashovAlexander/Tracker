@@ -73,8 +73,8 @@ final class TrackerConfigurationViewModel {
                                                                  selectedPoperty: nil)
     private let scheduleViewModel = ConfigTableViewCellViewModel(propertyName: String().scheduleName, selectedPoperty: "nil")
     
-    private let trackerRecordStore = TrackerRecordStore.shared
-    private let trackerCategoryStore = TrackerCategoryStore.shared
+    private let trackerRecordStore = TrackerRecordStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
     private let calendarHelper = CalendarHelper()
     
     var tableViewCellViewModel: [ConfigTableViewCellViewModel] = []

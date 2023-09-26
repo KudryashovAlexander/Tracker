@@ -105,9 +105,8 @@ class TrackerRecordStore: NSObject {
             for trackerRecord in object where trackerRecord.id == id {
                 context.delete(trackerRecord)
             }
+            try context.save()
         }
-        try context.save()
-        
     }
     
     private func updateTrackerRecordCoreData(_ trackerRecordCoreData: TrackerRecordCoreData, trackerRecord: TrackerRecord) {

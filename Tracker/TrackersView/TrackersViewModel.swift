@@ -71,8 +71,8 @@ class TrackersViewModel {
     
     
     init(searchText: String? = nil,
-         trackerCategoryStore: TrackerCategoryStore = TrackerCategoryStore.shared,
-         trackerRecordStore: TrackerRecordStore = TrackerRecordStore.shared) {
+         trackerCategoryStore: TrackerCategoryStore = TrackerCategoryStore(),
+         trackerRecordStore: TrackerRecordStore = TrackerRecordStore()) {
         self.searchText = searchText
         self.currentDate = calendarHelper.dateWithoutTime(Date())
         self.trackerCategoryStore = trackerCategoryStore

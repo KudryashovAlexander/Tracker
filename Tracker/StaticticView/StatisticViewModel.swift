@@ -5,17 +5,27 @@
 //  Created by Александр Кудряшов on 24.09.2023.
 //
 
+/*
+  Для статистики пока только подсчет кол-ва выполненных трекерв без подсчета "Лучший период", "Идеальные дни", "Среднее значение"
+ */
+
+
 import Foundation
 
 class StatisticViewModel {
     
     private(set) var statisticsVM = [StatisticSubViewModel]()
     private let trackerRecordStore = TrackerRecordStore.shared
-    private let trackerCategoryStore = TrackerCategoryStore.shared
     
-    /*
-      Для статистики пока только подсчет кол-ва выполненных трекерв без подсчета "Лучший период", "Идеальные дни", "Среднее значение"
-     */
+    private var trackerRecord = [TrackerRecord]() {
+        didSet {
+            getBestPeriod()
+            getBestDays()
+            getTrackerCompleted()
+            getAverage()
+            updateStatistic()
+        }
+    }
     
     @Observable
     private(set) var statisticIsEmpty: Bool = false
@@ -58,8 +68,14 @@ class StatisticViewModel {
         statisticsVM.append(bestDaysVM)
         statisticsVM.append(trackerCompletedVM)
         statisticsVM.append(averageVM)
+        bind()
+        trackerRecord = trackerRecordStore.trackerRecords
         
+        getBestPeriod()
+        getBestDays()
         getTrackerCompleted()
+        getAverage()
+        updateStatistic()
     }
     
     private func getBestPeriod(){
@@ -69,16 +85,32 @@ class StatisticViewModel {
     
     private func getBestDays(){
         //TODO: метод расчета идельных дней
-        bestPeriod = 3
+        bestDays = 3
     }
     
     private func getTrackerCompleted() {
-        trackersCompleted = trackerRecordStore.trackerRecords.count
+        trackersCompleted = trackerRecord.count
     }
     
     private func getAverage(){
         //TODO: метод расчета среднего значения
-        bestPeriod = 2
+        average = 2
     }
     
+    private func bind() {
+        trackerRecordStore.$trackerRecords.bind { [weak self] newTrackerRecord in
+            self?.trackerRecord = newTrackerRecord
+        }
+    }
+    
+    private func updateStatistic() {
+        if bestPeriod < 1 ||
+           bestPeriod < 1 ||
+           trackersCompleted < 1 ||
+           bestPeriod < 1 {
+            statisticIsEmpty = true
+        } else {
+            statisticIsEmpty = false
+        }
+    }
 }
