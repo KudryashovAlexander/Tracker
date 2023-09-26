@@ -7,8 +7,8 @@
 */
 
 //Онбординг
-"onboarding.label1" = "Only track what you want";
-"onboarding.label2" = "Even if it's not liters of water and yoga";
+"onboarding.label1" = "Only track\n what you want";
+"onboarding.label2" = "Even if it's not\n liters of water and yoga";
 "onboarding.button" = "This is technology";
 
 //ТрекерВью
@@ -59,7 +59,7 @@
 "cell.delete" = "Delete";
 
 //Категориявью
-"category.empty" = "Habits and events can be combined by meaning";
+"category.empty" = "Habits and events can\n be combined by meaning";
 "category.placeholder" = "Enter a category name";
 "category.changeTitle" = "Editing category";
 "category.newTitle" = "New Category";
