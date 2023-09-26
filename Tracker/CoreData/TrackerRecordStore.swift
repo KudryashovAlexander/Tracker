@@ -99,6 +99,17 @@ class TrackerRecordStore: NSObject {
         }
     }
     
+    func deleteTrackerRecords(_ arrayID: [UUID]) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
+        for id in arrayID {
+            for trackerRecord in object where trackerRecord.id == id {
+                context.delete(trackerRecord)
+            }
+        }
+        try context.save()
+        
+    }
+    
     private func updateTrackerRecordCoreData(_ trackerRecordCoreData: TrackerRecordCoreData, trackerRecord: TrackerRecord) {
         trackerRecordCoreData.id = trackerRecord.id
         trackerRecordCoreData.date = trackerRecord.date

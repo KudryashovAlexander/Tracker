@@ -14,7 +14,7 @@ class StatisticViewModel {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     
     /*
-     Gjrfpfntkb
+      Для статистики пока только подсчет кол-ва выполненных трекерв без подсчета "Лучший период", "Идеальные дни", "Среднее значение"
      */
     
     @Observable
@@ -58,27 +58,27 @@ class StatisticViewModel {
         statisticsVM.append(bestDaysVM)
         statisticsVM.append(trackerCompletedVM)
         statisticsVM.append(averageVM)
+        
+        getTrackerCompleted()
     }
     
-    private func getBestPeriod() -> Int {
-        return 10
+    private func getBestPeriod(){
+        //TODO: метод расчета лучшего периода
+        bestPeriod = 10
     }
     
-    private func getBestDays() -> Int {
-        return 10
+    private func getBestDays(){
+        //TODO: метод расчета идельных дней
+        bestPeriod = 3
     }
     
     private func getTrackerCompleted() {
         trackersCompleted = trackerRecordStore.trackerRecords.count
     }
     
-    private func getAverage() -> Int {
-        return 10
+    private func getAverage(){
+        //TODO: метод расчета среднего значения
+        bestPeriod = 2
     }
-    
-    private func calculationStatistic() {
-        
-    }
-    
     
 }

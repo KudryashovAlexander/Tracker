@@ -237,7 +237,7 @@ class TrackersViewModel {
     
     func deleteTracker(id: UUID) {
         do {
-            try trackerCategoryStore.deleteTrackerInCategory(at: id)
+            try trackerCategoryStore.deleteTracker(at: id)
         } catch {
             print("Не удалось удалить трекер")
         }

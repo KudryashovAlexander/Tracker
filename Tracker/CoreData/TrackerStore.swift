@@ -23,6 +23,7 @@ class TrackerStore: NSObject {
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>!
+    private let trackerRecordStore = TrackerRecordStore.shared
     
     @Observable
     private(set) var trackers: [Tracker] = []
@@ -66,12 +67,13 @@ class TrackerStore: NSObject {
     
     func deleteTracker(at trackerID: UUID) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
-        for trackerCoreData in object {
-            if trackerCoreData.id == trackerID {
-                context.delete(trackerCoreData)
-                try context.save()
-                return
+        for trackerCoreData in object where trackerCoreData.id == trackerID {
+            context.delete(trackerCoreData)
+            try context.save()
+            if let id = trackerCoreData.id {
+                try trackerRecordStore.deleteTrackerRecord(id)
             }
+            return
         }
     }
     
@@ -105,9 +107,16 @@ class TrackerStore: NSObject {
         
     }
     
-    func deleteTrackerCoreData(_ trackerCoreData: TrackerCoreData) throws {
-        context.delete(trackerCoreData)
+    func deleteTrackersCoreData(_ trackersCoreData: [TrackerCoreData]) throws {
+        var trackersID = [UUID]()
+        for tracker in trackersCoreData {
+            context.delete(tracker)
+            if let id = tracker.id {
+                trackersID.append(id)
+            }
+        }
         try context.save()
+        try trackerRecordStore.deleteTrackerRecords(trackersID)
     }
     
     private func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) throws {

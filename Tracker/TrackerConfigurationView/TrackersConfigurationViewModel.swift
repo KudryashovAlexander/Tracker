@@ -236,7 +236,7 @@ final class TrackerConfigurationViewModel {
                                   id: UUID())
            
             do {
-                try trackerCategoryStore.addTrackerToCategory(at: tracker, categoryName: categoryName)
+                try trackerCategoryStore.addNewTrackerToCategory(at: tracker, categoryName: categoryName)
                 nextView()
             } catch {
                 print("Ошибка в сохранении трекера")

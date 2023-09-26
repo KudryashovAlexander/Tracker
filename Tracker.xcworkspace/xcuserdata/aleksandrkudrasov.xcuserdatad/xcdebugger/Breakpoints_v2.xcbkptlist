@@ -3,4 +3,129 @@
    uuid = "17560E90-9371-48FC-9FE4-B58C17BA5AD8"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tracker/CoreData/TrackerCategoryStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "trackerCategory"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - 5fb76f142639a70d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "property wrapper backing initializer of Tracker.TrackerCategoryStore.trackerCategory : Swift.Array&lt;Tracker.TrackerCategory&gt;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "45">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - ade0e7e12f5dcb11"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.trackerCategory.getter : Swift.Array&lt;Tracker.TrackerCategory&gt;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - c75ec0187af7db05"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.trackerCategory.setter : Swift.Array&lt;Tracker.TrackerCategory&gt;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "145">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - aa6069a690a95f14"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.trackerCategory.modify : Swift.Array&lt;Tracker.TrackerCategory&gt;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - a246ec71eec82d58"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.trackerCategory.modify : Swift.Array&lt;Tracker.TrackerCategory&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - 283c548b93a47e23"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.$trackerCategory.getter : Tracker.Observable&lt;Swift.Array&lt;Tracker.TrackerCategory&gt;&gt;"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "3575B7D3-C60F-4FC4-A1E8-BDB2484FE655 - a12a8e38c5c2bc8a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Tracker.TrackerCategoryStore.init(context: __C.NSManagedObjectContext) throws -&gt; Tracker.TrackerCategoryStore"
+                  moduleName = "Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkudrasov/Desktop/Swift%20lessons/YandexPracticum2023/Modul%204/Tracker/Tracker/CoreData/TrackerCategoryStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "259">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
