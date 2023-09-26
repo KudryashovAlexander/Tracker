@@ -41,7 +41,7 @@ class TabBarController: UITabBarController {
     
     func tabBarBorder() {
         let lineView = UIView()
-        lineView.backgroundColor = .ypGray
+        lineView.backgroundColor = .ypBackground
         lineView.translatesAutoresizingMaskIntoConstraints = false
         
         tabBar.addSubview(lineView)
