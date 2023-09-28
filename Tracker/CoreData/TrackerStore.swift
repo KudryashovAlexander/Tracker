@@ -19,8 +19,14 @@ enum TrackerStoreError: Error {
 
 class TrackerStore: NSObject {
     
+    static let shared = TrackerStore()
+    
     private let context: NSManagedObjectContext
-    private var trackerRecordStore = TrackerRecordStore()
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>!
+    private let trackerRecordStore = TrackerRecordStore.shared
+    
+    @Observable
+    private(set) var trackers: [Tracker] = []
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
@@ -30,6 +36,26 @@ class TrackerStore: NSObject {
     init(context: NSManagedObjectContext) throws {
         self.context = context
         super.init()
+        
+        let fetchRequest = TrackerCoreData.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TrackerCoreData.name, ascending: true)]
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                    managedObjectContext: context,
+                                                    sectionNameKeyPath: nil,
+                                                    cacheName: nil)
+        controller.delegate = self
+        self.fetchedResultsController = controller
+        try controller.performFetch()
+        getTracker()
+    }
+    
+    private func getTracker() {
+        trackers = { guard
+            let object = self.fetchedResultsController.fetchedObjects,
+            let trackers = try? object.map({ try self.updateTracker($0)})
+            else { return [] }
+            return trackers
+        }()
     }
     
     func addTracker(at newTracker: Tracker) throws -> TrackerCoreData {
@@ -39,20 +65,26 @@ class TrackerStore: NSObject {
         return trackerCoreData
     }
     
-    func deleteTracker(at tracker: Tracker) throws {
-        let fetchRequest = TrackerCoreData.fetchRequest()
-        let object = try context.fetch(fetchRequest)
-        for trackerCoreData in object {
-            if trackerCoreData.id == tracker.id {
-                context.delete(trackerCoreData)
-                try context.save()
-                try trackerRecordStore.deleteTrackerRecord(tracker.id) 
-                break
+    func deleteTracker(at trackerID: UUID) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
+        for trackerCoreData in object where trackerCoreData.id == trackerID {
+            context.delete(trackerCoreData)
+            try context.save()
+            if let id = trackerCoreData.id {
+                try trackerRecordStore.deleteTrackerRecord(id)
             }
+            return
         }
     }
     
     func changeTracker(oldTracker: Tracker, newTracker: Tracker) {
+        if oldTracker.name == newTracker.name,
+           oldTracker.color == newTracker.color,
+           oldTracker.emojie == newTracker.emojie,
+           oldTracker.schedule.daysOnString() == newTracker.schedule.daysOnString() {
+            return
+        }
+        
         let trackerIDString = oldTracker.id.uuidString
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         let predicate = NSPredicate(format: "%K == %@", (\TrackerCoreData.id)._kvcKeyPathString!, trackerIDString)
@@ -75,9 +107,16 @@ class TrackerStore: NSObject {
         
     }
     
-    func deleteTrackerCoreData(_ trackerCoreData: TrackerCoreData) throws {
-        context.delete(trackerCoreData)
+    func deleteTrackersCoreData(_ trackersCoreData: [TrackerCoreData]) throws {
+        var trackersID = [UUID]()
+        for tracker in trackersCoreData {
+            context.delete(tracker)
+            if let id = tracker.id {
+                trackersID.append(id)
+            }
+        }
         try context.save()
+        try trackerRecordStore.deleteTrackerRecords(trackersID)
     }
     
     private func updateTrackerCoreData(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) throws {
@@ -110,6 +149,14 @@ class TrackerStore: NSObject {
                        emojie: emojie,
                        schedule: Schedule(numberDaysString: scheduleString),
                        id: id)
+    }
+}
+
+//MARK: - Extension NSFetchedResultsControllerDelegate
+extension TrackerStore: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        getTracker()
     }
     
 }

@@ -14,40 +14,24 @@ enum TrackerCategoryError: Error {
     case convertErrorTrackerCategoryTrackersCoreData
 }
 
-protocol TrackerCategoryStoryDelegate: AnyObject {
-    func store(didUpdate trackerCategory: [TrackerCategory])
-}
-
 class TrackerCategoryStore: NSObject {
+    
+    static let shared = TrackerCategoryStore()
     
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
-    weak var delegate: TrackerCategoryStoryDelegate?
-    private var currentTrackerCategoryName: String?
+    private var trackerStore = TrackerStore.shared
     
-    private var trackerStore = TrackerStore()
-    var trackerCategory: [TrackerCategory] {
-            guard
-                let object = self.fetchedResultsController.fetchedObjects,
-                let trackerCategory = try? object.map({ try self.updateTrackerCategory($0)})
-            else { return [] }
-            return trackerCategory
-    }
-    
-    var trackerCategoryViewModel: [CategoryViewModel] {
-        guard
-            let object = self.fetchedResultsController.fetchedObjects,
-            let trackerCategory = try? object.map({ trackerCategoryCoreData in
-                CategoryViewModel(categoryName: trackerCategoryCoreData.name!,
-                                  categoryIsSelected: false)
-            })
-        else { return [] }
-        return trackerCategory
-    }
+    @Observable
+    private(set) var trackerCategory: [TrackerCategory] = []
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantContainer.viewContext
         try! self.init(context: context)
+        
+        trackerStore.$trackers.bind { [weak self] _ in
+            self?.getTrackerCategory()
+        }
     }
     
     init(context: NSManagedObjectContext) throws {
@@ -63,6 +47,18 @@ class TrackerCategoryStore: NSObject {
         controller.delegate = self
         self.fetchedResultsController = controller
         try controller.performFetch()
+        getTrackerCategory()
+    }
+    
+    private func getTrackerCategory() {
+        trackerCategory = { guard
+            let object = self.fetchedResultsController.fetchedObjects,
+            let trackerCategory = try? object.map({ try self.updateTrackerCategory($0)})
+            else {
+            return []
+        }
+            return trackerCategory
+        }()
     }
     
     private func updateTrackerCategoryCoreData(_ trackerCategoryCoreData: TrackerCategoryCoreData,
@@ -93,42 +89,23 @@ class TrackerCategoryStore: NSObject {
     
     func deleteCategory(_ category: TrackerCategory) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
-        for trackerCategory in object {
-            if trackerCategory.name == category.name {
-                if let trackers = trackerCategory.trackers {
-                    let trackerArray = trackers.compactMap { $0 as? TrackerCoreData}
-                    for tracker in trackerArray {
-                        do {
-                            try trackerStore.deleteTrackerCoreData(tracker)
-                        } catch {
-                            print("Не удалось удалить трекер \(tracker.name ?? "")")
-                        }
-                    }
+        var deleteTrackersCoreData = [TrackerCoreData]()
+        for trackerCategory in object where trackerCategory.name == category.name {
+            if let trackers = trackerCategory.trackers {
+                let trackerArray = trackers.compactMap { $0 as? TrackerCoreData}
+                deleteTrackersCoreData = trackerArray
+                for trackerCoreData in trackerArray {
+                    trackerCategory.removeFromTrackers(trackerCoreData)
                 }
-                context.delete(trackerCategory)
-                try context.save()
             }
+            context.delete(trackerCategory)
+            try context.save()
         }
+        //При удалении категории дополнительно удаляем трекеры внутри этой категории из памяти
+        try trackerStore.deleteTrackersCoreData(deleteTrackersCoreData)
     }
     
-    func addTracker(at newTracker: Tracker, categoryName: String) throws {
-        currentTrackerCategoryName = categoryName
-        guard let object = self.fetchedResultsController.fetchedObjects else { return }
-        for trackerCategory in object {
 
-            if trackerCategory.name == categoryName {
-                if let trackersSet = trackerCategory.trackers {
-                    let newTrackerCoreData = try trackerStore.addTracker(at: newTracker)
-                    let mutableTrackersSet = NSMutableSet(set: trackersSet)
-                    mutableTrackersSet.add(newTrackerCoreData)
-                    
-                    trackerCategory.trackers = mutableTrackersSet
-                    try context.save()
-                    return
-                }
-            }
-        }
-    }
     
     func changeNameCategory(oldName: String, newName: String) throws {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -154,14 +131,45 @@ class TrackerCategoryStore: NSObject {
     }
     
     func changeTracker(oldTracker: Tracker, oldCategoryName: String, newTracker: Tracker, newCategoryName: String) throws {
-        if oldCategoryName != newCategoryName {
-            try deleteTracker(at: oldTracker, categoryName: oldCategoryName)
-            try addTracker(at: newTracker, categoryName: newCategoryName)
-        }
+        
         trackerStore.changeTracker(oldTracker: oldTracker, newTracker: newTracker)
+
+        if oldCategoryName != newCategoryName {
+            try! moveTrackerInCategory(at: oldTracker.id, oldCategoryName: oldCategoryName, newCategoryName: newCategoryName)
+        }
     }
     
-    func deleteTracker(at tracker: Tracker, categoryName: String) throws {
+    private func moveTrackerInCategory(at trackerID: UUID, oldCategoryName: String, newCategoryName: String) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
+        
+        var moveTrackerCoreData = TrackerCoreData()
+        for trackerCategory in object {
+            guard let trackers = trackerCategory.trackers else {
+               throw TrackerCategoryError.decodingErrorInvalidTrackers
+            }
+            let trackerArray = trackers.compactMap { $0 as? TrackerCoreData }
+            for trackerCoreData in trackerArray where trackerCoreData.id == trackerID {
+                moveTrackerCoreData = trackerCoreData
+                trackerCategory.removeFromTrackers(trackerCoreData)
+                try context.save()
+            }
+        }
+        
+        for trackerCategory in object {
+            if trackerCategory.name == newCategoryName {
+                if let trackersSet = trackerCategory.trackers {
+                    let mutableTrackersSet = NSMutableSet(set: trackersSet)
+                    mutableTrackersSet.add(moveTrackerCoreData)
+                    trackerCategory.trackers = mutableTrackersSet
+                    try context.save()
+                    return
+                }
+            }
+        }
+    }
+    
+    
+    func deleteTracker(at trackerID: UUID) throws {
         guard let object = self.fetchedResultsController.fetchedObjects else { return }
         
         for trackerCategory in object {
@@ -169,9 +177,28 @@ class TrackerCategoryStore: NSObject {
                throw TrackerCategoryError.decodingErrorInvalidTrackers
             }
             let trackerArray = trackers.compactMap { $0 as? TrackerCoreData }
-            for trackerCoreData in trackerArray {
-                if trackerCoreData.id == tracker.id {
-                    try trackerStore.deleteTracker(at: tracker)
+            for trackerCoreData in trackerArray where trackerCoreData.id == trackerID {
+                trackerCategory.removeFromTrackers(trackerCoreData)
+                try context.save()
+                try trackerStore.deleteTracker(at: trackerCoreData.id!)
+            }
+        }
+        
+    }
+    
+    func addNewTrackerToCategory(at newTracker: Tracker, categoryName: String) throws {
+        guard let object = self.fetchedResultsController.fetchedObjects else { return }
+        for trackerCategory in object {
+
+            if trackerCategory.name == categoryName {
+                if let trackersSet = trackerCategory.trackers {
+                    let newTrackerCoreData = try trackerStore.addTracker(at: newTracker)
+                    let mutableTrackersSet = NSMutableSet(set: trackersSet)
+                    mutableTrackersSet.add(newTrackerCoreData)
+                    
+                    trackerCategory.trackers = mutableTrackersSet
+                    try context.save()
+                    return
                 }
             }
         }
@@ -180,9 +207,9 @@ class TrackerCategoryStore: NSObject {
 
 //MARK: - Extension NSFetchedResultsControllerDelegate
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store(didUpdate: trackerCategory)
+        getTrackerCategory()
     }
     
 }

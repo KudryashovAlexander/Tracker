@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Кудряшов on 18.09.2023.
+  
+*/
+
+//Онбординг
+"onboarding.label1" = "Отслеживайте только\n то, что хотите";
+"onboarding.label2" = "Даже если это\n не литры воды и йога";
+"onboarding.button" = "Вот это технологии";
+
+//ТрекерВью
+"main.trackers" = "Трекеры";
+"main.statistics" = "Статистика";
+"main.filter" = "Фильтры";
+"main.emptyLabel" = "Что будем отслеживать?";
+"main.notSearch" = "Ничего не найдено";
+
+//Фильтры
+"filter.alltracker" = "Все трекеры";
+"filter.trackerToday" = "Трекеры на сегодня";
+"filter.complated" = "Завершенные";
+"filter.notComplated" = "Не завершенные";
+
+//Новыйтрекервью
+"newtracker.title" = "Создание трекера";
+"button.addTracker" = "Привычка";
+"button.addNotRegular" = "Нерегулярное событие";
+
+//ТрекерКонфигуратионВью
+"trackerEdit.newTrackerTitle" = "Новая привычка";
+"trackerEdit.newNotRegularTitle" = "Новое нерегулярное событие";
+"trackerEdit.editTitle" = "Редактирование привычки";
+"trackerName.placeholder" = "Введите название трекера";
+"attentionLabel" = "Ограничение 38 символов";
+"category" = "Категория";
+"schedule" = "Расписание";
+"emoji" = "Emoji";
+"color" = "Цвет";
+
+//Button
+"button.create" = "Создать";
+"button.delete" = "Удалить";
+"button.cancel" = "Отменить";
+"button.ready" = "Готово";
+"button.save" = "Сохранить";
+"button.addCategory" = "Добавить категорию";
+
+//Алерт
+"alert.deleteTracker" = "Уверены что хотите удалить трекер?";
+"alert.category" = "Эта категория точно не нужна?";
+
+//CellConfigeration
+"cell.pin" = "Закрепить";
+"cell.unpin" = "Открепить";
+"cell.edit" = "Редактировать";
+"cell.delete" = "Удалить";
+
+//Категориявью
+"category.empty" = "Привычки и события можно\nобъединить по смыслу";
+"category.placeholder" = "Введите название категории";
+"category.changeTitle" = "Редактирование категории";
+"category.newTitle" = "Новая категория";
+
+
+//Статистика
+"statistic.bestPeriod" = "Лучший период";
+"statistic.perfectDays" = "Идеальные дни";
+"statistic.trackersCompleted" = "Трекеров завершено";
+"statistic.averageValue" = "Среднее значение";
+
+"statistic.empty" = "Анализировать пока нечего";
+

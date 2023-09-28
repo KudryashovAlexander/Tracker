@@ -9,7 +9,7 @@ import UIKit
 
 final class WelcomePageViewController: UIPageViewController {
     
-    private let pressButton = UIButton().customBlackButton(title: "Вот это технологии!")
+    private let pressButton = UIButton().customBlackButton(title:String().onboardingButton)
     
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
@@ -20,11 +20,8 @@ final class WelcomePageViewController: UIPageViewController {
         return pageControl
     }()
     
-    private let textArray = ["Отслеживайте только то, что хотите",
-                                """
-                                Даже если это
-                                не литры воды и йога
-                                """]
+    private var textArray:[String] = [String().onboardingLabel1,
+                                      String().onboardingLabel2]
     
     private let nameImageView = ["background1",
                                  "background2"]

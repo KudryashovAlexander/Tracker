@@ -17,6 +17,7 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: UICollectionViewFlowLayout())
     weak var delegate:ColorViewDelegate?
+    var selectedColor:UIColor?
     
     init(delegate:ColorViewDelegate?) {
         
@@ -56,6 +57,12 @@ final class ColorView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
             return UICollectionViewCell()
         }
         let color = colorCollection.array[indexPath.row]
+        if color.hexStringFromColor() == selectedColor?.hexStringFromColor() {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
+            cell.layer.borderWidth = 3
+            let borderColor = color.withAlphaComponent(0.3).cgColor
+            cell.layer.borderColor = borderColor
+        }
         cell.configure(color: color)
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 8

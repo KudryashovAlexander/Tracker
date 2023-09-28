@@ -11,6 +11,7 @@ extension UIButton {
     func customBlackButton(title: String) -> UIButton {
         let button = UIButton()
         button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 16
         button.setTitle(title, for: .normal)
@@ -51,12 +52,12 @@ extension UITextField {
 }
 
 extension UILabel {
-    func attenteionLabel(countSimbol: Int) -> UILabel {
+    func attenteionLabel() -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
         label.font = .yPRegular17
         label.textColor = .ypRed
-        label.text = "Ограничение " + String(countSimbol) + " символов"
+        label.text = String().attenteionLabel
         return label
     }
 }

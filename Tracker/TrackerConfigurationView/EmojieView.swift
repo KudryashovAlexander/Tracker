@@ -17,6 +17,7 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: UICollectionViewFlowLayout())
     weak var delegate: EmojieViewDelegate?
+    var selectedEmogie: String?
         
     init(delegate: EmojieViewDelegate?) {
         self.delegate = delegate
@@ -55,12 +56,19 @@ final class EmojieView: UIView, UICollectionViewDataSource, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojieCell.cellIdentifier,for: indexPath) as? EmojieCell else {
             return UICollectionViewCell()
         }
+        
         let text = emojieCollection.array[indexPath.row]
+        
+        if text == selectedEmogie {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
+            cell.backgroundColor = .ypLightGray
+        }
         cell.configure(text: text)
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16
         return cell
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 52, height: 52)

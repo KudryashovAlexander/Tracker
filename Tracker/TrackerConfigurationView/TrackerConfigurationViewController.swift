@@ -28,12 +28,15 @@ final class TrackerConfigurationViewController: UIViewController {
     
     private var contenSize = CGSize()
     
+    private var countDay: Int?
+    private var countDayLabel = UILabel()
+    
     private let nameTrackerConteiner = UIView()
     private var hightNameTrackerConteinerConstraint: NSLayoutConstraint?
     
-    private let nameTrackerTextField = UITextField().customTextField(placeHolder: "Введите название трекера")
+    private let nameTrackerTextField = UITextField().customTextField(placeHolder: String().trackerEditPlaceHolder)
     
-    private var attentionLabel = UILabel().attenteionLabel(countSimbol: 38)
+    private var attentionLabel = UILabel().attenteionLabel()
     
     private let propertyTableViewConteiner = UIView()
     private let propertyTableView = UITableView()
@@ -44,10 +47,9 @@ final class TrackerConfigurationViewController: UIViewController {
     private lazy var colorCollectionView = ColorView(delegate: self)
     private let colorNameLabel = UILabel()
     
-    private let canselButton = UIButton().customRedButton(title: "Отменить")
-    private let createButton = UIButton().customBlackButton(title: "Создать")
+    private let canselButton = UIButton().customRedButton(title: String().buttonCansel)
+    private let createButton = UIButton().customBlackButton(title: "")
     
-    private let alertPresenter = AlertPresenter()
         
     init(viewModel: TrackerConfigurationViewModel) {
         self.viewModel = viewModel
@@ -67,6 +69,8 @@ final class TrackerConfigurationViewController: UIViewController {
         propertyTableView.delegate = self
         propertyTableView.dataSource = self
         nameTrackerTextField.delegate = self
+        
+        countDayLabelSupport()
         
         nameTrackerConteinerSupport()
         nameTrackerTextFieldSupport()
@@ -91,7 +95,18 @@ final class TrackerConfigurationViewController: UIViewController {
         
         nameTrackerConteiner.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameTrackerConteiner)
-        nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24).isActive = true
+        
+        if countDay != nil {
+            contentView.addSubview(countDayLabel)
+            countDayLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24).isActive = true
+            countDayLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
+            countDayLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16).isActive = true
+            countDayLabel.heightAnchor.constraint(equalToConstant: 38).isActive = true
+            nameTrackerConteiner.topAnchor.constraint(equalTo: countDayLabel.bottomAnchor, constant: 40).isActive = true
+        } else {
+            nameTrackerConteiner.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24).isActive = true
+        }
+        
         nameTrackerConteiner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32).isActive = true
         hightNameTrackerConteinerConstraint?.isActive = true
         nameTrackerConteiner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
@@ -191,6 +206,14 @@ final class TrackerConfigurationViewController: UIViewController {
             self.changeCreateButton(isEnabled)
         }
         
+        self.countDay = viewModel.daysRecord
+        if let name = viewModel.buttonName {
+            self.createButton.setTitle(name, for: .normal)
+        }
+        
+        emojieCollectionView.selectedEmogie = viewModel.trackerEmodji
+        colorCollectionView.selectedColor = viewModel.trackerColor
+        
     }
     
     private func setHeightTextFieldContainer(_ isHidden: Bool) {
@@ -217,14 +240,27 @@ final class TrackerConfigurationViewController: UIViewController {
     }
     
     private func updateContentSize() {
-        let heightElement = 24 + Int(nameTrackerConteiner.frame.size.height) + 25 + viewModel.tableViewCellViewModel.count * 75 + 60 + Int(emojieCollectionView.frame.size.height) + 34 + Int(colorCollectionView.frame.size.height) + 16 + 60 + 34
+        var heightElement = 24 + Int(nameTrackerConteiner.frame.size.height) + 25 + viewModel.tableViewCellViewModel.count * 75 + 60 + Int(emojieCollectionView.frame.size.height) + 34 + Int(colorCollectionView.frame.size.height) + 16 + 60 + 34
+        if countDay != nil {
+            heightElement += 78
+        }
         contenSize = CGSize(width: view.frame.width, height: CGFloat(heightElement))
         scrollView.contentSize = contenSize
         contentView.frame.size = contenSize
     }
     
+    private func countDayLabelSupport() {
+        guard let countDay = countDay else { return }
+        let countDayText = String.localizedStringWithFormat(NSLocalizedString("numberOfdays", comment: "number of check day tracker"), countDay)
+        countDayLabel.text = countDayText
+        countDayLabel.font = .yPBold32
+        countDayLabel.textAlignment = .center
+        countDayLabel.textColor = .ypBlack
+        countDayLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private func nameTrackerConteinerSupport() {
-        nameTrackerConteiner.backgroundColor = .white
+        nameTrackerConteiner.backgroundColor = .ypWhite
     }
     
     private func nameTrackerTextFieldSupport() {
@@ -352,8 +388,8 @@ extension TrackerConfigurationViewController: UITableViewDataSource, UITableView
     }
     
     private func createCategoryViewController() {
-        let viewModel = CategoriesViewModel(delegate: self.viewModel, selectedCategoryName: viewModel.categoryName)
-        let vc = CategoryViewController(viewModel: viewModel)
+        let categoriesViewModel = CategoriesViewModel(delegate: self.viewModel, selectedCategoryName: viewModel.categoryName)
+        let vc = CategoryViewController(viewModel: categoriesViewModel)
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }

@@ -25,10 +25,7 @@ class CategoryViewController: UIViewController {
         let label = UILabel()
         label.font = .yPMedium12
         label.textColor = .ypBlack
-        label.text = """
-                        Привычки и события можно
-                        объединить по смыслу
-                    """
+        label.text = String().categoryEmptyLabel
         label.textAlignment = .center
         label.numberOfLines = 2
         label.isHidden = true
@@ -52,6 +49,7 @@ class CategoryViewController: UIViewController {
     
     private var contenSize = CGSize()
     private var countElement = 0
+    private var selectedCategory: String?
     
     private var categoryTableView: UITableView = {
         let tableView = UITableView()
@@ -67,13 +65,14 @@ class CategoryViewController: UIViewController {
         return tableView
     }()
     
-    private let createCategoryButton = UIButton().customBlackButton(title: "Добавить категорию")
+    private let createCategoryButton = UIButton().customBlackButton(title: String().buttonAddCategory)
     private var heightTableViewConstaraint: NSLayoutConstraint?
     private var viewHight = CGFloat()
     
     init(viewModel: CategoriesViewModel) {
         self.viewModel = viewModel
         super .init(nibName: nil, bundle: nil)
+        selectedCategory = viewModel.selectedCategoryName
     
     }
     
@@ -84,7 +83,7 @@ class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
-        self.navigationItem.title = "Категория"
+        self.navigationItem.title = String().categoryName
         modalPresentationStyle = .none
         viewHight = view.frame.maxY - 98
         
@@ -172,7 +171,6 @@ class CategoryViewController: UIViewController {
     private func createCategory() {
         let createCategoryVC = CategoryAddViewController()
         createCategoryVC.viewModel = CategoryAddViewModel()
-        createCategoryVC.viewModel.delegate = viewModel
         let nc = UINavigationController(rootViewController: createCategoryVC)
         self.present(nc, animated: true)
     }
@@ -183,15 +181,14 @@ class CategoryViewController: UIViewController {
         
         createCategoryVC.viewModel = CategoryAddViewModel(oldNCategoryName: categoryName)
         
-        createCategoryVC.viewModel.delegate = viewModel
         let nc = UINavigationController(rootViewController: createCategoryVC)
         self.present(nc, animated: true)
     }
     
     private func deleteCategory(index: Int) {
-        let alertModel = AlertModel(title: "Эта категория точно не нужна?",
+        let alertModel = AlertModel(title: String().alertDeleteCategory,
                                     message: "",
-                                    buttonTitle: "Удалить")
+                                    buttonTitle: String().buttonDelete)
         
         alertPresenter.showAlertSheet(model: alertModel,
                                       viewController: self) {
@@ -242,16 +239,17 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate  {
             return nil
         }
         
-        return UIContextMenuConfiguration(actionProvider: { actions in
-            let action1 = UIAction(title: "Редактировать") { [weak self] _ in
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let action1 = UIAction(title: String().cellEdit) { [weak self] _ in
                 self?.changeCategory(index: indexPath.row)
             }
-            let action2 = UIAction(title: "Удалить") { [weak self] _ in
+            
+            let action2 = UIAction(title: String().cellDelete, attributes: .destructive) { [weak self] _ in
                 self?.deleteCategory(index: indexPath.row)
             }
             return UIMenu(children: [action1, action2])
-        })
-        
+        }
+        return configuration
     }
     
 }

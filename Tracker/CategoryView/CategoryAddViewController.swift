@@ -9,9 +9,9 @@ import UIKit
 
 final class CategoryAddViewController: UIViewController {
     
-    private let addCategoryTextField = UITextField().customTextField(placeHolder: "Введите название категории")
-    private let attentionLabel = UILabel().attenteionLabel(countSimbol: 25)
-    private let addCategoryButton = UIButton().customBlackButton(title: "Готово")
+    private let addCategoryTextField = UITextField().customTextField(placeHolder: String().categoryPlaceHolder)
+    private let attentionLabel = UILabel().attenteionLabel()
+    private let addCategoryButton = UIButton().customBlackButton(title: String().buttonReady)
     private var categoryIsChange: Bool = false
     
     var viewModel: CategoryAddViewModel! {
@@ -65,13 +65,13 @@ final class CategoryAddViewController: UIViewController {
     
     private func checkView() {
         if categoryIsChange {
-            self.navigationItem.title = "Редактирование категории"
+            self.navigationItem.title = String().categoryChangeTitle
             addCategoryButton.addTarget(self, action: #selector(changeCategoryName), for: .touchUpInside)
             guard let text = viewModel.oldNCategoryName else { return }
             addCategoryTextField.text = text
             checkSimbol(text.count)
         } else {
-            self.navigationItem.title = "Новая категория"
+            self.navigationItem.title = String().categoryNewCategory
             addCategoryButton.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
             checkSimbol(0)
         }
@@ -102,7 +102,7 @@ final class CategoryAddViewController: UIViewController {
             addCategoryButton.backgroundColor = .ypGray
             addCategoryButton.isEnabled = false
             attentionLabel.isHidden = true
-        case 1...25 :
+        case 1...38 :
             addCategoryButton.backgroundColor = .ypBlack
             addCategoryButton.isEnabled = true
             attentionLabel.isHidden = true

@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Кудряшов on 18.09.2023.
+  
+*/
+
+//Онбординг
+"onboarding.label1" = "Only track\n what you want";
+"onboarding.label2" = "Even if it's not\n liters of water and yoga";
+"onboarding.button" = "This is technology";
+
+//ТрекерВью
+"main.trackers" = "Trackers";
+"main.statistics" = "Statistics";
+"main.filter" = "Filters";
+"main.emptyLabel" = "What will we track?";
+"main.notSearch" = "Nothing found";
+
+//Фильтры
+"filter.alltracker" = "All trackers";
+"filter.trackerToday" = "Trackers for today";
+"filter.complated" = "Completed";
+"filter.notComplated" = "Not Completed";
+
+//Новыйтрекервью
+"newtracker.title" = "Creating a tracker";
+"button.addTracker" = "Habit";
+"button.addNotRegular" = "Irregular event";
+
+//ТрекерКонфигуратионВью
+"trackerEdit.newTrackerTitle" = "New Habit";
+"trackerEdit.newNotRegularTitle" = "New Irregular Event";
+"trackerEdit.editTitle" = "Edit Habit";
+"trackerName.placeholder" = "Enter a tracker name";
+"attentionLabel" = "38 character limit";
+"category" = "Category";
+"schedule" = "Schedule";
+"emoji" = "Emoji";
+"color" = "Color";
+
+//Button
+"button.create" = "Create";
+"button.delete" = "Delete";
+"button.cancel" = "Cancel";
+"button.ready" = "Ready";
+"button.save" = "Save";
+"button.addCategory" = "Add category";
+
+//Алерт
+"alert.deleteTracker" = "Are you sure you want to delete the tracker?";
+"alert.category" = "Are you sure this category is not needed?";
+
+//CellConfigeration
+"cell.pin" = "Pin";
+"cell.unpin" = "Unpin";
+"cell.edit" = "Edit";
+"cell.delete" = "Delete";
+
+//Категориявью
+"category.empty" = "Habits and events can\n be combined by meaning";
+"category.placeholder" = "Enter a category name";
+"category.changeTitle" = "Editing category";
+"category.newTitle" = "New Category";
+
+
+//Статистика
+"statistic.bestPeriod" = "Best period";
+"statistic.perfectDays" = "Perfect Days";
+"statistic.trackersCompleted" = "Trackers Completed";
+"statistic.averageValue" = "Average";
+
+"statistic.empty" = "There is nothing to analyze yet";
+
