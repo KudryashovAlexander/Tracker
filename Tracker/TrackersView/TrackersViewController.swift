@@ -355,16 +355,14 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                                                          height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority:.required, verticalFittingPriority: .fittingSizeLevel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard indexPaths.count > 0 else { return nil }
-        
-        let indexPath = indexPaths[0]
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let viewModelID = viewModel.visibleViewModels[indexPath.section].trackers[indexPath.row].id
         let trackerIsPin = viewModel.visibleViewModels[indexPath.section].trackers[indexPath.row].pinTracker
         let pintextAlert = trackerIsPin ? String().cellUnpin : String().cellPin
+        let identifier = indexPath as NSCopying
         
-        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        let configuration = UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) { _ in
             let actionPin = UIAction(title: pintextAlert) { [weak self] _ in
                 self?.pinTracker(id: viewModelID)
             }
@@ -377,6 +375,25 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             return UIMenu(children: [actionPin, actionChange, actionDelete])
         }
         return configuration
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        
+        guard let indexPath = configuration.identifier as? IndexPath else {
+            return nil
+        }
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell else {
+            return nil
+        }
+        
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        parameters.visiblePath = UIBezierPath(roundedRect: cell.viewForContextMenu().bounds, cornerRadius: 16)
+        
+        let targetedPreview = UITargetedPreview(view: cell.viewForContextMenu(), parameters: parameters)
+        
+        return targetedPreview
     }
     
 }

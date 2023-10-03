@@ -209,5 +209,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         viewModel?.changeRecord()
     }
 
-    
+}
+
+extension TrackerCollectionViewCell {
+    func viewForContextMenu() -> UIView {
+        return trackerView
+    }
 }
