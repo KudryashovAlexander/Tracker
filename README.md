@@ -4,17 +4,40 @@ Tracker - это приложение для формирования полез
 
 ## **Скрины приложения**
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/f37ba65e-6572-411a-944c-42868c9979ec" width="200" alt="Simulator Screenshot - iPhone 15 Pro_1">
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/a2bd06c4-d0e5-4ab6-90cd-3907631bdcff" width="200" alt="Simulator Screenshot - iPhone 15 Pro_1">
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/5d7b5ad3-684f-406e-9361-0cd6248fd459" width="200" alt="Simulator Screenshot - iPhone 15 Pro_2">
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/837fd76d-36a3-4d0e-a9c1-34695550f347" width="200" alt="Simulator Screenshot - iPhone 15 Pro_2">
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/02333518-ef88-45fe-9fb7-622bcd7998a9" width="200" alt="Simulator Screenshot - iPhone 15 Pro_3">
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/a27058a1-5987-41d3-928e-9ad1809eb629" width="200" alt="Simulator Screenshot - iPhone 15 Pro_3">
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/1104e536-dc7b-43e1-93d1-55bd0d07b8f3" width="200" alt="Simulator Screenshot - iPhone 15 Pro_4">
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/d96be568-9adb-4cab-b713-c46abf3084e0" width="200" alt="Simulator Screenshot - iPhone 15 Pro_5">
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/04165f32-491c-499e-8d02-7a866be683d0" width="200" alt="Simulator Screenshot - iPhone 15 Pro_4">
 
-<img src="https://github.com/KudryashovAlexander/ImageFeed/assets/42520208/2b29f93c-87ec-48ae-9753-7644ea35d913" width="200" alt="Simulator Screenshot - iPhone 15 Pro_6">
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/7ff624c0-afb2-4179-b789-633f1b828197" width="200" alt="Simulator Screenshot - iPhone 15 Pro_5">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/9af8b002-84e5-4144-84b7-c6fb138f743a" width="200" alt="Simulator Screenshot - iPhone 15 Pro_6">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/39407e49-d775-4321-86b9-f3fb8baa0a1d" width="200" alt="Simulator Screenshot - iPhone 15 Pro_7">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/e33c7bf4-8c05-4752-9203-ab2711eb0df9" width="200" alt="Simulator Screenshot - iPhone 15 Pro_8">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/fcaad931-37c4-442a-81df-71f055881c3a" width="200" alt="Simulator Screenshot - iPhone 15 Pro_9">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/733a89b2-499f-4684-bb49-b099b140db04" width="200" alt="Simulator Screenshot - iPhone 15 Pro_10">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/52079d27-11d7-4f38-af93-8b11acc16607" width="200" alt="Simulator Screenshot - iPhone 15 Pro_11">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/71f4af52-a699-4e6d-a310-a3911fd94fe0" width="200" alt="Simulator Screenshot - iPhone 15 Pro_12">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/bb1b2cc7-d415-49aa-8c44-ff4804d3e7aa" width="200" alt="Simulator Screenshot - iPhone 15 Pro_13">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/feb714ba-b3ca-4d29-b5f4-eecaa827a3df" width="200" alt="Simulator Screenshot - iPhone 15 Pro_14">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/e15a8e8d-2231-409f-a3fb-ed66db551c4e" width="200" alt="Simulator Screenshot - iPhone 15 Pro_15">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/9ea50759-7a47-4807-a23d-49787c648641" width="200" alt="Simulator Screenshot - iPhone 15 Pro_16">
+
+<img src="https://github.com/KudryashovAlexander/Tracker/assets/42520208/f7727a80-f0ef-43d5-a370-ddfcf7a115a0" width="200" alt="Simulator Screenshot - iPhone 15 Pro_17">
 
 ## **Ссылки**
 
